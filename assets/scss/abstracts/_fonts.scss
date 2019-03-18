@@ -1,0 +1,61 @@
+// =======================
+// Fonts Imports & Settings
+// =======================
+
+// -----------
+// Fonts Variables
+//
+$font-family--sans-serif: "Canaro", Arial, Roboto, sans-serif;
+$font-family--serif: Georgia, Cambria, "Times New Roman", Times, serif;
+// $font-family--monospace: Consolas, "Liberation Mono", Courier, monospace;
+
+$font-family--body: $font-family--sans-serif;
+$font-family--header: $font-family--sans-serif;
+// $font-family--button: $font-family--body;
+
+// -----------
+// Import of the font faces
+//
+// @font-face {
+//   font-weight: 300;
+//   font-family: "Canaro";
+//   font-style: normal;
+//   src: url("../fonts/895dbfd0-3416-48d0-8ef0-3a15407e4de0.woff2")
+//     format("woff2"),
+//     url("../fonts/1b445d63-8ade-4541-a73e-76b7f0ddd158.woff") format("woff"),
+//     url("../fonts/b109e175-8224-4609-b722-56ca1aa04302.ttf") format("truetype");
+//   font-display: optional;
+// }
+
+// @font-face {
+//   font-weight: 400;
+//   font-family: "Canaro";
+//   font-style: normal;
+//   src: url("../fonts/9c2d3fc9-9589-469a-b0be-5e54be8c7716.woff2")
+//     format("woff2"),
+//     url("../fonts/dc7e2392-eb4c-4f94-aecf-88e0d539390c.woff") format("woff"),
+//     url("../fonts/03d1f6ca-d36f-41f5-9f82-5c23b7040306.ttf") format("truetype");
+//   font-display: optional;
+// }
+
+// @font-face {
+//   font-weight: 700;
+//   font-family: "Canaro";
+//   font-style: normal;
+//   src: url("../fonts/de092e38-1747-4a38-a495-e67396c111c7.woff2")
+//     format("woff2"),
+//     url("../fonts/13fb0594-f57a-4329-8895-33132525b8e6.woff") format("woff"),
+//     url("../fonts/0bb213b7-ec69-4883-a5a1-59a5d257d57f.ttf") format("truetype");
+//   font-display: optional;
+// }
+
+// @font-face {
+//   font-weight: 900;
+//   font-family: "Canaro";
+//   font-style: normal;
+//   src: url("../fonts/936a378c-262b-416c-b9d1-7d1b14b68587.woff2")
+//     format("woff2"),
+//     url("../fonts/cfd4c006-90fa-4421-aa08-061e908f6b66.woff") format("woff"),
+//     url("../fonts/ec7cf8f2-8642-484a-97bb-a1b4c76a4e9b.ttf") format("truetype");
+//   font-display: optional;
+// }

@@ -1,0 +1,38 @@
+$fluid-breakpoint: "xlarge" !default;
+$maxed-breakpoint-width: map-get($breakpoints, "xxlarge") !default;
+$maxed-row-width: 1200 !default;
+
+@mixin row {
+  max-width: $maxed-row-width;
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+@mixin row--outer {
+  @include row;
+
+  padding: 0 rem($padding--side);
+  margin-left: auto;
+  margin-right: auto;
+
+  @include breakpoint($fluid-breakpoint) {
+    max-width: percentage($maxed-row-width / strip-unit($maxed-breakpoint-width));
+  }
+
+  @include breakpoint($maxed-breakpoint-width) {
+    max-width: calc-rem($maxed-row-width);
+  }
+}
+
+// ---------
+// Implementation
+@if $generate-classes {
+  .row--outer {
+    @include row--outer;
+  }
+
+  .row {
+    @include row;
+  }
+}

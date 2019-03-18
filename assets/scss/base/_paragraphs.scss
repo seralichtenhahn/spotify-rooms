@@ -1,0 +1,72 @@
+// =======================
+// Global Text Paragraphs Styles
+// =======================
+
+$generate-classes: false !default;
+
+@mixin paragraph($box-model: true) {
+  font-family: $font-family--body;
+  font-weight: 400;
+  font-size: rem(16);
+  letter-spacing: 0.6px;
+  line-height: 1.6;
+  color: $primary-font-color;
+
+  @if $box-model {
+    padding-bottom: rh(0.25);
+    margin-bottom: rh(0.25);
+
+    @include breakpoint(medium) {
+      padding-bottom: rh(0.5);
+      margin-bottom: rh(0.5);
+    }
+
+    @include breakpoint(xlarge) {
+      margin-bottom: rh(0.75);
+    }
+  }
+}
+
+@mixin paragraph--small($box-model: true) {
+  @include paragraph($box-model);
+
+  font-size: rem(12) !important;
+  color: rgba($primary-font-color, 0.4);
+}
+
+@mixin paragraph--error($box-model: false) {
+  @include paragraph($box-model);
+
+  padding-bottom: 0;
+  margin-bottom: rh(0.25);
+  margin-left: rem(6);
+  font-weight: 600;
+  color: $error-color;
+}
+
+@mixin paragraph--intro($box-model: true) {
+  @include paragraph($box-model);
+
+  max-width: rem(500);
+  max-width: 70ch;
+}
+
+// ---------
+// Implementation
+@if $generate-classes {
+  p {
+    @include paragraph;
+
+    &.small {
+      @include paragraph--small;
+    }
+
+    &.error {
+      @include paragraph--error;
+    }
+
+    &.intro {
+      @include paragraph--intro;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+// =======================
+// General Styles for Boxes
+// =======================
+
+@mixin box--base {
+  padding: rh(1) rem(30);
+  border-radius: rem(6);
+  box-shadow: rem(1 1 14 0) rgba($black, 0.1);
+}

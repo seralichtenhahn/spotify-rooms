@@ -1,0 +1,135 @@
+// =======================
+// Global Headlines Styles
+// =======================
+
+$generate-classes: false !default;
+
+@mixin headline {
+  display: block;
+  font-family: $font-family--header;
+  font-weight: 600;
+  line-height: 1.25;
+  color: $headline-fc;
+}
+
+@mixin headline--lvl1($box-model: true) {
+  @include headline;
+  @include fluid(
+    (
+      font-size: (
+        28,
+        56
+      )
+    ),
+    (medium, xxlarge)
+  );
+  @include fluid(
+    (
+      margin-bottom: (
+        12,
+        36
+      )
+    ),
+    (medium, xlarge)
+  );
+
+  @if $box-model {
+    padding: rh(0.25) 0;
+    margin: rh(0.5) 0;
+  }
+}
+
+@mixin headline--lvl2($box-model: true) {
+  @include headline;
+  @include fluid(
+    (
+      font-size: (
+        26,
+        40
+      )
+    ),
+    (medium, xlarge)
+  );
+
+  @if $box-model {
+    padding: rh(0.25) 0;
+    margin: rh(0.25) 0;
+  }
+}
+
+@mixin headline--lvl3($box-model: true) {
+  @include headline;
+
+  font-size: rem(22);
+  font-weight: 100;
+
+  @if $box-model {
+    padding: 0 0 rh(0.125);
+    margin: 0 0 rh(0.125);
+  }
+}
+
+@mixin headline--lvl4($box-model: true) {
+  @include headline;
+
+  font-size: rem(16);
+
+  @if $box-model {
+    padding: 0 0 rh(0.25);
+    margin: 0 0 rh(0.25);
+  }
+}
+
+@mixin headline--lvl5($box-model: true) {
+  @include headline;
+
+  font-size: rem(12);
+  font-weight: 400;
+  color: rgba($primary-font-color, 0.75);
+  letter-spacing: 0.8px;
+
+  @if $box-model {
+    padding: 0 0 rh(0.125);
+    margin: 0;
+  }
+}
+
+@mixin headline--page {
+  @include headline--lvl1;
+
+  font-family: $font-family--serif;
+  font-weight: 100;
+}
+
+// ---------
+// Implementation
+@if $generate-classes {
+  .is-h1,
+  h1 {
+    @include headline--lvl1;
+  }
+
+  .is-h2,
+  h2 {
+    @include headline--lvl2;
+  }
+
+  .is-h3,
+  h3 {
+    @include headline--lvl3;
+  }
+
+  .is-h4,
+  h4 {
+    @include headline--lvl4;
+  }
+
+  .is-h5,
+  h5 {
+    @include headline--lvl5;
+  }
+
+  .is-page-headline {
+    @include headline--page;
+  }
+}

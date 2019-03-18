@@ -1,0 +1,30 @@
+// =======================
+// Default setup for Images
+// =======================
+
+$generate-classes: false !default;
+
+@mixin image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+@mixin image--full {
+  @include image;
+
+  width: 100%;
+}
+
+// ---------
+// Implementation
+@if $generate-classes {
+  img {
+    @include image;
+
+    &.full-width {
+      @include image--full;
+    }
+  }
+}

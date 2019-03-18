@@ -1,0 +1,13 @@
+<!-- THIS IS JUST A SAMPLE ICON -->
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-border copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-border-copy-2" fill="#FFFFFF" fill-rule="nonzero">
+            <path d="M457.372583,89.372583 C469.86936,76.8758057 490.13064,76.8758057 502.627417,89.372583 C515.124194,101.86936 515.124194,122.13064 502.627417,134.627417 L214.627417,422.627417 C202.13064,435.124194 181.86936,435.124194 169.372583,422.627417 L9.372583,262.627417 C-3.12419433,250.13064 -3.12419433,229.86936 9.372583,217.372583 C21.8693603,204.875806 42.1306397,204.875806 54.627417,217.372583 L192,354.745166 L457.372583,89.372583 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

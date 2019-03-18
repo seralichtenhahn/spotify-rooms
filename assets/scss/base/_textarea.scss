@@ -1,0 +1,40 @@
+// =======================
+// Global TextArea Styles
+// =======================
+
+$generate-classes: false !default;
+
+@mixin textarea {
+  @include paragraph(false);
+
+  overflow: auto;
+  width: 100%;
+  padding: rh(0.5);
+  margin-bottom: rh();
+  color: $textarea-fc;
+  outline: none;
+  box-shadow: rem(1 1 14) 0 rgba($black, 0.1);
+  border: {
+    width: calc-rem(1);
+    color: $textarea-bc;
+    style: solid;
+    radius: rem(6);
+  }
+
+  &::placeholder {
+    color: $textarea-placeholder-fc;
+  }
+
+  &:active,
+  &:focus {
+    border-color: $textarea-bc--active;
+  }
+}
+
+// ---------
+// Implementation
+@if $generate-classes {
+  textarea {
+    @include textarea;
+  }
+}
