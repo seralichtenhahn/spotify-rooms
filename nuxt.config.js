@@ -35,7 +35,7 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: ["@/plugins/spotify.js"],
+  plugins: ["@/plugins/spotify.js", "@/plugins/firebase.js"],
 
   /*
   ** Nuxt.js modules
