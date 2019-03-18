@@ -1,6 +1,10 @@
-# WONDROUS NUXT TEMPLATE
+# Spotify Rooms (IPA Project)
 
-> This is template for Nuxt.js project in WONDROUS LTD.
+[![CircleCI](https://circleci.com/gh/seralichtenhahn/spotify-rooms.svg?style=svg)](https://circleci.com/gh/seralichtenhahn/spotify-rooms)
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/597ea606-1b7b-4320-b5b8-5e4fecd2bdca/deploy-status)](https://app.netlify.com/sites/spotify-rooms/deploys)
+
+> Repository für die IPA von Serafin Lichtenhahn 
 
 ## First Steps
 

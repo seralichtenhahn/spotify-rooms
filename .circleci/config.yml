@@ -1,0 +1,67 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10
+version: 2
+
+jobs:
+  install_dependencies:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - node-cache-10lts-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          - node-cache-10lts-{{ arch }}-{{ .Branch }}
+      - run:
+          name: install dependencies
+          command: yarn install
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: node-cache-10lts-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./node_modules
+  lint_scss_files:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: lint scss
+          command: yarn run lint:scss
+  lint_vue_files:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: lint vue
+          command: yarn run lint:vue
+  unit_test:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: unit test
+          command: yarn run test:unit
+workflows:
+  version: 2
+  build_lint_and_test:
+    jobs:
+      - install_dependencies
+      - lint_scss_files:
+          requires:
+            - install_dependencies
+      - lint_vue_files:
+          requires:
+            - install_dependencies
+      - unit_test:
+          requires:
+            - install_dependencies
