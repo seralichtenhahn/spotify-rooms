@@ -1,6 +1,6 @@
-# WONDROUS NUXT TEMPLATE
+# Spotify Rooms (IPA Project)
 
-> This is template for Nuxt.js project in WONDROUS LTD.
+> Repository für die IPA von Serafin Lichtenhahn 
 
 ## First Steps
 
