@@ -2,6 +2,11 @@ import firebase from "firebase/app"
 import "firebase/firestore"
 
 export default (ctx, inject) => {
+  console.log(
+    process.env.FIREBASE_PROJECT_ID,
+    typeof process.env.FIREBASE_PROJECT_ID
+  )
+
   const config = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
