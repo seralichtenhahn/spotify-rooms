@@ -54,7 +54,12 @@ module.exports = {
   /*
   ** Nuxt.js modules
   */
-  modules: ["@nuxtjs/dotenv", "@nuxtjs/style-resources", "@nuxtjs/axios"],
+  modules: [
+    "@nuxtjs/dotenv",
+    "@nuxtjs/style-resources",
+    "@nuxtjs/axios",
+    "portal-vue/nuxt"
+  ],
 
   /*
   ** Deafult SCSS Files import - requirments for all components
