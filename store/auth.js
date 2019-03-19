@@ -28,7 +28,7 @@ export const actions = {
       const response = await this.$axios.post(
         process.env.NETLIFY_FUNCTIONS_URI + "/token",
         {
-          redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+          redirect_uri: location.protocol + "//" + location.host + "/rooms",
           ...payload
         }
       )

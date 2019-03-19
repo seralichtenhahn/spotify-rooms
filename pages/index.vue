@@ -28,7 +28,7 @@ export default {
         "user-read-playback-state"
       ].join(" ")
 
-      console.log(process.env.SPOTIFY_REDIRECT_URI)
+      const redirect_uri = location.protocol + "//" + location.host + "/rooms"
 
       return (
         "https://accounts.spotify.com/authorize?" +
@@ -36,7 +36,7 @@ export default {
           response_type: "code",
           client_id: process.env.SPOTIFY_CLIENT_ID,
           scope,
-          redirect_uri: process.env.SPOTIFY_REDIRECT_URI
+          redirect_uri
         })
       )
     }
