@@ -1,8 +1,8 @@
 {
-  "name": "wndrs-nuxt-template",
-  "version": "1.0.0",
-  "description": "This is template for Nuxt.js project in WONDROUS LLC.",
-  "author": "WONDROUS LLC <hello@wondrous.ch> (https://www.wearewondrous.ch)",
+  "name": "spotify-rooms",
+  "version": "0.1.0",
+  "description": "Repository für die IPA von Serafin Lichtenhahn ",
+  "author": "Serafin Lichtenhahn <serafin@wondrous.ch> (https://www.wearewondrous.ch)",
   "private": true,
   "scripts": {
     "dev": "nuxt",
