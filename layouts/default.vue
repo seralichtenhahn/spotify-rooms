@@ -1,11 +1,17 @@
 <template>
   <div class="app--layout">
     <nuxt/>
+    <AppModal />
   </div>
 </template>
 
 <script>
+import AppModal from "@/components/Modal/Modal"
+
 export default {
+  components: {
+    AppModal
+  },
   middleware: ["auth"]
 }
 </script>
