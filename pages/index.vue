@@ -28,6 +28,8 @@ export default {
         "user-read-playback-state"
       ].join(" ")
 
+      console.log(process.env.SPOTIFY_REDIRECT_URI)
+
       return (
         "https://accounts.spotify.com/authorize?" +
         stringify({
