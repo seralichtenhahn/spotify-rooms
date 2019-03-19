@@ -40,13 +40,25 @@ module.exports = {
   /*
   ** Nuxt.js modules
   */
-  modules: ["@nuxtjs/dotenv", "@nuxtjs/style-resources"],
+  modules: ["@nuxtjs/dotenv", "@nuxtjs/style-resources", "@nuxtjs/axios"],
 
   /*
   ** Deafult SCSS Files import - requirments for all components
   */
   styleResources: {
     scss: ["~assets/scss/_toolbelt.scss"]
+  },
+
+  axios: {
+    proxy: true // Can be also an object with default options
+  },
+
+  proxy: {
+    "/.netlify/functions": {
+      target: "http://localhost:9000",
+      pathRewrite: { "^/.netlify/functions": "" },
+      ws: false
+    }
   },
 
   /*
