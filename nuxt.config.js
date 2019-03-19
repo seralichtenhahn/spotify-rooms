@@ -11,6 +11,9 @@ module.exports = {
 
   env: {
     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+    SPOTIFY_REDIRECT_URI: process.env.DEPLOY_PRIME_URI
+      ? process.env.DEPLOY_PRIME_URI + "/rooms"
+      : process.env.SPOTIFY_REDIRECT_URI,
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
     FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
