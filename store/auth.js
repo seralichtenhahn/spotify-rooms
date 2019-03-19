@@ -24,11 +24,14 @@ export const mutations = {
 
 export const actions = {
   async fetchTokens({ dispatch }, payload) {
+    const redirect_uri = process.env.DEPLOY_PRIME_URI
+      ? process.env.DEPLOY_PRIME_URI + "/rooms"
+      : process.env.SPOTIFY_REDIRECT_URI
     try {
       const response = await this.$axios.post(
         process.env.NETLIFY_FUNCTIONS_URI + "/token",
         {
-          redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+          redirect_uri,
           ...payload
         }
       )
