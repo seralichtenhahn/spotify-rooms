@@ -147,3 +147,6 @@ fabric.properties
 
 .idea/modules.xml
 .idea/wndrs-nuxt-template.iml
+
+# Netlify Functions
+.netlify/functions

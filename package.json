@@ -1,19 +1,22 @@
 {
-  "name": "wndrs-nuxt-template",
-  "version": "1.0.0",
-  "description": "This is template for Nuxt.js project in WONDROUS LLC.",
-  "author": "WONDROUS LLC <hello@wondrous.ch> (https://www.wearewondrous.ch)",
+  "name": "spotify-rooms",
+  "version": "0.1.0",
+  "description": "Repository für die IPA von Serafin Lichtenhahn ",
+  "author": "Serafin Lichtenhahn <serafin@wondrous.ch> (https://www.wearewondrous.ch)",
   "private": true,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate && yarn functions:build",
+    "functions:serve": "netlify-lambda serve functions",
+    "functions:build": "netlify-lambda build functions",
     "lint:vue": "eslint **/*.vue",
     "lint:scss": "stylelint **/**/*.vue **/**/*.scss",
     "lint": "yarn lint:scss & yarn lint:vue",
     "test:unit": "jest --passWithNoTests",
     "test:unit:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --no-cache --runInBand",
+    "test": "yarn lint && yarn test:unit",
     "precommit": "yarn lint"
   },
   "husky": {
@@ -34,11 +37,13 @@
     ]
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.4.1",
     "@nuxtjs/dotenv": "1.3.0",
     "@nuxtjs/style-resources": "0.1.2",
     "firebase": "^5.9.0",
     "nuxt": "2.4.5",
-    "spotify-web-api-js": "^1.2.0"
+    "spotify-web-api-js": "^1.2.0",
+    "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.29",
@@ -52,6 +57,7 @@
     "husky": "1.3.1",
     "jest": "^24.5.0",
     "lint-staged": "8.1.3",
+    "netlify-lambda": "^1.4.3",
     "node-sass": "4.11.0",
     "nodemon": "1.18.9",
     "postcss-normalize": "7.0.1",

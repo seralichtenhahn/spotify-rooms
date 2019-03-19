@@ -9,6 +9,15 @@ const pkg = require("./package")
 module.exports = {
   mode: "spa",
 
+  env: {
+    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+    FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+    FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
+    FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
+    FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
+    NETLIFY_FUNCTIONS_URI: process.env.NETLIFY_FUNCTIONS_URI
+  },
+
   /*
   ** Headers of the page
   */
@@ -35,18 +44,35 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: ["@/plugins/spotify.js", "@/plugins/firebase.js"],
+  plugins: [
+    "@/plugins/spotify.js",
+    "@/plugins/firebase.js",
+    "@/plugins/localStorage.js",
+    "@/plugins/nuxtClientInit.js"
+  ],
 
   /*
   ** Nuxt.js modules
   */
-  modules: ["@nuxtjs/dotenv", "@nuxtjs/style-resources"],
+  modules: ["@nuxtjs/dotenv", "@nuxtjs/style-resources", "@nuxtjs/axios"],
 
   /*
   ** Deafult SCSS Files import - requirments for all components
   */
   styleResources: {
     scss: ["~assets/scss/_toolbelt.scss"]
+  },
+
+  axios: {
+    proxy: true // Can be also an object with default options
+  },
+
+  proxy: {
+    "/.netlify/functions": {
+      target: "http://localhost:9000",
+      pathRewrite: { "^/.netlify/functions": "" },
+      ws: false
+    }
   },
 
   /*
