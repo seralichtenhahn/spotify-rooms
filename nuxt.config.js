@@ -12,6 +12,8 @@ const SPOTIFY_REDIRECT_URI = process.env.DEPLOY_PRIME_URI
     : process.env.DEPLOY_PRIME_URL + "/rooms"
   : process.env.SPOTIFY_REDIRECT_URI
 
+console.log(SPOTIFY_REDIRECT_URI)
+
 module.exports = {
   mode: "spa",
 
