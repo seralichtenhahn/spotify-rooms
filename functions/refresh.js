@@ -44,8 +44,6 @@ exports.handler = function(event, _context, callback) {
     `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
   ).toString("base64")
 
-  console.log(base64encoded)
-
   return request.post(
     {
       url: "https://accounts.spotify.com/api/token",
@@ -59,8 +57,6 @@ exports.handler = function(event, _context, callback) {
       json: true
     },
     function(error, response, body) {
-      console.log(body)
-
       if (!error && response.statusCode === 200) {
         return callback(null, {
           statusCode: 200,

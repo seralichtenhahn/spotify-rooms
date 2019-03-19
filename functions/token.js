@@ -68,8 +68,6 @@ exports.handler = function(event, _context, callback) {
       json: true
     },
     function(error, response, body) {
-      console.log(body)
-
       if (!error && response.statusCode === 200) {
         return callback(null, {
           statusCode: 200,
