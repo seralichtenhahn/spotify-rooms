@@ -23,5 +23,14 @@ export const mutations = {
 }
 
 export const actions = {
-  //
+  async fetchUser({ commit }) {
+    try {
+      const { display_name, id } = await this.$spotify.getMe()
+      commit("setId", id)
+      commit("setUsername", display_name)
+      commit("setLoginStatus", true)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 }

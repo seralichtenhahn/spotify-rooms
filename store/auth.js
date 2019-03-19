@@ -23,5 +23,49 @@ export const mutations = {
 }
 
 export const actions = {
-  //
+  async fetchTokens({ dispatch }, payload) {
+    try {
+      const response = await this.$axios.post(
+        process.env.NETLIFY_FUNCTIONS_URI + "/token",
+        {
+          redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+          ...payload
+        }
+      )
+
+      dispatch("setCredentials", response.data)
+
+      return response
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  },
+  async refreshTokens({ dispatch, state }) {
+    try {
+      const response = await this.$axios.post(
+        process.env.NETLIFY_FUNCTIONS_URI + "/refresh",
+        {
+          refresh_token: state.refreshToken
+        }
+      )
+
+      dispatch("setCredentials", response.data)
+
+      return response
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  },
+  setCredentials({ commit }, credentials) {
+    const expiresInMilliseconds = credentials.expires_in * 1000
+
+    commit("setAccessToken", credentials.access_token)
+    commit("setExpiresIn", Date.now() + expiresInMilliseconds)
+
+    if (credentials.refresh_token) {
+      commit("setRefreshToken", credentials.refresh_token)
+    }
+  }
 }
