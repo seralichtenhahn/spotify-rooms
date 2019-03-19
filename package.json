@@ -8,12 +8,15 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate && yarn functions:build",
+    "functions:serve": "netlify-lambda serve functions",
+    "functions:build": "netlify-lambda build functions",
     "lint:vue": "eslint **/*.vue",
     "lint:scss": "stylelint **/**/*.vue **/**/*.scss",
     "lint": "yarn lint:scss & yarn lint:vue",
     "test:unit": "jest --passWithNoTests",
     "test:unit:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --no-cache --runInBand",
+    "test": "yarn lint && yarn test:unit",
     "precommit": "yarn lint"
   },
   "husky": {
