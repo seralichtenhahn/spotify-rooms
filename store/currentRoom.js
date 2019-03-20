@@ -60,7 +60,10 @@ export const actions = {
 
     const unsubscribe = room.collection("queue").onSnapshot(async queueRef => {
       const queue = await queueRef.query.orderBy("createdAt").get()
-      const queueData = queue.docs.map(doc => doc.data())
+      const queueData = queue.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
       commit("setQueue", queueData)
     })
 
@@ -78,6 +81,23 @@ export const actions = {
         user: rootState.user.username,
         score: 0,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+  },
+  async voteTrack({ state }, { id, value }) {
+    const track = state.queue.find(track => track.id === id)
+
+    const score = track.score + value
+
+    console.log(value)
+    console.log(track, score)
+
+    await this.$db
+      .collection("rooms")
+      .doc(state.id)
+      .collection("queue")
+      .doc(id)
+      .update({
+        score: track.score + value
       })
   },
   reset({ commit }) {
