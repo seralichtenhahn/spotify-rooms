@@ -1,5 +1,12 @@
 <template>
   <div class="row">
+    <div class="topbar">
+      <div class="left">
+        <button @click="leaveRoom">
+          X
+        </button>
+      </div>
+    </div>
     <div>
       <h1>{{ title }}</h1>
       <h2>Room by {{ owner }}</h2>
@@ -17,7 +24,14 @@
         </li>
       </ul>
     </div>
-    <div/>
+    <div>
+      <nuxt-link
+        :to="{ name: 'rooms-id-add' }"
+        class="button"
+      >
+        Add Track
+      </nuxt-link>
+    </div>
   </div>
 </template>
 
@@ -39,6 +53,12 @@ export default {
   },
   computed: {
     ...mapGetters("currentRoom", ["queue"])
+  },
+  methods: {
+    leaveRoom() {
+      this.$store.dispatch("currentRoom/reset")
+      this.$router.push("/rooms")
+    }
   }
 }
 </script>
