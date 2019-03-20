@@ -37,9 +37,9 @@ export default {
 
   .topbar {
     position: absolute;
+    display: flex;
     width: 100%;
     height: rem(100);
-    display: flex;
 
     .left {
       align-self: flex-start;
