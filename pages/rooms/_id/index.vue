@@ -14,14 +14,11 @@
     <div class="queue">
       <h2>Queue:</h2>
       <ul>
-        <li
-          v-for="(song, index) in queue"
+        <CardTrack
+          v-for="(track, index) in queue"
           :key="index"
-        >
-          <strong>{{ song.title }}</strong> by {{ song.artist }}
-          <br>
-          eingereicht von <i>{{ song.user }}</i>
-        </li>
+          :track="track"
+        />
       </ul>
     </div>
     <div>
@@ -36,9 +33,13 @@
 </template>
 
 <script>
+import CardTrack from "@/components/Cards/CardTrack"
 import { mapGetters } from "vuex"
 
 export default {
+  components: {
+    CardTrack
+  },
   async asyncData({ params, error, store }) {
     try {
       const room = await store.dispatch("currentRoom/init", params.id)
