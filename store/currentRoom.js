@@ -83,12 +83,29 @@ export const actions = {
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
   },
-  async voteTrack({ state }, { id, value }) {
+  async voteTrack({ state, dispatch }, { id, mode }) {
     const track = state.queue.find(track => track.id === id)
+
+    const index = await dispatch(
+      "voting/updateVote",
+      {
+        trackId: id,
+        mode
+      },
+      { root: true }
+    )
+
+    console.log(index)
+
+    let value = mode === "up" ? 1 : -1
+
+    if (index > -1) {
+      value = value * 2
+      console.log(value)
+    }
 
     const score = track.score + value
 
-    console.log(value)
     console.log(track, score)
 
     await this.$db

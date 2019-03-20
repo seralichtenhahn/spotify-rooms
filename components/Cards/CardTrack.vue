@@ -38,31 +38,23 @@ export default {
       )
     },
     canUpvote() {
-      return this.vote ? this.vote.value !== "upvote" : true
+      return this.vote ? this.vote.mode !== "up" : true
     },
     canDownvote() {
-      return this.vote ? this.vote.value !== "downvote" : true
+      return this.vote ? this.vote.value !== "down" : true
     }
   },
   methods: {
     upvoteTrack() {
-      this.$store.dispatch("voting/updateVote", {
-        trackId: this.track.id,
-        value: "upvote"
-      })
       this.$store.dispatch("currentRoom/voteTrack", {
         id: this.track.id,
-        value: 1
+        mode: "up"
       })
     },
     downvoteTrack() {
-      this.$store.dispatch("voting/updateVote", {
-        trackId: this.track.id,
-        value: "downvote"
-      })
       this.$store.dispatch("currentRoom/voteTrack", {
         id: this.track.id,
-        value: -1
+        mode: "down"
       })
     }
   }

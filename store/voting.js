@@ -22,5 +22,7 @@ export const actions = {
       commit("removeVote", index)
     }
     commit("addVote", data)
+
+    return index
   }
 }
