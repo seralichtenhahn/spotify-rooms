@@ -12,7 +12,7 @@ export const actions = {
       throw new Error("Raum wurde nicht gefunden")
     }
 
-    this.$router.push({ name: "rooms-id", params: { roomName } })
+    this.$router.push({ name: "rooms-id", params: { id: roomName } })
 
     return roomName
   },
