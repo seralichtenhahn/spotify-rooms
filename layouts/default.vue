@@ -34,5 +34,32 @@ export default {
     padding: rem(32 16);
     text-align: center;
   }
+
+  .topbar {
+    position: absolute;
+    width: 100%;
+    height: rem(100);
+    display: flex;
+
+    .left {
+      align-self: flex-start;
+    }
+  }
+
+  ul {
+    margin: 0;
+    list-style: none;
+
+    li {
+      box-sizing: border-box;
+      padding: rem(12);
+      border-bottom: rem(1) solid $black;
+
+      strong {
+        display: block;
+        font-size: rem(18);
+      }
+    }
+  }
 }
 </style>
