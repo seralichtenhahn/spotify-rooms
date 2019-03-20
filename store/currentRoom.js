@@ -1,8 +1,11 @@
+import firebase from "firebase/app"
+
 export const state = () => ({
   id: "",
   title: "",
   owner: "",
-  queue: []
+  queue: [],
+  listener: null
 })
 
 export const getters = {
@@ -25,6 +28,19 @@ export const mutations = {
   },
   setQueue(state, queue) {
     state.queue = queue
+  },
+  setListener(state, listener) {
+    state.listener = listener
+  },
+  resetState(state) {
+    if (typeof state.listener === "function") {
+      state.listener()
+    }
+
+    state.id = ""
+    state.title = ""
+    state.queue = []
+    state.listener = null
   }
 }
 
@@ -42,12 +58,29 @@ export const actions = {
     commit("setTitle", roomData.title)
     commit("setOwner", roomData.owner)
 
-    room.collection("queue").onSnapshot(async queueRef => {
+    const unsubscribe = room.collection("queue").onSnapshot(async queueRef => {
       const queue = await queueRef.query.orderBy("createdAt").get()
       const queueData = queue.docs.map(doc => doc.data())
       commit("setQueue", queueData)
     })
 
+    commit("setListener", unsubscribe)
+
     return roomData
+  },
+  async addTrack({ state, rootState }, trackData) {
+    await this.$db
+      .collection("rooms")
+      .doc(state.id)
+      .collection("queue")
+      .add({
+        ...trackData,
+        user: rootState.user.username,
+        score: 0,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+  },
+  reset({ commit }) {
+    commit("resetState")
   }
 }
