@@ -2,53 +2,44 @@ import slugify from "slugify"
 import firebase from "firebase/app"
 
 export const actions = {
-  join({}, roomName) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const room = await this.$db
-          .collection("rooms")
-          .doc(roomName)
-          .get()
+  async join({}, roomName) {
+    const room = await this.$db
+      .collection("rooms")
+      .doc(roomName)
+      .get()
 
-        if (!room.exists) {
-          reject("Raum wurde nicht gefunden")
-        }
+    if (!room.exists) {
+      throw new Error("Raum wurde nicht gefunden")
+    }
 
-        this.$router.push({ name: "rooms-id", params: { id } })
-        resolve(roomName)
-      } catch (error) {
-        reject(error)
-      }
-    })
+    this.$router.push({ name: "rooms-id", params: { roomName } })
+
+    return roomName
   },
-  create({ rootState }, roomName) {
-    return new Promise(async (resolve, reject) => {
-      if (!roomName) {
-        reject("Gebe einen Namen ein")
-        return
-      }
+  async create({ rootState }, roomName) {
+    if (!rootState.user.isPremium) {
+      throw new Error("Nur Spotify Premium Nutzer können einen Raum erstellen")
+    }
 
-      const id = slugify(roomName, { lower: true })
+    if (!roomName) {
+      throw new Error("Gebe einen Namen ein")
+    }
 
-      try {
-        const roomDoc = await this.$db.collection("rooms").doc(id)
-        const room = roomDoc.get()
+    const id = slugify(roomName, { lower: true })
 
-        if (room.exists) {
-          reject("Raum existirt bereits")
-        }
+    const roomDoc = await this.$db.collection("rooms").doc(id)
+    const room = roomDoc.get()
 
-        await roomDoc.set({
-          title: roomName,
-          owner: rootState.user.id,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
+    if (room.exists) {
+      throw new Error("Raum existiert bereits")
+    }
 
-        this.$router.push({ name: "rooms-id", params: { id } })
-        resolve(roomName)
-      } catch (error) {
-        reject(error)
-      }
+    await roomDoc.set({
+      title: roomName,
+      owner: rootState.user.id,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
     })
+
+    this.$router.push({ name: "rooms-id", params: { id } })
   }
 }

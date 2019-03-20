@@ -56,8 +56,8 @@ export default {
     async submit() {
       try {
         await this.$store.dispatch("rooms/join", this.roomName)
-      } catch (error) {
-        this.error = error
+      } catch ({ message }) {
+        this.error = message
       }
     },
     openModal() {

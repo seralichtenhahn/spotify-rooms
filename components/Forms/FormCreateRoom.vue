@@ -32,8 +32,8 @@ export default {
       try {
         await this.$store.dispatch("rooms/create", this.roomName)
         this.$nuxt.$emit("modal:deactivate")
-      } catch (error) {
-        this.error = error
+      } catch ({ message }) {
+        this.error = message
       }
     }
   }
