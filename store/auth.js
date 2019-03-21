@@ -23,6 +23,13 @@ export const mutations = {
 }
 
 export const actions = {
+  /**
+   * Sendet den Authentifizierungscode an die token Lamda function.
+   * Mit den Rückgabewerten werden die Credentials für den benutzer gesetzt.
+   * @param {object} StoreContext - vuex context.
+   * @param {object} payload - Authentifizierungscode von Spotify
+   * @return {object} Rückgabewert der Lamda function
+   */
   async fetchTokens({ dispatch }, payload) {
     try {
       const response = await this.$axios.post(
@@ -41,6 +48,12 @@ export const actions = {
       return e
     }
   },
+  /**
+   * Sendet den Refreshtoken an die token Lamda function.
+   * Mit den Rückgabewerten werden die Credentials für den benutzer gesetzt.
+   * @param {object} StoreContext - vuex context.
+   * @return {object} Rückgabewert der Lamda function
+   */
   async refreshTokens({ dispatch, state }) {
     try {
       const response = await this.$axios.post(
@@ -58,6 +71,11 @@ export const actions = {
       return e
     }
   },
+  /**
+   * Setzt die credentials des Benutzers mittels Mutations in den Store
+   * @param {object} StoreContext - vuex context.
+   * @param {object} credentials - Spotify credentials
+   */
   setCredentials({ commit }, credentials) {
     const expiresInMilliseconds = credentials.expires_in * 1000
 
