@@ -7,6 +7,7 @@
     <div>
       <button
         :disabled="!canUpvote"
+        class="button--upvote"
         @click="upvoteTrack"
       >
         up
@@ -14,6 +15,7 @@
       <span>{{ track.score }}</span>
       <button
         :disabled="!canDownvote"
+        class="button--downvote"
         @click="downvoteTrack"
       >
         down
@@ -27,7 +29,6 @@ export default {
   props: {
     track: {
       type: Object,
-      default: () => ({}),
       required: true
     }
   },
