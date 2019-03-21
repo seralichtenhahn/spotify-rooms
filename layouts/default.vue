@@ -1,11 +1,17 @@
 <template>
   <div class="app--layout">
     <nuxt/>
+    <AppModal />
   </div>
 </template>
 
 <script>
+import AppModal from "@/components/Modal/Modal"
+
 export default {
+  components: {
+    AppModal
+  },
   middleware: ["auth"]
 }
 </script>
@@ -27,6 +33,33 @@ export default {
     height: 100%;
     padding: rem(32 16);
     text-align: center;
+  }
+
+  .topbar {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: rem(100);
+
+    .left {
+      align-self: flex-start;
+    }
+  }
+
+  ul {
+    margin: 0;
+    list-style: none;
+
+    li {
+      box-sizing: border-box;
+      padding: rem(12);
+      border-bottom: rem(1) solid $black;
+
+      strong {
+        display: block;
+        font-size: rem(18);
+      }
+    }
   }
 }
 </style>
