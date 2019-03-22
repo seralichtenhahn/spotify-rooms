@@ -28,17 +28,31 @@
       >
         Add Track
       </nuxt-link>
+      <button
+        v-if="isOwner"
+        @click="setDevice"
+      >
+        Start Queue
+      </button>
     </div>
+    <portal
+      v-if="showDeviceList"
+      to="modal"
+    >
+      <FormDeviceList />
+    </portal>
   </div>
 </template>
 
 <script>
 import CardTrack from "@/components/Cards/CardTrack"
+import FormDeviceList from "@/components/Forms/FormDeviceList"
 import { mapGetters } from "vuex"
 
 export default {
   components: {
-    CardTrack
+    CardTrack,
+    FormDeviceList
   },
   async asyncData({ params, error, store }) {
     try {
@@ -52,13 +66,22 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      showDeviceList: false
+    }
+  },
   computed: {
-    ...mapGetters("currentRoom", ["queue"])
+    ...mapGetters("currentRoom", ["queue", "isOwner"])
   },
   methods: {
     leaveRoom() {
       this.$store.dispatch("currentRoom/reset")
       this.$router.push("/rooms")
+    },
+    setDevice() {
+      this.showDeviceList = true
+      this.$nuxt.$emit("modal:activate", "Set Device")
     }
   }
 }

@@ -25,7 +25,9 @@ export default {
         "user-read-private",
         "user-read-email",
         "user-modify-playback-state",
-        "user-read-playback-state"
+        "user-read-playback-state",
+        "playlist-modify-private",
+        "playlist-modify-public"
       ].join(" ")
 
       const redirect_uri = location.protocol + "//" + location.host + "/rooms"
