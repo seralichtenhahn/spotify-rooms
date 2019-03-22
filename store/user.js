@@ -1,6 +1,7 @@
 export const state = () => ({
   id: "",
   username: "",
+  device: "",
   loggedIn: false,
   isPremium: false
 })
@@ -8,6 +9,7 @@ export const state = () => ({
 export const getters = {
   id: state => state.id,
   username: state => state.username,
+  device: state => state.device,
   isLoggedIn: state => state.loggedIn,
   isPremium: state => state.isPremium
 }
@@ -18,6 +20,9 @@ export const mutations = {
   },
   setUsername(state, username) {
     state.username = username
+  },
+  setDevice(state, device) {
+    state.device = device
   },
   setLoginStatus(state, status) {
     state.loggedIn = status

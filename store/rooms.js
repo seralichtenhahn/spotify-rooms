@@ -34,9 +34,14 @@ export const actions = {
       throw new Error("Raum existiert bereits")
     }
 
+    const playlist = await this.$spotify.createPlaylist(rootState.user.id, {
+      name: roomName
+    })
+
     await roomDoc.set({
       title: roomName,
       owner: rootState.user.id,
+      playlistId: playlist.id,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     })
 
