@@ -1,6 +1,12 @@
 import firebase from "firebase/app"
 import "firebase/firestore"
 
+/**
+ * Initalisiert Firebase Applikation
+ * Setzt Firestore in Context und App als db
+ * @param {object} NuxtContext - https://nuxtjs.org/api/context/
+ * @param {function} inject
+ */
 export default (ctx, inject) => {
   const config = {
     apiKey: process.env.FIREBASE_API_KEY,

@@ -39,12 +39,21 @@ export default {
     ...mapGetters("currentRoom", ["isPlaying", "currentTrack", "isOwner", "id"])
   },
   methods: {
+    /*
+     * Führt Actions aus zum starten des letzten Tracks in der Wartesclange
+     */
     prevTrack() {
       this.$store.dispatch("currentRoom/prevTrack")
     },
+    /*
+     * Führt Actions aus zum ändern des Play Status
+     */
     changePlayState() {
       this.$store.dispatch("currentRoom/changePlayState")
     },
+    /*
+     * Führt Actions aus zum starten des nächsten Tracks in der Wartesclange
+     */
     nextTrack() {
       this.$store.dispatch("currentRoom/nextTrack")
     }

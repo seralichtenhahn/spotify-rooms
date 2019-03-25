@@ -19,7 +19,13 @@ export default {
   middleware: "anonymous",
   layout: "blank",
   computed: {
+    /**
+     * Generiert die URL zum Spotify Auth Service
+     * @return {string} url
+     */
     login() {
+      // Alle für die Funktionalitäten der App benötigten Scopes
+      // https://developer.spotify.com/documentation/general/guides/scopes/
       const scope = [
         "user-top-read",
         "user-read-private",

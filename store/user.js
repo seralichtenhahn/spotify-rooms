@@ -33,6 +33,11 @@ export const mutations = {
 }
 
 export const actions = {
+  /**
+   * Holt Informaatione über Nutzer
+   * Speichert Informationen im Store
+   * @param {object} StoreContext - vuex context.
+   */
   async fetchUser({ commit }) {
     try {
       const { display_name, id, product } = await this.$spotify.getMe()

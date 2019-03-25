@@ -22,12 +22,20 @@ export default {
       devices: []
     }
   },
+  /**
+   * Holt alle verfügraben Geräte des Benutzers
+   */
   async mounted() {
     const { devices } = await this.$spotify.getMyDevices()
-    console.log(devices)
     this.devices = devices
   },
   methods: {
+    /**
+     * Setzt aktives Gerät des Benutzers
+     * Führt Actions aus zum starten der Warteschlange
+     *  Ruft Event auf um Modal zu deaktivieren
+     * @param {string} device - id
+     */
     startQueue(device) {
       this.$store.commit("user/setDevice", device.id)
       this.$store.dispatch("currentRoom/start")

@@ -72,6 +72,14 @@ export const mutations = {
 }
 
 export const actions = {
+  /**
+   * initialisiert den betrettenen Raum für den Nutzer
+   * Erstellte alle Hörer um Änderungen in Echtzeit zu erhalten
+   * Gibt die Raum Daten zurück
+   * @param {object} StoreContext - vuex context.
+   * @param {string} roomID
+   * @return {promise}
+   */
   async init({ commit, getters, dispatch, state }, id) {
     const room = await this.$db.collection("rooms").doc(id)
     const roomSnapshot = await room.get()
@@ -90,6 +98,7 @@ export const actions = {
       dispatch("fetchPlayback")
     }
 
+    // Wird bei Änderungen der Raumdaten ausgeführt
     const roomListener = room.onSnapshot(async snapshot => {
       const { isPlaying, currentTrack } = snapshot.data()
 
@@ -97,8 +106,10 @@ export const actions = {
       commit("setCurrentTrack", currentTrack)
     })
 
+    // // Listener wird gespeichert damit er beim verlassen des Raumes wieder entfrent werden kann
     commit("addListener", roomListener)
 
+    // Wird bei Änderungen der Warteschlange ausgeführt
     const queueListener = room
       .collection("queue")
       .onSnapshot(async snapshot => {
@@ -121,6 +132,7 @@ export const actions = {
             }
           )
 
+          // Speichert neue Tracks in der Playlist
           if (newTracks.length) {
             const uris = newTracks.map(track => track.uri)
             const index = queueData.findIndex(track => track.score === -1)
@@ -136,6 +148,7 @@ export const actions = {
             return newTrack.score !== track.score
           })
 
+          // Neue Position wird bestimmt
           updatedTracks.forEach(track => {
             const findTrack = _track => _track.id === track.id
             const position = getters.queue.findIndex(findTrack)
@@ -154,6 +167,7 @@ export const actions = {
         commit("setHydrated", true)
       })
 
+    // Event Listener wird gesetzt um Status des Raums abzufragen
     document.addEventListener(
       "visibilitychange",
       handleVisibilityChange.bind(this)
@@ -163,6 +177,11 @@ export const actions = {
 
     return roomData
   },
+  /**
+   * Fügt einen neuen Track der Datenbank hinzu
+   * @param {object} StoreContext - vuex context.
+   * @param {object} trackData
+   */
   async addTrack({ state, rootState }, trackData) {
     await this.$db
       .collection("rooms")
@@ -175,6 +194,11 @@ export const actions = {
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
   },
+  /**
+   * Bewertet einen Track und speichert den Score des Track in der Datenbank
+   * @param {object} StoreContext - vuex context.
+   * @param {object} VoteData
+   */
   async voteTrack({ state, dispatch }, { id, mode }) {
     const track = state.queue.find(track => track.id === id)
 
@@ -187,18 +211,13 @@ export const actions = {
       { root: true }
     )
 
-    console.log(index)
-
+    // Setzt Value jenachdem ob "up" oder "down"
     let value = mode === "up" ? 1 : -1
 
+    // Falls bereits eine Bewertung vorhanden ist wird die alte überschrieben
     if (index > -1) {
       value = value * 2
-      console.log(value)
     }
-
-    const score = track.score + value
-
-    console.log(track, score)
 
     await this.$db
       .collection("rooms")
@@ -209,6 +228,10 @@ export const actions = {
         score: track.score + value
       })
   },
+  /**
+   * Deaktiviert die Zufallswiedergabe und Startet die Warteschlange
+   * @param {object} StoreContext - vuex context.
+   */
   async start({ rootState, state }) {
     await this.$spotify.setShuffle(false, {
       device_id: rootState.user.device
@@ -218,10 +241,15 @@ export const actions = {
       context_uri: `spotify:playlist:${state.playlistId}`
     })
   },
+  /**
+   * Holt den Playback Status des Nutzters
+   * Setzt ein Timeout und führt Funktion erneut aus, wenn nächsters Track startet
+   * @param {object} StoreContext - vuex context.
+   */
   async fetchPlayback({ dispatch, commit }) {
     const playback = await this.$spotify.getMyCurrentPlaybackState()
-    console.log(playback)
     const isPlaying = await dispatch("checkIfQueueIsPlaying", playback)
+
     if (isPlaying) {
       dispatch("checkCurrentTrack", playback)
 
@@ -233,6 +261,12 @@ export const actions = {
       commit("addTimeout", timeout)
     }
   },
+  /**
+   * Checkt ob Nutzer gerade die Warteschlange am spielen ist.
+   * Aktualisiert die Datenbank
+   * @param {object} StoreContext - vuex context.
+   * @param {object} playback
+   */
   async checkIfQueueIsPlaying({ state }, playback) {
     const isPlaying =
       playback.is_playing && playback.context.uri.includes(state.playlistId)
@@ -244,6 +278,11 @@ export const actions = {
       })
     return isPlaying
   },
+  /**
+   * Speichert aktuell laufenden Track in der Datenbank
+   * @param {object} StoreContext - vuex context.
+   * @param {object} playback
+   */
   checkCurrentTrack({ state }, { item }) {
     if (!item) {
       return
@@ -260,28 +299,50 @@ export const actions = {
         }
       })
   },
+  /**
+   * Spielt den zuletzt gespielten Track in der Warteschlange ab
+   * @param {object} StoreContext - vuex context.
+   */
   async prevTrack({ dispatch }) {
     await this.$spotify.skipToPrevious()
+
+    // Timeout notwendig weil Spotify den Playback Status noch nicht aktualisiert hat
     setTimeout(() => {
       dispatch("fetchPlayback")
     }, 100)
   },
+  /**
+   * Spielt den nächsten Track in der Warteschlange ab
+   * @param {object} StoreContext - vuex context.
+   */
   async nextTrack({ dispatch }) {
     await this.$spotify.skipToNext()
+
+    // Timeout notwendig weil Spotify den Playback Status noch nicht aktualisiert hat
     setTimeout(() => {
       dispatch("fetchPlayback")
     }, 100)
   },
+  /**
+   * Ändern den Playback Status
+   * @param {object} StoreContext - vuex context.
+   */
   async changePlayState({ dispatch, state }) {
     if (state.isPlaying) {
       await this.$spotify.pause()
     } else {
       await this.$spotify.play()
     }
+
+    // Timeout notwendig weil Spotify den Playback Status noch nicht aktualisiert hat
     setTimeout(() => {
       dispatch("fetchPlayback")
     }, 100)
   },
+  /**
+   * Setzt den aktuellen Raum zurück
+   * @param {object} StoreContext - vuex context.
+   */
   reset({ commit, getters, state }) {
     if (getters.isOwner) {
       document.removeEventListener("visibilitychange", handleVisibilityChange)

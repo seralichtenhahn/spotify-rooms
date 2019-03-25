@@ -48,11 +48,20 @@ export default {
     }
   },
   computed: {
+    /**
+     * Holt Nutzername des Nutzers aus dem Store
+     * @return {string} - username
+     */
     username() {
       return this.$store.getters["user/username"]
     }
   },
   methods: {
+    /**
+     * Führt Action aus um Raum mit eingegebenen Namen beizutretten
+     * Setzt Error Meldung falls Fehler zurückgegeben wird
+     * @return {Promise} Promise
+     */
     async submit() {
       try {
         await this.$store.dispatch("rooms/join", this.roomName)
@@ -60,9 +69,13 @@ export default {
         this.error = message
       }
     },
+    /**
+     * Setzt newRoomModalActive auf true
+     * Ruft Event auf um Modal zu aktivieren mit dem Titel "Gib einen Namen für deinen Raum ein"
+     */
     openModal() {
       this.newRoomModalActive = true
-      this.$nuxt.$emit("modal:activate", "Create new Room")
+      this.$nuxt.$emit("modal:activate", "Gib einen Namen für deinen Raum ein")
     }
   }
 }
