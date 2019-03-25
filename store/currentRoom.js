@@ -129,11 +129,25 @@ export const actions = {
               position
             })
           }
-        }
 
-        // Überprüft ob Tracks neue Reihenfolge haben
-        if (getters.isOwner) {
-          //
+          // Überprüft ob Tracks neue Reihenfolge haben
+          const updatedTracks = getters.queue.filter(track => {
+            const newTrack = queueData.find(_track => _track.id === track.id)
+            return newTrack.score !== track.score
+          })
+
+          updatedTracks.forEach(track => {
+            const findTrack = _track => _track.id === track.id
+            const position = getters.queue.findIndex(findTrack)
+            const newPosition = queueData.findIndex(findTrack)
+            if (position !== newPosition) {
+              this.$spotify.reorderTracksInPlaylist(
+                state.playlistId,
+                position,
+                newPosition
+              )
+            }
+          })
         }
 
         commit("setQueue", queueData)
