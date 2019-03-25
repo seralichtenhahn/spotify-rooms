@@ -9,6 +9,7 @@ export const state = () => ({
   queue: [],
   isPlaying: false,
   currentTrack: null,
+  hydrated: false,
   listeners: [],
   timeout: null
 })
@@ -46,6 +47,9 @@ export const mutations = {
   setCurrentTrack(state, currentTrack) {
     state.currentTrack = currentTrack
   },
+  setHydrated(state, hydrated) {
+    state.hydrated = hydrated
+  },
   addListener(state, listener) {
     state.listeners.push(listener)
   },
@@ -61,6 +65,7 @@ export const mutations = {
     state.queue = []
     state.isPlaying = false
     state.currentTrack = null
+    state.hydrated = false
     state.listeners = []
     state.timeout = null
   }
@@ -106,7 +111,8 @@ export const actions = {
           ...doc.data()
         }))
 
-        if (getters.isOwner && getters.queue.length) {
+        // Überprüft ob neue Tracks vorhanden sind
+        if (getters.isOwner && state.hydrated) {
           const newTracks = differenceWith(
             queueData,
             getters.queue,
@@ -117,11 +123,21 @@ export const actions = {
 
           if (newTracks.length) {
             const uris = newTracks.map(track => track.uri)
-            this.$spotify.addTracksToPlaylist(state.playlistId, uris)
+            const index = queueData.findIndex(track => track.score === -1)
+            const position = index > -1 ? index - 1 : queueData.length - 1
+            this.$spotify.addTracksToPlaylist(state.playlistId, uris, {
+              position
+            })
           }
         }
 
+        // Überprüft ob Tracks neue Reihenfolge haben
+        if (getters.isOwner) {
+          //
+        }
+
         commit("setQueue", queueData)
+        commit("setHydrated", true)
       })
 
     document.addEventListener(
