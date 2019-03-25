@@ -7,7 +7,10 @@ export const state = () => ({
   owner: "",
   playlistId: "",
   queue: [],
-  listener: null
+  isPlaying: false,
+  currentTrack: null,
+  listeners: [],
+  timeout: null
 })
 
 export const getters = {
@@ -16,7 +19,9 @@ export const getters = {
   owner: state => state.owner,
   playlistId: state => state.playlistId,
   isOwner: (state, _getters, rootState) => state.owner === rootState.user.id,
-  queue: state => state.queue
+  queue: state => state.queue,
+  isPlaying: state => state.isPlaying,
+  currentTrack: state => state.currentTrack
 }
 
 export const mutations = {
@@ -35,23 +40,34 @@ export const mutations = {
   setQueue(state, queue) {
     state.queue = queue
   },
-  setListener(state, listener) {
-    state.listener = listener
+  setIsPlaying(state, isPlaying) {
+    state.isPlaying = isPlaying
+  },
+  setCurrentTrack(state, currentTrack) {
+    state.currentTrack = currentTrack
+  },
+  addListener(state, listener) {
+    state.listeners.push(listener)
+  },
+  addTimeout(state, timeout) {
+    state.timeout = timeout
+  },
+  removeTimeout(state) {
+    clearTimeout(state.timeout)
   },
   resetState(state) {
-    if (typeof state.listener === "function") {
-      state.listener()
-    }
-
     state.id = ""
     state.title = ""
     state.queue = []
-    state.listener = null
+    state.isPlaying = false
+    state.currentTrack = null
+    state.listeners = []
+    state.timeout = null
   }
 }
 
 export const actions = {
-  async init({ commit, getters, rootState, state }, id) {
+  async init({ commit, getters, dispatch, state }, id) {
     const room = await this.$db.collection("rooms").doc(id)
     const roomSnapshot = await room.get()
 
@@ -66,39 +82,54 @@ export const actions = {
 
     if (getters.isOwner) {
       commit("setPlaylistId", roomData.playlistId)
+      dispatch("fetchPlayback")
     }
 
-    const unsubscribe = room.collection("queue").onSnapshot(async snapshot => {
-      const source = snapshot.metadata.hasPendingWrites ? "Local" : "Server"
-      if (source === "Local") {
-        return
-      }
+    const roomListener = room.onSnapshot(async snapshot => {
+      const { isPlaying, currentTrack } = snapshot.data()
 
-      const queue = await snapshot.query.orderBy("createdAt").get()
-      const queueData = queue.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }))
-
-      if (getters.isOwner && getters.queue.length) {
-        const newTracks = differenceWith(
-          queueData,
-          getters.queue,
-          (newTrack, oldTrack) => {
-            return newTrack.id === oldTrack.id
-          }
-        )
-
-        if (newTracks.length) {
-          const uris = newTracks.map(track => track.uri)
-          this.$spotify.addTracksToPlaylist(state.playlistId, uris)
-        }
-      }
-
-      commit("setQueue", queueData)
+      commit("setIsPlaying", isPlaying)
+      commit("setCurrentTrack", currentTrack)
     })
 
-    commit("setListener", unsubscribe)
+    commit("addListener", roomListener)
+
+    const queueListener = room
+      .collection("queue")
+      .onSnapshot(async snapshot => {
+        const queue = await snapshot.query
+          .orderBy("score", "desc")
+          .orderBy("createdAt")
+          .get()
+        const queueData = queue.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+
+        if (getters.isOwner && getters.queue.length) {
+          const newTracks = differenceWith(
+            queueData,
+            getters.queue,
+            (newTrack, oldTrack) => {
+              return newTrack.id === oldTrack.id
+            }
+          )
+
+          if (newTracks.length) {
+            const uris = newTracks.map(track => track.uri)
+            this.$spotify.addTracksToPlaylist(state.playlistId, uris)
+          }
+        }
+
+        commit("setQueue", queueData)
+      })
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange.bind(this)
+    )
+
+    commit("addListener", queueListener)
 
     return roomData
   },
@@ -157,7 +188,81 @@ export const actions = {
       context_uri: `spotify:playlist:${state.playlistId}`
     })
   },
-  reset({ commit }) {
+  async fetchPlayback({ dispatch, commit }) {
+    const playback = await this.$spotify.getMyCurrentPlaybackState()
+    console.log(playback)
+    const isPlaying = await dispatch("checkIfQueueIsPlaying", playback)
+    if (isPlaying) {
+      dispatch("checkCurrentTrack", playback)
+
+      commit("removeTimeout")
+      const timeLeft = playback.item.duration_ms - playback.progress_ms
+      const timeout = setTimeout(() => {
+        dispatch("fetchPlayback")
+      }, timeLeft)
+      commit("addTimeout", timeout)
+    }
+  },
+  async checkIfQueueIsPlaying({ state }, playback) {
+    const isPlaying =
+      playback.is_playing && playback.context.uri.includes(state.playlistId)
+    await this.$db
+      .collection("rooms")
+      .doc(state.id)
+      .update({
+        isPlaying
+      })
+    return isPlaying
+  },
+  checkCurrentTrack({ state }, { item }) {
+    if (!item) {
+      return
+    }
+
+    this.$db
+      .collection("rooms")
+      .doc(state.id)
+      .update({
+        currentTrack: {
+          title: item.name,
+          artist: item.artists.map(artist => artist.name).join(", "),
+          image: item.album.images.find(image => image.height === 300).url
+        }
+      })
+  },
+  async prevTrack({ dispatch }) {
+    await this.$spotify.skipToPrevious()
+    setTimeout(() => {
+      dispatch("fetchPlayback")
+    }, 100)
+  },
+  async nextTrack({ dispatch }) {
+    await this.$spotify.skipToNext()
+    setTimeout(() => {
+      dispatch("fetchPlayback")
+    }, 100)
+  },
+  async changePlayState({ dispatch, state }) {
+    if (state.isPlaying) {
+      await this.$spotify.pause()
+    } else {
+      await this.$spotify.play()
+    }
+    setTimeout(() => {
+      dispatch("fetchPlayback")
+    }, 100)
+  },
+  reset({ commit, getters, state }) {
+    if (getters.isOwner) {
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+    }
+    state.listeners.forEach(listener => listener())
     commit("resetState")
+  }
+}
+
+function handleVisibilityChange() {
+  if (!document.hidden) {
+    this.dispatch("currentRoom/fetchPlayback")
   }
 }
