@@ -7,6 +7,6 @@ module.exports = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1"
   },
-  collectCoverage: false,
+  collectCoverage: true,
   collectCoverageFrom: ["**/*.{js,vue}", "!**/node_modules/**"]
 }
