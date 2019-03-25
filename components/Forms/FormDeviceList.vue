@@ -33,7 +33,7 @@ export default {
     /**
      * Setzt aktives Gerät des Benutzers
      * Führt Actions aus zum starten der Warteschlange
-     *  Ruft Event auf um Modal zu deaktivieren
+     * Ruft Event auf um Modal zu deaktivieren
      * @param {string} device - id
      */
     startQueue(device) {
