@@ -1,16 +1,19 @@
 <template>
   <div class="app--layout">
     <nuxt/>
+    <StripeRoomInfo />
     <AppModal />
   </div>
 </template>
 
 <script>
 import AppModal from "@/components/Modal/Modal"
+import StripeRoomInfo from "@/components/Stripes/StripeRoomInfo"
 
 export default {
   components: {
-    AppModal
+    AppModal,
+    StripeRoomInfo
   },
   middleware: ["auth"]
 }
@@ -33,6 +36,10 @@ export default {
     height: 100%;
     padding: rem(32 16);
     text-align: center;
+
+    .queue {
+      overflow: scroll;
+    }
   }
 
   .topbar {
