@@ -62,12 +62,15 @@ export default {
   height: rem(80);
   padding: rem(10);
   background-color: $gray-dove;
+
   .track {
     display: flex;
+
     img {
       width: auto;
       height: rem(60);
     }
+
     p {
       padding: 0;
       margin-bottom: rem(6);
