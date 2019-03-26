@@ -1,27 +1,37 @@
 <template>
-  <div class="row">
+  <div class="room-overview--page">
     <div class="topbar">
-      <div class="left">
-        <button @click="leaveRoom">
-          X
-        </button>
+      <div class="topbar--item left">
+        <IconArrowBack
+          class="icon"
+          @click="leaveRoom"
+        />
+      </div>
+      <div class="topbar--item right">
+        <nuxt-link
+          :to="{ name: 'rooms-id-add' }"
+        >
+          <IconAddCircle class="icon" />
+        </nuxt-link>
       </div>
     </div>
-    <div>
-      <h1>{{ title }}</h1>
-      <h2>Room by {{ owner }}</h2>
+    <div class="row--outer">
+      <div class="room-overview--page--header">
+        <h1>{{ title }}</h1>
+        <h2 class="subtitle">von <span>{{ owner }}</span></h2>
+      </div>
+      <div class="room-overview--page--queue">
+        <h3>Warteschlange</h3>
+        <ul>
+          <CardTrack
+            v-for="(track, index) in queue"
+            :key="index"
+            :track="track"
+          />
+        </ul>
+      </div>
     </div>
-    <div class="queue">
-      <h2>Queue:</h2>
-      <ul>
-        <CardTrack
-          v-for="(track, index) in queue"
-          :key="index"
-          :track="track"
-        />
-      </ul>
-    </div>
-    <div>
+    <!-- <div>
       <nuxt-link
         :to="{ name: 'rooms-id-add' }"
         class="button"
@@ -34,7 +44,7 @@
       >
         Start Queue
       </button>
-    </div>
+    </div> -->
     <portal
       v-if="showDeviceList"
       to="modal"
@@ -48,11 +58,15 @@
 import CardTrack from "@/components/Cards/CardTrack"
 import FormDeviceList from "@/components/Forms/FormDeviceList"
 import { mapGetters } from "vuex"
+import IconArrowBack from "@/assets/icons/arrow-back.svg"
+import IconAddCircle from "@/assets/icons/add-circle-outline.svg"
 
 export default {
   components: {
     CardTrack,
-    FormDeviceList
+    FormDeviceList,
+    IconArrowBack,
+    IconAddCircle
   },
   /**
    * Führt Action currentRoom/init mit der Raum Id aus
@@ -101,3 +115,39 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+$room-overview--page--header-height: rem(160);
+
+.room-overview--page {
+  &--header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: $room-overview--page--header-height;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background: $header-gradient;
+
+    h1 {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  &--queue {
+    transform: translateY($room-overview--page--header-height);
+    background-color: $grey-cod;
+    padding: rh(1) 0;
+
+    ul {
+      margin: 0;
+      margin-top: rh(1);
+      list-style: none;
+    }
+  }
+}
+</style>

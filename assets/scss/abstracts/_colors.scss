@@ -10,7 +10,9 @@ $transparent: rgba(255, 255, 255, 0);
 $white: #fff;
 $green-meadow: #1db954;
 $red-firebrick: #b22222;
+$greay-tundora: #434343;
 $grey-mine: #282828;
+$grey-cocoa: #1E1A1A;
 $grey-cod: #191414;
 $black: #000;
 
@@ -18,6 +20,8 @@ $green-spotify: $green-meadow;
 $blue-twitter: #55acee;
 $blue-facebook: #3b5998;
 $blue-linkedin: #5291dd;
+
+$header-gradient: linear-gradient(0deg, $grey-cocoa, $greay-tundora);
 
 // =======================
 // Colors Constants
