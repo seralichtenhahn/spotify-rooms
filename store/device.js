@@ -4,7 +4,8 @@ export const state = () => ({
 
 export const getters = {
   breakpoint: store => store.breakpoint,
-  isMobile: store => store.breakpoint === "small" || store.breakpoint === "default",
+  isMobile: store =>
+    store.breakpoint === "small" || store.breakpoint === "default",
   isMobileOrTablet: store =>
     store.breakpoint === "small" || store.breakpoint === "medium",
   isDesktop: store =>
