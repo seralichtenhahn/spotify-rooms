@@ -78,6 +78,7 @@ export default {
 <style lang="scss">
 .landing--page {
   height: 100%;
+
   &--bg {
     position: absolute;
     top: 0;
@@ -85,28 +86,34 @@ export default {
     z-index: -1;
     width: 100%;
     height: 100%;
+
     video {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
+
   &--content {
     height: 100%;
     padding: 10% 0;
     text-align: center;
     background-color: rgba($black, 0.4);
+
     .row--inner {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
+
       p {
         padding-bottom: rh(4);
       }
     }
+
     @include breakpoint(medium) {
       padding-top: 20vh;
+
       .row--inner {
         height: auto;
       }

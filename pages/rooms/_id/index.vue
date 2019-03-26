@@ -122,26 +122,26 @@ $room-overview--page--header-height: rem(160);
 .room-overview--page {
   &--header {
     position: fixed;
-    width: 100%;
     top: 0;
     left: 0;
-    height: $room-overview--page--header-height;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 100%;
+    height: $room-overview--page--header-height;
     text-align: center;
     background: $header-gradient;
 
     h1 {
-      margin: 0;
       padding: 0;
+      margin: 0;
     }
   }
 
   &--queue {
-    transform: translateY($room-overview--page--header-height);
-    background-color: $grey-cod;
     padding: rh(1) 0;
+    background-color: $grey-cod;
+    transform: translateY($room-overview--page--header-height);
 
     ul {
       margin: 0;

@@ -86,6 +86,7 @@ export default {
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 250ms ease-in-out;
+
   .modal-wrapper {
     transition: transform 250ms ease-in-out;
   }
@@ -94,6 +95,7 @@ export default {
 .modal-enter,
 .modal-leave-to {
   opacity: 0;
+
   .modal-wrapper {
     transform: translateY(100%);
   }
