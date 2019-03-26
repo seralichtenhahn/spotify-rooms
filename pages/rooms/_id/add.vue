@@ -6,13 +6,22 @@
           <IconArrowBack class="icon" />
         </nuxt-link>
       </div>
-      <div class="topbar--item center">
+      <div
+        v-if="isMobile"
+        class="topbar--item center"
+      >
         Track hinzufügen
       </div>
-      <div class="topbar--item right"/>
+      <div
+        v-if="isMobile"
+        class="topbar--item right"
+      />
     </div>
     <div class="add-track--page--header">
       <div class="row--inner">
+        <h1 v-if="!isMobile">
+          Track hinzufügen
+        </h1>
         <input
           v-model="query"
           type="search"
@@ -23,8 +32,14 @@
     </div>
     <div class="add-track--page--results">
       <div class="row--outer">
+        <h3 v-if="!isMobile">
+          {{ title }}
+        </h3>
         <ul>
-          <li class="title">
+          <li
+            v-if="isMobile"
+            class="title"
+          >
             <h3>{{ title }}</h3>
           </li>
           <li
@@ -52,6 +67,7 @@
 import debounce from "lodash/debounce"
 import IconArrowBack from "@/assets/icons/arrow-back.svg"
 import IconAddCircle from "@/assets/icons/add-circle-outline.svg"
+import { mapGetters } from "vuex"
 
 export default {
   components: {
@@ -69,6 +85,9 @@ export default {
       title: "Deine Top Tracks",
       results: []
     }
+  },
+  computed: {
+    ...mapGetters("device", ["isMobile"])
   },
   watch: {
     /**
@@ -183,6 +202,29 @@ export default {
 
         &:not(:last-child) {
           margin-bottom: rem(10);
+        }
+      }
+    }
+  }
+
+  @include breakpoint(medium) {
+    &--header {
+      text-align: center;
+    }
+
+    &--results {
+      overflow: auto;
+      margin-top: rh(2);
+
+      ul {
+        background-color: $transparent;
+        padding: 0;
+        padding-top: rem(16);
+
+        li {
+          border-radius: rem(5);
+          padding: rem(16);
+          background-color: $grey-mine;
         }
       }
     }

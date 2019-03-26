@@ -5,14 +5,9 @@
 $generate-classes: false !default;
 
 @mixin label {
-  display: block;
+  @include paragraph;
 
-  span {
-    @include headline--lvl5;
-
-    margin-left: rem(6);
-    margin-bottom: rh(0.125);
-  }
+  margin: 0;
 }
 
 @mixin label--inline {
@@ -24,7 +19,8 @@ $generate-classes: false !default;
 // ---------
 // Implementation
 @if $generate-classes {
-  label {
+  label,
+  .label {
     @include label;
   }
 

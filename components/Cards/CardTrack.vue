@@ -1,17 +1,39 @@
 <template>
   <li class="track--card">
     <div class="track--card--info">
-      <img
-        :src="track.image"
-        :alt="track.title"
-      >
-      <div>
-        <h3>{{ track.title }}</h3>
-        <p class="small">{{ track.artist }}</p>
-      </div>
-      <p class="small">
-        {{ createdAt }} • von {{ track.user }}
-      </p>
+      <template v-if="isMobile">
+        <img
+          :src="track.image"
+          :alt="track.title"
+        >
+        <div>
+          <h3>{{ track.title }}</h3>
+          <p class="small">{{ track.artist }}</p>
+        </div>
+        <p class="small">
+          {{ createdAt }} • von {{ track.user }}
+        </p>
+      </template>
+      <template v-else>
+        <img
+          :src="track.image"
+          :alt="track.title"
+        >
+        <div>
+          <p>
+            {{ track.artist }}
+            <span>{{ track.title }}</span>
+          </p>
+          <p>
+            eingereicht von
+            <span>{{ track.user }}</span>
+          </p>
+          <p>
+            vor
+            <span>{{ createdAt }}</span>
+          </p>
+        </div>
+      </template>  
     </div>
     <div class="track--card--voting">
       <a
@@ -43,6 +65,7 @@
 import IconArrowUp from "@/assets/icons/arrow-up.svg"
 import IconArrowDown from "@/assets/icons/arrow-down.svg"
 import dayjs from "dayjs"
+import { mapGetters } from "vuex"
 
 export default {
   components: {
@@ -56,6 +79,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters("device", ["isMobile"]),
     /**
      * Gibt gespeicherte Berwetung zurück, falls vorhanden
      * @return {object} vote
@@ -160,6 +184,38 @@ export default {
       &.active {
         fill: $green-meadow;
       }
+    }
+  }
+
+  @include breakpoint(medium) {
+    justify-content: space-between;
+    padding: rem(16);
+
+    &--info {
+      flex: 1 1;
+      flex-wrap: nowrap;
+
+      img {
+        margin: 0;
+      }
+
+      div {
+        display: flex;
+        align-items: center;
+
+        p {
+          font-size: rem(12);
+          padding: 0;
+        }
+
+        span {
+          @include headline--lvl3;
+        }
+      }
+    }
+
+    &--voting {
+      margin: 0;
     }
   }
 }

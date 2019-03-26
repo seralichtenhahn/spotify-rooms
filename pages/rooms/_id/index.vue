@@ -7,7 +7,10 @@
           @click="leaveRoom"
         />
       </div>
-      <div class="topbar--item right">
+      <div
+        v-if="isMobile"
+        class="topbar--item right"
+      >
         <nuxt-link
           :to="{ name: 'rooms-id-add' }"
         >
@@ -16,12 +19,30 @@
       </div>
     </div>
     <div class="room-overview--page--header">
-      <h1>{{ title }}</h1>
-      <h2 class="subtitle">von <span>{{ owner }}</span></h2>
+      <div class="row--outer">
+        <h1>{{ title }}</h1>
+        <h2 class="subtitle">von <span>{{ owner }}</span></h2>
+      </div>
     </div>
     <div class="room-overview--page--queue">
       <div class="row--outer">
-        <h3>Warteschlange</h3>
+        <div class="room-overview--page--queue--header">
+          <h3>Warteschlange</h3>
+          <div v-if="!isMobile">
+            <button
+              v-if="isOwner"
+              class="button--primary"
+            >
+              Warteschlange starten
+            </button>
+            <nuxt-link
+              :to="{ name: 'rooms-id-add' }"
+              class="button"
+            >
+              Track hinzufügen
+            </nuxt-link>
+          </div>
+        </div>
         <ul>
           <CardTrack
             v-for="(track, index) in queue"
@@ -93,7 +114,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("currentRoom", ["queue", "isOwner"])
+    ...mapGetters("currentRoom", ["queue", "isOwner"]),
+    ...mapGetters("device", ["isMobile"])
   },
   methods: {
     /**
@@ -117,20 +139,25 @@ export default {
 </script>
 
 <style lang="scss">
-$room-overview--page--header-height: rem(160);
+$room-overview--page--header-height: rem(320);
+$room-overview--page--header-height-mobile: rem(160);
 
 .room-overview--page {
   &--header {
     position: fixed;
     top: 0;
     left: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     width: 100%;
-    height: $room-overview--page--header-height;
+    height: $room-overview--page--header-height-mobile;
     text-align: center;
     background: $header-gradient;
+
+    .row--outer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
 
     h1 {
       padding: 0;
@@ -139,14 +166,36 @@ $room-overview--page--header-height: rem(160);
   }
 
   &--queue {
-    padding: rh(1) 0;
+    padding-top: rh(1);
     background-color: $grey-cod;
-    transform: translateY($room-overview--page--header-height);
+    transform: translateY($room-overview--page--header-height-mobile);
 
     ul {
       margin: 0;
       margin-top: rh(1);
       list-style: none;
+    }
+  }
+
+  @include breakpoint(medium) {
+    &--header {
+      height: $room-overview--page--header-height + rem(10);
+      text-align: left;
+    }
+
+    &--queue {
+      padding-top: rem(12);
+      transform: translateY($room-overview--page--header-height);
+
+      &--header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      ul {
+        margin-top: 0;
+      }
     }
   }
 }
