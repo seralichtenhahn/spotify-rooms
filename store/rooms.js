@@ -2,6 +2,13 @@ import slugify from "slugify"
 import firebase from "firebase/app"
 
 export const actions = {
+  /**
+   * Versucht Raum in Datenbank zu finden
+   * Nuutzer wird weitergeleitet fall der Raum gefunden wurde
+   * @param {object} StoreContext - vuex context.
+   * @param {string} roomName
+   * @return {promise}
+   */
   async join({}, roomName) {
     const room = await this.$db
       .collection("rooms")
@@ -16,6 +23,13 @@ export const actions = {
 
     return roomName
   },
+  /**
+   * Erstellt einen neuen Raum, inklusive Playlist
+   * Nutzer wird weitergeleitet fall der Raum erfolgreich erstellt wurde
+   * @param {object} StoreContext - vuex context.
+   * @param {string} roomName
+   * @return {promise}
+   */
   async create({ rootState }, roomName) {
     if (!rootState.user.isPremium) {
       throw new Error("Nur Spotify Premium Nutzer können einen Raum erstellen")
@@ -25,19 +39,23 @@ export const actions = {
       throw new Error("Gebe einen Namen ein")
     }
 
+    // Konventiert Raumname zu einzigartugem slug
     const id = slugify(roomName, { lower: true })
 
     const roomDoc = await this.$db.collection("rooms").doc(id)
     const room = roomDoc.get()
 
+    // Checkt ob Raum bereits existiert
     if (room.exists) {
       throw new Error("Raum existiert bereits")
     }
 
+    // Neue Playlist mit Raumnamen wird erstellt
     const playlist = await this.$spotify.createPlaylist(rootState.user.id, {
       name: roomName
     })
 
+    // Raum wird ind er Datenbank gespeichert
     await roomDoc.set({
       title: roomName,
       owner: rootState.user.id,

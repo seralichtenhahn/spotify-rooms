@@ -54,6 +54,13 @@ export default {
     CardTrack,
     FormDeviceList
   },
+  /**
+   * Führt Action currentRoom/init mit der Raum Id aus
+   * Gibt Raumdaten zurück
+   * Falls Raum nicht gefunden wird, wird der Nutzter zur 404 Seiter weitergeleitet
+   * @param {object} NuxtContext - https://nuxtjs.org/api/context/
+   * @return {object} Room
+   */
   async asyncData({ params, error, store }) {
     try {
       const room = await store.dispatch("currentRoom/init", params.id)
@@ -75,13 +82,21 @@ export default {
     ...mapGetters("currentRoom", ["queue", "isOwner"])
   },
   methods: {
+    /**
+     * Führt Action currentRoom/reset aus
+     * Leiter Nutzer zur Introseite weiter
+     */
     leaveRoom() {
       this.$store.dispatch("currentRoom/reset")
       this.$router.push("/rooms")
     },
+    /**
+     * Setzt showDeviceList auf true
+     * Ruft Event auf um Modal zu aktivieren mit dem Titel "Wähle dein aktives Gerät"
+     */
     setDevice() {
       this.showDeviceList = true
-      this.$nuxt.$emit("modal:activate", "Set Device")
+      this.$nuxt.$emit("modal:activate", "Wähle dein aktives Gerät")
     }
   }
 }

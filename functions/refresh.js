@@ -7,8 +7,16 @@ let headers = {
   "Access-Control-Allow-Headers": "Content-Type"
 }
 
+/**
+ * Führt eine Abfrage zu Spotify mit dem Refresh Token aus
+ * Gibt die empfangenen Credentials zurück
+ * @param {object} event - aws lambda event
+ * @param {object} context - context der Funktion
+ * @param {function} callback - Rückgabe Funktion
+ * @return {request} Post Request
+ */
 exports.handler = function(event, _context, callback) {
-  // handle Option requests from axios
+  // Gibt lerren Rückgabewert zurück für Axios CORS check
   if (event.httpMethod === "OPTIONS") {
     return callback(null, {
       statusCode: 204,
@@ -16,7 +24,7 @@ exports.handler = function(event, _context, callback) {
     })
   }
 
-  // only allow POST requests
+  // Nur POST Requests sind erlaubt
   if (event.httpMethod !== "POST") {
     return callback(null, {
       statusCode: 410,
@@ -29,7 +37,7 @@ exports.handler = function(event, _context, callback) {
 
   const payload = JSON.parse(event.body)
 
-  // validate the form
+  // Fehler falls kein Refresh Token gegeben ist.
   if (!payload.refresh_token) {
     return callback(null, {
       statusCode: 422,
@@ -40,10 +48,13 @@ exports.handler = function(event, _context, callback) {
     })
   }
 
+  // Client ID und Client Secret werden zu base64 konventiert
+  // https://developer.spotify.com/documentation/general/guides/authorization-guide/
   const base64encoded = Buffer.from(
     `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
   ).toString("base64")
 
+  // Führt Request zum Spotify auth server durch
   return request.post(
     {
       url: "https://accounts.spotify.com/api/token",
@@ -57,6 +68,7 @@ exports.handler = function(event, _context, callback) {
       json: true
     },
     function(error, response, body) {
+      // Gibt ein Fehler zurück fall der Statuscode nicht 200 ist
       if (!error && response.statusCode === 200) {
         return callback(null, {
           statusCode: 200,

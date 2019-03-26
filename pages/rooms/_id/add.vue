@@ -42,12 +42,21 @@ export default {
     }
   },
   watch: {
+    /**
+     * Führt fetchSongs() funktion aus wenn eine query vorhanden ist
+     * @param {string} query
+     */
     query(query) {
       if (query.length) {
         this.fetchSongs(query)
       }
     }
   },
+  /**
+   * Holt die 10 Top Tracks des Nutzers
+   * Speichert die Resultate
+   * @return {promise}
+   */
   async mounted() {
     const { items } = await this.$spotify.getMyTopTracks({
       limit: 10
@@ -55,18 +64,31 @@ export default {
     this.results = items
   },
   methods: {
+    /**
+     * Holt die 10 ersten Tracks die gefunden wurden
+     * Speichert die Resultate
+     * @param {string} query
+     * @return {promise}
+     */
     fetchSongs: debounce(async function(query) {
       const respone = await this.$spotify.searchTracks(query, {
         limit: 10
       })
       this.results = respone.tracks.items
     }, 150),
-    async addSong(song) {
+    /**
+     * Führt die Action currentRoom/addTrack mit den Track Infos aus
+     * Leitet den Nutzer auf die Raum Übersichtsseiter weiter
+     * Fängt Error auf und zeigt Error in der Konsole
+     * @param {object} SpotifyTrack
+     * @return {promise}
+     */
+    async addSong(track) {
       try {
         await this.$store.dispatch("currentRoom/addTrack", {
-          title: song.name,
-          artist: song.artists.map(artist => artist.name).join(", "),
-          uri: song.uri
+          title: track.name,
+          artist: track.artists.map(artist => artist.name).join(", "),
+          uri: track.uri
         })
 
         this.$router.push({ name: "rooms-id" })

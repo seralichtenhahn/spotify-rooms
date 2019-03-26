@@ -16,6 +16,14 @@ export const mutations = {
 }
 
 export const actions = {
+  /**
+   * Checkt ob bereits eine Bewertunf vorhanden ist
+   * Ersetzt allte Bewertung mit neuer Bewertung
+   * Gibt Bewertung zurück
+   * @param {object} StoreContext - vuex context.
+   * @param {object} roomName
+   * @return {number} index
+   */
   updateVote({ commit, state }, data) {
     const index = state.votes.findIndex(vote => vote.trackId === data.trackId)
     if (index !== -1) {
