@@ -7,6 +7,7 @@ export const actions = {
    * @param {object} NuxtContext - https://nuxtjs.org/api/context/
    */
   async nuxtClientInit({ commit, dispatch, rootState }, { spotify, error }) {
+    dispatch("device/init")
     const { accessToken, expiresIn } = rootState.auth
 
     if (accessToken) {
