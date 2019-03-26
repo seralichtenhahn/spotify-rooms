@@ -142,13 +142,13 @@ export default {
 
   &--results {
     ul {
-      margin: 0;
-      height: calc(100vh - #{rem(80) + rem(130)});
       overflow: scroll;
+      height: calc(100vh - #{rem(80) + rem(130)});
       padding: rem(16);
+      border-radius: rem(5);
+      margin: 0;
       list-style: none;
       background-color: $grey-mine;
-      border-radius: rem(5);
 
       li {
         display: flex;
@@ -166,8 +166,8 @@ export default {
 
           h4,
           p {
-            margin: 0;
             padding: 0;
+            margin: 0;
           }
 
           p {
@@ -176,9 +176,9 @@ export default {
         }
 
         .icon {
-          fill: rgba($white, 0.6);
           width: rem(24);
           height: rem(24);
+          fill: rgba($white, 0.6);
         }
 
         &:not(:last-child) {
