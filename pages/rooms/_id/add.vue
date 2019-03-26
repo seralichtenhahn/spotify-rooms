@@ -88,7 +88,8 @@ export default {
         await this.$store.dispatch("currentRoom/addTrack", {
           title: track.name,
           artist: track.artists.map(artist => artist.name).join(", "),
-          uri: track.uri
+          uri: track.uri,
+          image: track.album.images.find(image => image.height === 300).url
         })
 
         this.$router.push({ name: "rooms-id" })
