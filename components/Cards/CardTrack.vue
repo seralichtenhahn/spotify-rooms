@@ -146,10 +146,10 @@ export default {
     }
 
     .icon {
+      display: block;
       width: rem(24);
       cursor: pointer;
       fill: $white;
-      display: block;
 
       &.active {
         fill: $green-meadow;
