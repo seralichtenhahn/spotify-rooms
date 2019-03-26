@@ -44,6 +44,18 @@ $generate-classes: false !default;
     margin: rh(1.5) 0;
   }
 }
+
+@mixin list--inline {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  li {
+    margin: rem(0 6);
+  }
+}
 // ---------
 // Implementation
 // ---------
@@ -53,5 +65,9 @@ $generate-classes: false !default;
     ul {
       @include list--unordered;
     }
+  }
+
+  .list--inline {
+    @include list--inline;
   }
 }
