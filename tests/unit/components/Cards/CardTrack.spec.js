@@ -76,12 +76,12 @@ describe("CardTrack", () => {
       store
     })
 
-    wrapper.find(".button--downvote").trigger("click")
+    wrapper.find(".icon--downvote").trigger("click")
     expect(store.dispatch).toHaveBeenCalledWith("currentRoom/voteTrack", {
       id: track.id,
       mode: "down"
     })
-    wrapper.find(".button--upvote").trigger("click")
+    wrapper.find(".icon--upvote").trigger("click")
     expect(store.dispatch).toHaveBeenCalledWith("currentRoom/voteTrack", {
       id: track.id,
       mode: "up"

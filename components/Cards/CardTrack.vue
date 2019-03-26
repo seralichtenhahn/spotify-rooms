@@ -14,17 +14,27 @@
       </p>
     </div>
     <div class="track--card--voting">
-      <IconArrowUp
-        :class="{'active': !canUpvote}"
-        class=" icon icon--upvote"
-        @click="upvoteTrack"
-      />
+      <a
+        href="#"
+        class="icon--upvote"
+        @click.prevent="upvoteTrack"
+      >
+        <IconArrowUp
+          :class="{'active': !canUpvote}"
+          class=" icon"
+        />
+      </a>
       <span>{{ track.score }}</span>
-      <IconArrowDown
-        :class="{'active': !canDownvote}"
-        class="icon icon--downvote"
-        @click="downvoteTrack"
-      />
+      <a
+        href="#"
+        class="icon--downvote"
+        @click.prevent="downvoteTrack"
+      >
+        <IconArrowDown
+          :class="{'active': !canDownvote}"
+          class="icon"
+        />
+      </a>
     </div>
   </li>
 </template>
@@ -139,6 +149,7 @@ export default {
       width: rem(24);
       cursor: pointer;
       fill: $white;
+      display: block;
 
       &.active {
         fill: $green-meadow;
