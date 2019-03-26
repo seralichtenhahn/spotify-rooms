@@ -15,12 +15,12 @@
         </nuxt-link>
       </div>
     </div>
-    <div class="row--outer">
-      <div class="room-overview--page--header">
-        <h1>{{ title }}</h1>
-        <h2 class="subtitle">von <span>{{ owner }}</span></h2>
-      </div>
-      <div class="room-overview--page--queue">
+    <div class="room-overview--page--header">
+      <h1>{{ title }}</h1>
+      <h2 class="subtitle">von <span>{{ owner }}</span></h2>
+    </div>
+    <div class="room-overview--page--queue">
+      <div class="row--outer">
         <h3>Warteschlange</h3>
         <ul>
           <CardTrack
