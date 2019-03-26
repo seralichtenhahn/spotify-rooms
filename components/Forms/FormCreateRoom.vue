@@ -3,16 +3,31 @@
     <input
       v-model="roomName"
       type="text"
+      class="large"
+      placeholder="Name"
+      @keyup.enter="submit"
     >
     <p v-if="error">
       {{ error }}
     </p>
-    <button @click="cancel">
-      Abbrechen
-    </button>
-    <button @click="submit">
-      Erstellen
-    </button>
+    <ul class="list--inline">
+      <li>
+        <a
+          class="link"
+          @click="cancel"
+        >
+          Abbrechen
+        </a>
+      </li>
+      <li>
+        <a
+          class="link link--primary"
+          @click="submit"
+        >
+          Erstellen
+        </a>
+      </li>
+    </ul>
   </div>
 </template>
 
