@@ -94,20 +94,20 @@ export default {
 
 <style lang="scss">
 .track--card {
-  background-color: $grey-mine;
-  margin-bottom: rem(20);
-  border-radius: rem(5);
-  color: $white;
-  padding: rem(24 16 8);
   display: flex;
+  padding: rem(24 16 8);
+  border-radius: rem(5);
+  margin-bottom: rem(20);
+  color: $white;
+  background-color: $grey-mine;
 
   &--info {
     display: flex;
     flex-wrap: wrap;
 
     img {
-      height: rem(64);
       flex-basis: rem(64);
+      height: rem(64);
       margin-bottom: rem(6);
     }
 
@@ -118,27 +118,27 @@ export default {
 
     p {
       flex-basis: 100%;
-      color: rgba($white, 0.6);
       margin: 0;
+      color: rgba($white, 0.6);
     }
   }
 
   &--voting {
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
+    justify-content: space-between;
     margin-bottom: rem(16);
 
     span {
+      font-weight: 600;
       font-size: rem(16);
       text-align: center;
-      font-weight: 600;
     }
 
     .icon {
-      fill: $white;
       width: rem(24);
       cursor: pointer;
+      fill: $white;
 
       &.active {
         fill: $green-meadow;
