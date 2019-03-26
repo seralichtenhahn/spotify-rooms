@@ -1,31 +1,43 @@
 <template>
-  <li>
-    <strong>{{ track.title }}</strong> by {{ track.artist }}
-    <br>
-    eingereicht von <i>{{ track.user }}</i>
-    <br>
-    <div>
-      <button
-        :disabled="!canUpvote"
-        class="button--upvote"
+  <li class="track--card">
+    <div class="track--card--info">
+      <img
+        :src="track.image"
+        :alt="track.title"
+      >
+      <div>
+        <h3>{{ track.title }}</h3>
+        <p class="small">{{ track.artist }}</p>
+      </div>
+      <p class="small">
+        vor 3 min . von {{ track.user }}
+      </p>
+    </div>
+    <div class="track--card--voting">
+      <IconArrowUp
+        :class="{'active': !canUpvote}"
+        class=" icon icon--upvote"
         @click="upvoteTrack"
-      >
-        up
-      </button>
+      />
       <span>{{ track.score }}</span>
-      <button
-        :disabled="!canDownvote"
-        class="button--downvote"
+      <IconArrowDown
+        :class="{'active': !canDownvote}"
+        class="icon icon--downvote"
         @click="downvoteTrack"
-      >
-        down
-      </button>
+      />
     </div>
   </li>
 </template>
 
 <script>
+import IconArrowUp from "@/assets/icons/arrow-up.svg"
+import IconArrowDown from "@/assets/icons/arrow-down.svg"
+
 export default {
+  components: {
+    IconArrowUp,
+    IconArrowDown
+  },
   props: {
     track: {
       type: Object,
@@ -79,3 +91,59 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.track--card {
+  background-color: $grey-mine;
+  margin-bottom: rem(20);
+  border-radius: rem(5);
+  color: $white;
+  padding: rem(24 16 8);
+  display: flex;
+
+  &--info {
+    display: flex;
+    flex-wrap: wrap;
+
+    img {
+      height: rem(64);
+      flex-basis: rem(64);
+      margin-bottom: rem(6);
+    }
+
+    div {
+      flex: 1 1;
+      margin-left: 1em;
+    }
+
+    p {
+      flex-basis: 100%;
+      color: rgba($white, 0.6);
+      margin: 0;
+    }
+  }
+
+  &--voting {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-bottom: rem(16);
+
+    span {
+      font-size: rem(16);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .icon {
+      fill: $white;
+      width: rem(24);
+      cursor: pointer;
+
+      &.active {
+        fill: $green-meadow;
+      }
+    }
+  }
+}
+</style>
