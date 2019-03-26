@@ -58,19 +58,32 @@
         />
       </a>
     </div>
+    <div
+      v-if="isOwner"
+      class="track--card--remove"
+    >
+      <a
+        href="#"
+        @click.prevent="removeTrack"
+      >
+        <IconCloseCircle class="icon" />
+      </a>
+    </div>
   </li>
 </template>
 
 <script>
 import IconArrowUp from "@/assets/icons/arrow-up.svg"
 import IconArrowDown from "@/assets/icons/arrow-down.svg"
+import IconCloseCircle from "@/assets/icons/close-circle-outline.svg"
 import dayjs from "dayjs"
 import { mapGetters } from "vuex"
 
 export default {
   components: {
     IconArrowUp,
-    IconArrowDown
+    IconArrowDown,
+    IconCloseCircle
   },
   props: {
     track: {
@@ -80,6 +93,7 @@ export default {
   },
   computed: {
     ...mapGetters("device", ["isMobile"]),
+    ...mapGetters("currentRoom", ["isOwner"]),
     /**
      * Gibt gespeicherte Berwetung zurück, falls vorhanden
      * @return {object} vote
@@ -127,6 +141,12 @@ export default {
         id: this.track.id,
         mode: "down"
       })
+    },
+    /**
+     * Führt Store Action aus um Track zu entfernen
+     */
+    removeTrack() {
+      this.$store.dispatch("currentRoom/removeTrack", this.track)
     }
   }
 }
@@ -187,6 +207,18 @@ export default {
     }
   }
 
+  &--remove {
+    align-self: center;
+    margin-bottom: rem(16);
+
+    .icon {
+      display: block;
+      width: rem(24);
+      cursor: pointer;
+      fill: rgba($white, 0.4);
+    }
+  }
+
   @include breakpoint(medium) {
     justify-content: space-between;
     padding: rem(16);
@@ -216,6 +248,11 @@ export default {
 
     &--voting {
       margin: 0;
+    }
+
+    &--remove {
+      margin-bottom: 0;
+      margin-left: rem(16);
     }
   }
 }

@@ -150,7 +150,7 @@ export const actions = {
           // Überprüft ob Tracks neue Reihenfolge haben
           const updatedTracks = getters.queue.filter(track => {
             const newTrack = queueData.find(_track => _track.id === track.id)
-            return newTrack.score !== track.score
+            return newTrack ? newTrack.score !== track.score : false
           })
 
           // Neue Position wird bestimmt
@@ -198,6 +198,26 @@ export const actions = {
         score: 0,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
+  },
+  /**
+   * Entfernt einen Track aus der Playlist und der Warteschlange
+   * @param {object} StoreContext - vuex context.
+   * @param {object} Track
+   */
+  async removeTrack({ state }, track) {
+    const position = state.queue.findIndex(_track => _track.id === track.id)
+    await this.$spotify.removeTracksFromPlaylist(state.playlistId, [
+      {
+        uri: track.uri,
+        positions: [position]
+      }
+    ])
+    await this.$db
+      .collection("rooms")
+      .doc(state.id)
+      .collection("queue")
+      .doc(track.id)
+      .delete()
   },
   /**
    * Bewertet einen Track und speichert den Score des Track in der Datenbank
