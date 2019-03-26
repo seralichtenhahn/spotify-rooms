@@ -62,13 +62,16 @@ export default {
 </script>
 
 <style lang="scss">
+$stripe--room-height: rem(80);
+$stripe--room-height-mobile: rem(50);
+
 .stripe--room-info {
   position: fixed;
   bottom: 0;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: rem(80);
+  height: $stripe--room-height-mobile;
   padding: rem(10);
   background-color: $grey-mine;
 
@@ -85,5 +88,9 @@ export default {
       margin-bottom: rem(6);
     }
   }
+}
+
+.app--layout {
+  padding-bottom: $stripe--room-height-mobile;
 }
 </style>

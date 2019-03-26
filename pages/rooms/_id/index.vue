@@ -32,6 +32,7 @@
             <button
               v-if="isOwner"
               class="button--primary"
+              @click="setDevice"
             >
               Warteschlange starten
             </button>
@@ -52,20 +53,6 @@
         </ul>
       </div>
     </div>
-    <!-- <div>
-      <nuxt-link
-        :to="{ name: 'rooms-id-add' }"
-        class="button"
-      >
-        Add Track
-      </nuxt-link>
-      <button
-        v-if="isOwner"
-        @click="setDevice"
-      >
-        Start Queue
-      </button>
-    </div> -->
     <portal
       v-if="showDeviceList"
       to="modal"
