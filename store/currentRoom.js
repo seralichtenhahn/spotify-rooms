@@ -81,6 +81,11 @@ export const actions = {
    * @return {promise}
    */
   async init({ commit, getters, dispatch, state }, id) {
+    // Raum wurde bereits initialisiert
+    if (state.id) {
+      return
+    }
+
     const room = await this.$db.collection("rooms").doc(id)
     const roomSnapshot = await room.get()
 
