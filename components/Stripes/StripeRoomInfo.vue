@@ -70,7 +70,7 @@ export default {
   width: 100%;
   height: rem(80);
   padding: rem(10);
-  background-color: $gray-dove;
+  background-color: $grey-mine;
 
   .track {
     display: flex;

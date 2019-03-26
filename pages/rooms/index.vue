@@ -88,11 +88,14 @@ export default {
 .intro--page {
   padding: rh(2) 0;
   text-align: center;
+
   h1 {
     margin-bottom: rh(2);
   }
+
   @include breakpoint(medium) {
     padding: rh(4) 0;
+
     h1 {
       margin-bottom: rh(3);
     }
