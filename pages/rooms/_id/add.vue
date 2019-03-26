@@ -217,13 +217,13 @@ export default {
       margin-top: rh(2);
 
       ul {
-        background-color: $transparent;
         padding: 0;
         padding-top: rem(16);
+        background-color: $transparent;
 
         li {
-          border-radius: rem(5);
           padding: rem(16);
+          border-radius: rem(5);
           background-color: $grey-mine;
         }
       }

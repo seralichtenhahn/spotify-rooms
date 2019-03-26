@@ -204,8 +204,8 @@ export default {
         align-items: center;
 
         p {
-          font-size: rem(12);
           padding: 0;
+          font-size: rem(12);
         }
 
         span {
