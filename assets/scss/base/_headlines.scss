@@ -106,7 +106,7 @@ $generate-classes: false !default;
 @mixin headline--lvl4($box-model: true) {
   @include headline;
 
-  font-size: rem(16);
+  font-size: rem(14);
 
   @if $box-model {
     padding: 0 0 rh(0.25);
