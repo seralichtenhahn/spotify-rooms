@@ -24,6 +24,7 @@
     ],
     "max-nesting-depth": 5,
     "selector-max-compound-selectors": 5,
+    "selector-max-id": 2,
     "selector-class-pattern": [
       "^[a-z0-9\\-\\_]+$",
       {
