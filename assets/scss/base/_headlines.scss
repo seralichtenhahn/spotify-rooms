@@ -17,11 +17,11 @@ $generate-classes: false !default;
   @include fluid(
     (
       font-size: (
-        28,
-        56
+        36,
+        64
       )
     ),
-    (medium, xxlarge)
+    (medium, large)
   );
   @include fluid(
     (
@@ -36,6 +36,22 @@ $generate-classes: false !default;
   @if $box-model {
     padding: rh(0.25) 0;
     margin: rh(0.5) 0;
+  }
+}
+
+@mixin headline--lvl1--underline {
+  position: relative;
+  z-index: 0;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: rem(6);
+    z-index: -1;
+    display: block;
+    width: 100%;
+    height: rem(6);
+    background-color: $green-meadow;
   }
 }
 
@@ -94,19 +110,16 @@ $generate-classes: false !default;
   }
 }
 
-@mixin headline--page {
-  @include headline--lvl1;
-
-  font-family: $font-family--serif;
-  font-weight: 100;
-}
-
 // ---------
 // Implementation
 @if $generate-classes {
   .is-h1,
   h1 {
     @include headline--lvl1;
+
+    &.underline {
+      @include headline--lvl1--underline;
+    }
   }
 
   .is-h2,
@@ -127,9 +140,5 @@ $generate-classes: false !default;
   .is-h5,
   h5 {
     @include headline--lvl5;
-  }
-
-  .is-page-headline {
-    @include headline--page;
   }
 }
