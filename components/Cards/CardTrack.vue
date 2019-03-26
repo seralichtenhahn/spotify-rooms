@@ -10,7 +10,7 @@
         <p class="small">{{ track.artist }}</p>
       </div>
       <p class="small">
-        vor 3 min . von {{ track.user }}
+        {{ createdAt }} • von {{ track.user }}
       </p>
     </div>
     <div class="track--card--voting">
@@ -42,6 +42,7 @@
 <script>
 import IconArrowUp from "@/assets/icons/arrow-up.svg"
 import IconArrowDown from "@/assets/icons/arrow-down.svg"
+import dayjs from "dayjs"
 
 export default {
   components: {
@@ -77,6 +78,11 @@ export default {
      */
     canDownvote() {
       return this.vote ? this.vote.value !== "down" : true
+    },
+    createdAt() {
+      return this.track.createdAt
+        ? dayjs.unix(this.track.createdAt.seconds).fromNow()
+        : null
     }
   },
   methods: {
