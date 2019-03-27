@@ -2,6 +2,7 @@
   <div class="landing--page">
     <div class="landing--page--bg">
       <video
+        :poster="poster"
         autoplay
         muted
         loop
@@ -42,6 +43,13 @@ export default {
   middleware: "anonymous",
   layout: "blank",
   computed: {
+    /**
+     * Generiert die URL für das Poster
+     * @return {string} url
+     */
+    poster() {
+      return require("@/assets/images/poster.jpg")
+    },
     /**
      * Generiert die URL zum Spotify Auth Service
      * @return {string} url
