@@ -51,7 +51,7 @@ $generate-classes: false !default;
     display: block;
     width: 100%;
     height: rem(6);
-    background-color: $green-meadow;
+    background-color: darken($green-meadow, 11.5%);
   }
 }
 
