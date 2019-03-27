@@ -2,10 +2,12 @@
   <div class="room-overview--page">
     <div class="topbar">
       <div class="topbar--item left">
-        <IconArrowBack
-          class="icon"
-          @click="leaveRoom"
-        />
+        <a
+          href="#"
+          @click.prevent="leaveRoom"
+        >
+          <IconArrowBack class="icon" />
+        </a>
       </div>
       <div
         v-if="isMobile"
@@ -121,6 +123,18 @@ export default {
       this.showDeviceList = true
       this.$nuxt.$emit("modal:activate", "Wähle dein aktives Gerät")
     }
+  },
+  transition(to, from) {
+    if (!from) return null
+
+    console.log(from)
+
+    const transitions = {
+      "rooms-id-add": "slide-right",
+      rooms: "slide-left"
+    }
+
+    return transitions[from.name] || null
   }
 }
 </script>

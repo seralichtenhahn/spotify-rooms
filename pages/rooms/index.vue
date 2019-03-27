@@ -80,6 +80,9 @@ export default {
       this.newRoomModalActive = true
       this.$nuxt.$emit("modal:activate", "Gib einen Namen für deinen Raum ein")
     }
+  },
+  transition(to, from) {
+    return "slide-right"
   }
 }
 </script>

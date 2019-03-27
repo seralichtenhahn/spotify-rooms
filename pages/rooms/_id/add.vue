@@ -147,6 +147,9 @@ export default {
         console.error(error)
       }
     }
+  },
+  transition(to, from) {
+    return "slide-left"
   }
 }
 </script>
@@ -154,10 +157,6 @@ export default {
 <style lang="scss">
 .add-track--page {
   padding-top: rem(50);
-
-  &--header {
-    //
-  }
 
   &--results {
     ul {
