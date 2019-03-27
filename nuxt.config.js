@@ -82,6 +82,21 @@ module.exports = {
     }
   },
 
+  meta: {
+    theme_color: "#191414"
+  },
+
+  manifest: {
+    name: "Spotify Rooms",
+    short_name: "Spotify Rooms",
+    background_color: "#282828",
+    lang: "de-CH"
+  },
+
+  workbox: {
+    offlinePage: "200.html"
+  },
+
   /*
   ** Build configuration
   */
