@@ -127,8 +127,6 @@ export default {
   transition(to, from) {
     if (!from) return null
 
-    console.log(from)
-
     const transitions = {
       "rooms-id-add": "slide-right",
       rooms: "slide-left"

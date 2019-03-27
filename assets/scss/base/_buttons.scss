@@ -14,7 +14,7 @@ $generate-classes: false !default;
   margin-bottom: calc-rem(16);
   color: $button-fc;
   font-weight: 700;
-  font-size: rem(12);
+  font-size: rem(14);
   letter-spacing: rem(1.2);
   font-family: $font-family--header;
   text-transform: uppercase;
@@ -41,7 +41,7 @@ $generate-classes: false !default;
 // primary Button Mixin
 @mixin button--primary {
   color: $button-primary-fc;
-  background-color: $button-primary-bgc;
+  background-color: darken($button-primary-bgc, 11.5%);
 
   &:active,
   &:focus,

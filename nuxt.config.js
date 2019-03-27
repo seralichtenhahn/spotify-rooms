@@ -22,19 +22,18 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    title: "Spotify Rooms",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { hid: "description", name: "description", content: pkg.description }
-    ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
+    ]
   },
 
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: "#FFFFFF" },
+  loading: { color: "#1db954" },
 
   /*
   ** Global CSS
@@ -59,6 +58,7 @@ module.exports = {
     "@nuxtjs/dotenv",
     "@nuxtjs/style-resources",
     "@nuxtjs/axios",
+    "@nuxtjs/pwa",
     "portal-vue/nuxt"
   ],
 
@@ -79,6 +79,21 @@ module.exports = {
       pathRewrite: { "^/.netlify/functions": "" },
       ws: false
     }
+  },
+
+  meta: {
+    theme_color: "#191414"
+  },
+
+  manifest: {
+    name: "Spotify Rooms",
+    short_name: "Spotify Rooms",
+    background_color: "#282828",
+    lang: "de-CH"
+  },
+
+  workbox: {
+    offlinePage: "200.html"
   },
 
   /*

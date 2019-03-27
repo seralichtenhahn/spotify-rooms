@@ -150,3 +150,6 @@ fabric.properties
 
 # Netlify Functions
 .netlify/functions
+
+# Nuxt PWA Module
+sw.*

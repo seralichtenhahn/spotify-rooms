@@ -8,7 +8,7 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate && yarn functions:build",
+    "generate": "nuxt generate --modern=client && yarn functions:build",
     "functions:serve": "netlify-lambda serve functions",
     "functions:build": "netlify-lambda build functions",
     "lint:vue": "eslint **/*.vue",
@@ -39,6 +39,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.4.1",
     "@nuxtjs/dotenv": "1.3.0",
+    "@nuxtjs/pwa": "^3.0.0-beta.14",
     "@nuxtjs/style-resources": "0.1.2",
     "dayjs": "^1.8.11",
     "firebase": "^5.9.0",
