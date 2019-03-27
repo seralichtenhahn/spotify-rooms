@@ -32,12 +32,12 @@ export default {
 
 <style lang="scss">
 .app--error {
-  width: 100%;
-  height: 100%;
   display: flex;
-  background-color: $grey-cod;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: $grey-cod;
 
   .container {
     text-align: center;

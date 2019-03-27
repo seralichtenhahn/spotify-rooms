@@ -334,7 +334,7 @@ export const actions = {
     // Timeout notwendig weil Spotify den Playback Status noch nicht aktualisiert hat
     setTimeout(() => {
       dispatch("fetchPlayback")
-    }, 100)
+    }, 250)
   },
   /**
    * Spielt den nächsten Track in der Warteschlange ab
@@ -346,7 +346,7 @@ export const actions = {
     // Timeout notwendig weil Spotify den Playback Status noch nicht aktualisiert hat
     setTimeout(() => {
       dispatch("fetchPlayback")
-    }, 100)
+    }, 250)
   },
   /**
    * Ändern den Playback Status
@@ -362,7 +362,7 @@ export const actions = {
     // Timeout notwendig weil Spotify den Playback Status noch nicht aktualisiert hat
     setTimeout(() => {
       dispatch("fetchPlayback")
-    }, 100)
+    }, 250)
   },
   /**
    * Setzt den aktuellen Raum zurück
