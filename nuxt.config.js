@@ -48,6 +48,7 @@ module.exports = {
     "@/plugins/spotify.js",
     "@/plugins/firebase.js",
     "@/plugins/localStorage.js",
+    "@/plugins/dayjs.js",
     "@/plugins/nuxtClientInit.js"
   ],
 

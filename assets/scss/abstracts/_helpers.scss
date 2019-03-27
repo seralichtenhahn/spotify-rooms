@@ -3,6 +3,8 @@
 // =======================
 /* stylelint-disable */
 
+$generate-classes: false !default;
+
 // -----------
 // Get a unitless value
 //
@@ -67,5 +69,25 @@
     > li {
       display: inline-block;
     }
+  }
+}
+
+@mixin css-breakpoints-to-js {
+  &::before {
+    display: none;
+  }
+
+  @each $breakpoint in $breakpoints {
+    @include breakpoint(nth($breakpoint, 1)) {
+      &::before {
+        content: "#{nth($breakpoint, 1)}";
+      }
+    }
+  }
+}
+
+@if $generate-classes {
+  body {
+    @include css-breakpoints-to-js();
   }
 }

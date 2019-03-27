@@ -1,14 +1,37 @@
 <template>
-  <div class="row">
-    <h1>
-      Spotify Rooms
-    </h1>
-    <a
-      :href="login"
-      class="button"
-    >
-      Login With Spotify
-    </a>
+  <div class="landing--page">
+    <div class="landing--page--bg">
+      <video
+        autoplay
+        muted
+        loop
+      >
+        <source
+          src="~assets/videos/Cheering-Crowd.mp4"
+          type="video/mp4"
+        >
+        <source
+          src="~assets/videos/Cheering-Crowd.webm"
+          type="video/webm"
+        >
+      </video>
+    </div>
+    <div class="landing--page--content">
+      <div class="row--inner">
+        <h1 class="underline">
+          Spotify Rooms
+        </h1>
+        <p class="small">
+          Alleine Musikhören ist auf Spotify kein Problem. Jedoch wenn mehrere Personen gleichzeitig ihre Liederwünsche abspielen möchten, entsteht ein heilloses durcheinander. Mit Spotify Rooms hast du die Möglichkeit zusammen mit den Menschen die dir etwas bedeuten ein unvergessliches Musiserlwebnis zu geniessen
+        </p>
+        <a
+          :href="login"
+          class="button button--primary button--block"
+        >
+          Login With Spotify
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -51,3 +74,50 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.landing--page {
+  height: 100%;
+
+  &--bg {
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &--content {
+    height: 100%;
+    padding: 10% 0;
+    text-align: center;
+    background-color: rgba($black, 0.4);
+
+    .row--inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+
+      p {
+        padding-bottom: rh(4);
+      }
+    }
+
+    @include breakpoint(medium) {
+      padding-top: 20vh;
+
+      .row--inner {
+        height: auto;
+      }
+    }
+  }
+}
+</style>

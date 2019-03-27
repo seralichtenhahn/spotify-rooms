@@ -24,6 +24,7 @@
     ],
     "max-nesting-depth": 5,
     "selector-max-compound-selectors": 5,
+    "selector-max-id": 2,
     "selector-class-pattern": [
       "^[a-z0-9\\-\\_]+$",
       {
@@ -46,7 +47,7 @@
       }
     ],
     "no-descending-specificity": null,
-    "a11y/media-prefers-reduced-motion": true,
+    "a11y/media-prefers-reduced-motion": null,
     "a11y/no-outline-none": true,
     "a11y/selector-pseudo-class-focus": true,
     "plugin/declaration-block-no-ignored-properties": true,

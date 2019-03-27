@@ -1,29 +1,32 @@
+
 <template>
-  <div class="row">
-    <h1>
-      Rooms
-    </h1>
-    <div>
-      <label for="roomName">
-        <input
-          v-model="roomName"
-          type="text"
-          placeholder="Enter a name"
-          @keyup.enter="submit"
+  <div class="intro--page">
+    <div class="row--inner">
+      <h1>
+        Spotify Rooms
+      </h1>
+      <div>
+        <label for="roomName">
+          <input
+            v-model="roomName"
+            type="text"
+            placeholder="Raum beitreten"
+            @keyup.enter="submit"
+          >
+        </label>
+        <!-- <button @click="submit">Enter Room</button> -->
+        <p v-if="error">
+          {{ error }}
+        </p>
+        <p>Oder</p>
+        <button
+          class="button--block"
+          @click="openModal"
         >
-      </label>
-      <button @click="submit">Enter Room</button>
-      <p v-if="error">
-        {{ error }}
-      </p>
-      <hr>
-      <button @click="openModal">
-        Create New Room
-      </button>
+          Raum erstellen
+        </button>
+      </div>
     </div>
-    <p>
-      <strong>User:</strong>{{ username }}
-    </p>
     <portal
       v-if="newRoomModalActive"
       to="modal"
@@ -77,6 +80,28 @@ export default {
       this.newRoomModalActive = true
       this.$nuxt.$emit("modal:activate", "Gib einen Namen für deinen Raum ein")
     }
+  },
+  transition(to, from) {
+    return "slide-right"
   }
 }
 </script>
+
+<style lang="scss">
+.intro--page {
+  padding: rh(2) 0;
+  text-align: center;
+
+  h1 {
+    margin-bottom: rh(2);
+  }
+
+  @include breakpoint(medium) {
+    padding: rh(4) 0;
+
+    h1 {
+      margin-bottom: rh(3);
+    }
+  }
+}
+</style>

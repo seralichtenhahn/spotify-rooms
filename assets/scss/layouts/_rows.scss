@@ -3,7 +3,7 @@ $maxed-breakpoint-width: map-get($breakpoints, "xxlarge") !default;
 $maxed-row-width: 1200 !default;
 
 @mixin row {
-  max-width: $maxed-row-width;
+  max-width: rem($maxed-row-width);
   padding: 0;
   margin-left: 0;
   margin-right: 0;
@@ -25,11 +25,24 @@ $maxed-row-width: 1200 !default;
   }
 }
 
+@mixin row--inner {
+  @include row;
+
+  max-width: rem(640);
+  padding: 0 rem($padding--side);
+  margin-right: auto;
+  margin-left: auto;
+}
+
 // ---------
 // Implementation
 @if $generate-classes {
   .row--outer {
     @include row--outer;
+  }
+
+  .row--inner {
+    @include row--inner;
   }
 
   .row {

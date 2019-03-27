@@ -5,19 +5,20 @@
 $generate-classes: false !default;
 
 @mixin button--base {
-  @include paragraph(false);
-  @include transition(background-color, color, border-color);
+  @include transition(background-color, color);
 
   display: inline-block;
-  padding: calc-rem(6 12);
-  border: calc-rem(2) solid $button-bc;
-  border-radius: rem(6);
+  padding: calc-rem(16 36);
+  border: 0;
+  border-radius: rem(50);
   margin-bottom: calc-rem(16);
   color: $button-fc;
-  font-weight: 400;
+  font-weight: 700;
+  font-size: rem(12);
+  letter-spacing: rem(1.2);
   font-family: $font-family--header;
+  text-transform: uppercase;
   background-color: $button-bgc;
-  background-clip: padding-box;
   outline: none;
   cursor: pointer;
   appearance: none;
@@ -30,40 +31,35 @@ $generate-classes: false !default;
     background-color: $button-bgc--hover;
   }
 
-  &:active {
-    border-color: $button-bc--active;
-  }
-
   &:disabled {
-    border-color: rgba($black, 0.1) !important;
     color: $white !important;
     background-color: rgba($black, 0.1) !important;
-    box-shadow: none !important;
     cursor: not-allowed !important;
-  }
-
-  @include breakpoint(large) {
-    padding: calc-rem(8 24);
-    margin-bottom: rh(1);
   }
 }
 // -----------
-// gray Button Mixin
-@mixin button--gray {
-  border-color: $button-gray-bc;
-  color: $button-gray-fc;
-  background-color: $button-gray-bgc;
-  box-shadow: 0 0 0 0 $transparent;
+// primary Button Mixin
+@mixin button--primary {
+  color: $button-primary-fc;
+  background-color: $button-primary-bgc;
 
   &:active,
   &:focus,
   &:hover {
-    color: $button-gray-fc--hover;
-    background-color: $button-gray-bgc--hover;
+    color: $button-primary-fc--hover;
+    background-color: $button-primary-bgc--hover;
   }
+}
 
-  &:active {
-    border-color: $button-gray-bc--active;
+// -----------
+// primary Button Mixin
+@mixin button--block {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  
+  @include breakpoint(medium) {
+    max-width: rem(300);
   }
 }
 
@@ -75,7 +71,11 @@ $generate-classes: false !default;
     @include button--base;
   }
 
-  .button--gray {
-    @include button--gray;
+  .button--primary {
+    @include button--primary;
+  }
+
+  .button--block {
+    @include button--block;
   }
 }

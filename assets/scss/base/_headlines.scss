@@ -17,11 +17,11 @@ $generate-classes: false !default;
   @include fluid(
     (
       font-size: (
-        28,
-        56
+        36,
+        64
       )
     ),
-    (medium, xxlarge)
+    (medium, large)
   );
   @include fluid(
     (
@@ -36,6 +36,22 @@ $generate-classes: false !default;
   @if $box-model {
     padding: rh(0.25) 0;
     margin: rh(0.5) 0;
+  }
+}
+
+@mixin headline--lvl1--underline {
+  position: relative;
+  z-index: 0;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: rem(6);
+    z-index: -1;
+    display: block;
+    width: 100%;
+    height: rem(6);
+    background-color: $green-meadow;
   }
 }
 
@@ -57,11 +73,29 @@ $generate-classes: false !default;
   }
 }
 
+@mixin headline--lvl2--subtitle {
+  padding: 0;
+  margin: 0;
+  color: rgba($headline-fc, 0.6);
+  text-transform: uppercase;
+
+  @include fluid(
+    (
+      font-size: (
+        12,
+        16
+      )
+    ),
+    (small, large)
+  );
+}
+
 @mixin headline--lvl3($box-model: true) {
   @include headline;
 
-  font-size: rem(22);
-  font-weight: 100;
+  font-size: rem(12);
+  font-weight: 600;
+  letter-spacing: rem(0.33);
 
   @if $box-model {
     padding: 0 0 rh(0.125);
@@ -72,7 +106,7 @@ $generate-classes: false !default;
 @mixin headline--lvl4($box-model: true) {
   @include headline;
 
-  font-size: rem(16);
+  font-size: rem(14);
 
   @if $box-model {
     padding: 0 0 rh(0.25);
@@ -94,11 +128,8 @@ $generate-classes: false !default;
   }
 }
 
-@mixin headline--page {
-  @include headline--lvl1;
-
-  font-family: $font-family--serif;
-  font-weight: 100;
+@mixin headline--muted {
+  color: rgba($white, 0.6);
 }
 
 // ---------
@@ -107,11 +138,19 @@ $generate-classes: false !default;
   .is-h1,
   h1 {
     @include headline--lvl1;
+
+    &.underline {
+      @include headline--lvl1--underline;
+    }
   }
 
   .is-h2,
   h2 {
     @include headline--lvl2;
+
+    &.subtitle {
+      @include headline--lvl2--subtitle;
+    }
   }
 
   .is-h3,
@@ -129,7 +168,7 @@ $generate-classes: false !default;
     @include headline--lvl5;
   }
 
-  .is-page-headline {
-    @include headline--page;
+  .muted {
+    @include headline--muted;
   }
 }

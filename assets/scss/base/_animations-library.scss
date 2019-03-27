@@ -7,5 +7,20 @@ $generate-classes: false !default;
 // ---------
 // Implementation
 @if $generate-classes {
-  //
+  .slide-left-enter, .slide-right-leave-to {
+    opacity: 0;
+    transform: translateX(#{rem(80)});
+  }
+
+  .slide-left-leave-to, .slide-right-enter {
+    opacity: 0;
+    transform: translateX(#{rem(-80)});
+  }
+
+  .slide-left-enter-active,
+  .slide-left-leave-active,
+  .slide-right-leave-active,
+  .slide-right-enter-active {
+    @include transition(opacity, transform);
+  }
 }

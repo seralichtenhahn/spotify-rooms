@@ -5,14 +5,16 @@
 $generate-classes: false !default;
 
 @mixin link--stand-alone {
-  @include paragraph(false);
+  @include paragraph--small(false);
   @include transition(color);
 
   display: inline-block;
   padding: rem(2 6);
+  color: $link-fc;
   font-weight: 600;
   text-decoration: none;
-  color: $link-fc;
+  text-transform: uppercase;
+  cursor: pointer;
 
   &:focus,
   &:hover,
@@ -25,24 +27,10 @@ $generate-classes: false !default;
   }
 }
 
-@mixin link--in-paragraph {
-  @include transition(color, box-shadow);
-
-  display: inline-block;
-  font-family: inherit;
-  text-decoration: none;
-  color: $link-fc;
-  box-shadow: inset 0 calc-rem(-1) 0 0;
-
-  &:focus,
-  &:hover {
-    color: $link-paragraph-fc--hover;
-  }
-
-  &:active {
-    color: $link-paragraph-fc--active;
-  }
+@mixin link--primary {
+  color: $link-primary-fc;
 }
+
 // ---------
 // Implementation
 @if $generate-classes {
@@ -50,7 +38,11 @@ $generate-classes: false !default;
     @include link--stand-alone;
   }
 
-  p a {
-    @include link--in-paragraph;
+  .link {
+    @include link--stand-alone;
+  }
+
+  .link--primary {
+    @include link--primary;
   }
 }

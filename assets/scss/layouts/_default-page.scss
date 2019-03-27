@@ -7,7 +7,15 @@ $generate-classes: false !default;
 // ---------
 // Implementation
 @if $generate-classes {
-  .app-wrapper {
-    // placeholder
+  html,
+  body,
+  #__nuxt,
+  #__layout, {
+    height: 100%;
+    width: 100%;
+  }
+
+  body {
+    font-family: $font-family--body;
   }
 }

@@ -8,8 +8,8 @@ $generate-classes: false !default;
   font-family: $font-family--body;
   font-weight: 400;
   font-size: rem(16);
-  letter-spacing: 0.6px;
-  line-height: 1.6;
+  letter-spacing: rem(0.6);
+  line-height: 1.87;
   color: $primary-font-color;
 
   @if $box-model {
@@ -29,9 +29,15 @@ $generate-classes: false !default;
 
 @mixin paragraph--small($box-model: true) {
   @include paragraph($box-model);
-
-  font-size: rem(12) !important;
-  color: rgba($primary-font-color, 0.4);
+  @include fluid(
+    (
+      font-size: (
+        12,
+        16
+      )
+    ),
+    (small, large)
+  );
 }
 
 @mixin paragraph--error($box-model: false) {
@@ -51,6 +57,10 @@ $generate-classes: false !default;
   max-width: 70ch;
 }
 
+@mixin paragraph--muted {
+  color: rgba($white, 0.6);
+}
+
 // ---------
 // Implementation
 @if $generate-classes {
@@ -67,6 +77,10 @@ $generate-classes: false !default;
 
     &.intro {
       @include paragraph--intro;
+    }
+
+    &.muted {
+      @include paragraph--muted;
     }
   }
 }

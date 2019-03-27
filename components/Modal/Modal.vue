@@ -45,83 +45,59 @@ export default {
 </script>
 
 <style lang="scss">
-@media screen and (prefers-reduced-motion: reduce) {
-  .modal-mask {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9998;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    transition: none;
-  }
-}
-
 .modal-mask {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9998;
+  z-index: 99;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  transition: opacity 0.3s ease;
-}
-
-@media screen and (prefers-reduced-motion: reduce) {
-  .modal-wrapper {
-    width: rem(300);
-    padding: rem(20) rem(30);
-    border-radius: rem(2);
-    margin: 0 auto;
-    font-family: Helvetica, Arial, sans-serif;
-    background-color: #fff;
-    box-shadow: 0 rem(2) rem(8) rgba(0, 0, 0, 0.33);
-    transition: none;
-  }
+  background-color: rgba($black, 0.5);
 }
 
 .modal-wrapper {
-  width: rem(300);
-  padding: rem(20) rem(30);
-  border-radius: rem(2);
-  margin: 0 auto;
-  font-family: Helvetica, Arial, sans-serif;
-  background-color: #fff;
+  width: 100%;
+  max-width: rem(640);
+  border-radius: rem(7);
+  margin: 0 rem($padding--side);
+  background-color: $grey-mine;
   box-shadow: 0 rem(2) rem(8) rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
 }
 
-.modal-header h3 {
+.modal-header {
+  padding: rem(16) rem($padding--side);
+  border-bottom: rem(1) solid $grey-cod;
   margin-top: 0;
-  color: #42b983;
+  color: $white;
+  font-weight: 600;
+  letter-spacing: rem(0.33);
+  text-align: center;
 }
 
 .modal-body {
+  padding: rem(16) rem($padding--side);
   margin: rem(20) 0;
+  text-align: center;
 }
 
-.modal-default-button {
-  float: right;
-}
-
-.modal-enter {
-  opacity: 0;
-}
-
+.modal-enter-active,
 .modal-leave-active {
-  opacity: 0;
+  transition: opacity 250ms ease-in-out;
+
+  .modal-wrapper {
+    transition: transform 250ms ease-in-out;
+  }
 }
 
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  transform: scale(1.1);
+.modal-enter,
+.modal-leave-to {
+  opacity: 0;
+
+  .modal-wrapper {
+    transform: translateY(100%);
+  }
 }
 </style>
