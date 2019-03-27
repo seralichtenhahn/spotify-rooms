@@ -37,7 +37,7 @@ $generate-classes: true;
 
 // Global Styles
 // ----------------
-// @import "base/animations-library";
+@import "base/animations-library";
 @import "base/paragraphs";
 @import "base/headlines";
 @import "base/links";
@@ -57,3 +57,4 @@ $generate-classes: true;
 // Base Components
 //@import "base/pagination";
 @import "components/topbar";
+@import "components/equalizer";
