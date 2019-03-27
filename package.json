@@ -8,7 +8,7 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate && yarn functions:build",
+    "generate": "nuxt generate --modern=client && yarn functions:build",
     "functions:serve": "netlify-lambda serve functions",
     "functions:build": "netlify-lambda build functions",
     "lint:vue": "eslint **/*.vue",
