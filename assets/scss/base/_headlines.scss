@@ -128,6 +128,10 @@ $generate-classes: false !default;
   }
 }
 
+@mixin headline--muted {
+  color: rgba($white, 0.6);
+}
+
 // ---------
 // Implementation
 @if $generate-classes {
@@ -162,5 +166,9 @@ $generate-classes: false !default;
   .is-h5,
   h5 {
     @include headline--lvl5;
+  }
+
+  .muted {
+    @include headline--muted;
   }
 }

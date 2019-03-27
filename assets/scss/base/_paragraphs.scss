@@ -57,6 +57,10 @@ $generate-classes: false !default;
   max-width: 70ch;
 }
 
+@mixin paragraph--muted {
+  color: rgba($white, 0.6);
+}
+
 // ---------
 // Implementation
 @if $generate-classes {
@@ -73,6 +77,10 @@ $generate-classes: false !default;
 
     &.intro {
       @include paragraph--intro;
+    }
+
+    &.muted {
+      @include paragraph--muted;
     }
   }
 }
