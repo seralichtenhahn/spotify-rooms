@@ -59,6 +59,7 @@ module.exports = {
     "@nuxtjs/dotenv",
     "@nuxtjs/style-resources",
     "@nuxtjs/axios",
+    "@nuxtjs/pwa",
     "portal-vue/nuxt"
   ],
 
