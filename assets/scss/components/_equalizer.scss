@@ -38,12 +38,23 @@ $fourteen: $max;
   width: $width;
   height: $two;
   background-color: $color;
-}
 
-.equalizer,
-.equalizer::before,
-.equalizer::after {
-  animation: equalize 1.25s steps(25, end) 0s infinite;
+  &.active {
+    &,
+    &::before,
+    &::after {
+      height: $max;
+      animation: equalize 1.25s steps(25, end) 0s infinite;
+    }
+
+    &::before {
+      animation-name: equalize2;
+    }
+
+    &::after {
+      animation-name: equalize3;
+    }
+  }
 }
 
 .equalizer::before,
@@ -52,20 +63,14 @@ $fourteen: $max;
   position: absolute;
   bottom: 0;
   left: $width + $margin;
-  height: $max;
+  height: $two;
   width: $width;
   background-color: $color;
-}
-
-// Equalizer 2
-.equalizer::before {
-  animation-name: equalize2;
 }
 
 // Equalizer 3
 .equalizer::after {
   left: $width * 2 + $margin * 2;
-  animation-name: equalize3;
 }
 
 @keyframes equalize {
