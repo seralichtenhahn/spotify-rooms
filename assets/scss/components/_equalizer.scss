@@ -13,7 +13,7 @@ $color: $white;
 $equalizers: 3;
 $equalizer-size: ($equalizers * $width) + ( ($equalizers - 1) * $margin );
 $bottom: ( $size - $max ) / 2;
-$left: ( $size - $equalizerSize ) / 2;
+$left: ( $size - $equalizer-size ) / 2;
 
 // Heights
 $two: $max / 7;
