@@ -11,7 +11,7 @@ $generate-classes: false !default;
   max-width: rem(300);
   padding: rh(0.25) rem(6);
   border: 0;
-  border-radius: rem(6);
+  border-radius: 6px;
   margin-bottom: rh(1);
   color: $input-fc;
   font-weight: 600;
@@ -28,7 +28,7 @@ $generate-classes: false !default;
   &:active,
   &:focus {
     border: 0;
-    border-radius: rem(6);
+    border-radius: 6px;
   }
 }
 
