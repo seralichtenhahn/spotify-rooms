@@ -212,12 +212,14 @@ export default {
     }
 
     &--results {
-      overflow: auto;
       margin-top: rh(2);
 
       ul {
+        overflow: visible;
+        height: auto;
         padding: 0;
         padding-top: rem(16);
+        padding-bottom: rem($stripe--room-height);
         background-color: $transparent;
 
         li {
