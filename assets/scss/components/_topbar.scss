@@ -10,8 +10,8 @@ $topbar-height: rem(40);
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding-top: rem($padding--side);
   height: $topbar-height;
+  padding-top: rem($padding--side);
 
   &--item {
     display: flex;
