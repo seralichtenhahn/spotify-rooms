@@ -44,11 +44,13 @@
 
 <script>
 import { stringify } from "querystring"
+import { mapGetters } from "vuex"
 
 export default {
   middleware: "anonymous",
   layout: "blank",
   computed: {
+    ...mapGetters("device", ["isEdge"]),
     /**
      * Generiert die URL für das Poster
      * @return {string} url
