@@ -11,6 +11,7 @@ $topbar-height: rem(40);
   align-items: center;
   width: 100%;
   height: $topbar-height;
+  padding-top: rem($padding--side);
 
   &--item {
     display: flex;

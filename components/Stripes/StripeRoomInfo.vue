@@ -125,16 +125,13 @@ export default {
 </script>
 
 <style lang="scss">
-$stripe--room-height: rem(80);
-$stripe--room-height-mobile: rem(60);
-
 .stripe--room-info {
   position: fixed;
   bottom: 0;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: $stripe--room-height-mobile;
+  height: rem($stripe--room-height-mobile);
   padding: rem(10 0);
   background-color: $grey-mine;
   box-shadow: rem(0 0 21 0) rgba($black, 0.45);
@@ -182,7 +179,7 @@ $stripe--room-height-mobile: rem(60);
   }
 
   &.owner {
-    height: $stripe--room-height;
+    height: rem($stripe--room-height);
   }
 
   > p {
@@ -191,7 +188,7 @@ $stripe--room-height-mobile: rem(60);
   }
 
   @include breakpoint(medium) {
-    height: $stripe--room-height;
+    height: rem($stripe--room-height);
 
     &--item {
       img {
@@ -230,10 +227,10 @@ $stripe--room-height-mobile: rem(60);
 }
 
 .app--layout {
-  padding-bottom: $stripe--room-height-mobile;
+  padding-bottom: rem($stripe--room-height-mobile);
 
   @include breakpoint(medium) {
-    padding-bottom: $stripe--room-height;
+    padding-bottom: rem($stripe--room-height);
   }
 }
 </style>

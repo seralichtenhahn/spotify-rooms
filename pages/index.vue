@@ -2,10 +2,12 @@
   <div class="landing--page">
     <div class="landing--page--bg">
       <video
+        v-if="!isEdge"
         :poster="poster"
         autoplay
         muted
         loop
+        playsinline
       >
         <source
           src="~assets/videos/Cheering-Crowd.mp4"
@@ -16,6 +18,11 @@
           type="video/webm"
         >
       </video>
+      <img
+        v-else
+        :src="poster"
+        alt="Spotify Rooms"
+      >
     </div>
     <div class="landing--page--content">
       <div class="row--inner">
@@ -38,11 +45,13 @@
 
 <script>
 import { stringify } from "querystring"
+import { mapGetters } from "vuex"
 
 export default {
   middleware: "anonymous",
   layout: "blank",
   computed: {
+    ...mapGetters("device", ["isEdge"]),
     /**
      * Generiert die URL für das Poster
      * @return {string} url
@@ -95,7 +104,8 @@ export default {
     width: 100%;
     height: 100%;
 
-    video {
+    video,
+    img {
       width: 100%;
       height: 100%;
       object-fit: cover;

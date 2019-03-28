@@ -24,6 +24,12 @@ $generate-classes: false !default;
   &::placeholder {
     color: $input-fc;
   }
+
+  &:active,
+  &:focus {
+    border: 0;
+    border-radius: 6px;
+  }
 }
 
 @mixin input--large {
@@ -60,6 +66,16 @@ $generate-classes: false !default;
       @include input--large;
     }
   }
+
+  /* stylelint-disable */
+  input[type="search"] {
+    -webkit-appearance: textfield;
+
+    &::-webkit-search-decoration {
+      -webkit-appearance: none;
+    }
+  }
+  /* stylelint-enable */
 
   input[type="reset"] {
     @include input--reset;
