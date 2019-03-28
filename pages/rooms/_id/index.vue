@@ -173,6 +173,7 @@ $room-overview--page--header-height-mobile: rem(160);
       margin: 0;
       margin-top: rh(1);
       list-style: none;
+      padding-bottom: rem($stripe--room-height-mobile) + rem(20);
     }
   }
 
@@ -194,6 +195,7 @@ $room-overview--page--header-height-mobile: rem(160);
 
       ul {
         margin-top: 0;
+        padding-bottom: rem($stripe--room-height) + rem(20);
       }
     }
   }
