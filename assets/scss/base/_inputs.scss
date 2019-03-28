@@ -27,6 +27,7 @@ $generate-classes: false !default;
 
   &:active,
   &:focus {
+    border: 0;
     border-radius: rem(6);
   }
 }
