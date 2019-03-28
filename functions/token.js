@@ -49,6 +49,8 @@ exports.handler = function(event, _context, callback) {
   }
 
   // Fehler falls die Redirect URI nicht mit den Request Headern übereinstimmen
+  console.log(event.headers)
+  console.log(!payload.redirect_uri.match(event.headers.origin)[0])
   if (!payload.redirect_uri.match(event.headers.origin)[0]) {
     return callback(null, {
       statusCode: 422,
