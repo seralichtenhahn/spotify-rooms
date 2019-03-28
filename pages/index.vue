@@ -45,7 +45,6 @@
 <script>
 import { stringify } from "querystring"
 
-
 export default {
   middleware: "anonymous",
   layout: "blank",
