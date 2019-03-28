@@ -7,6 +7,7 @@
         autoplay
         muted
         loop
+        playsinline
       >
         <source
           src="~assets/videos/Cheering-Crowd.mp4"
