@@ -109,7 +109,6 @@ export default {
     const { items } = await this.$spotify.getMyTopTracks({
       limit: 10
     })
-    console.log(items)
     this.results = items
   },
   methods: {
