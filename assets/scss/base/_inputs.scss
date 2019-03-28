@@ -67,6 +67,16 @@ $generate-classes: false !default;
     }
   }
 
+  /* stylelint-disable */
+  input[type="search"] {
+    -webkit-appearance: textfield;
+
+    &::-webkit-search-decoration {
+      -webkit-appearance: none;
+    }
+  }
+  /* stylelint-enable */
+
   input[type="reset"] {
     @include input--reset;
   }
