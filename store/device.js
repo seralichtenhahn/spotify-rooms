@@ -1,5 +1,8 @@
+import { detect } from "detect-browser"
+
 export const state = () => ({
-  breakpoint: ""
+  breakpoint: "",
+  browser: {}
 })
 
 export const getters = {
@@ -9,20 +12,27 @@ export const getters = {
   isMobileOrTablet: store =>
     store.breakpoint === "small" || store.breakpoint === "medium",
   isDesktop: store =>
-    store.breakpoint !== "small" && store.breakpoint !== "medium"
+    store.breakpoint !== "small" && store.breakpoint !== "medium",
+  isEdge: store => store.browser.name === "edge"
 }
 
 export const mutations = {
-  setCurrentBreakpoint(store) {
-    store.breakpoint = window
+  setCurrentBreakpoint(state) {
+    state.breakpoint = window
       .getComputedStyle(document.querySelector("body"), ":before")
       .getPropertyValue("content")
       .replace(/\"|\'/g, "")
+  },
+  setBrowser(state, browser) {
+    state.browser = browser
   }
 }
 
 export const actions = {
   init({ commit }) {
+    const browser = detect()
+    commit("setBrowser", browser)
+
     commit("setCurrentBreakpoint")
     window.addEventListener("resize", () => {
       commit("setCurrentBreakpoint")
