@@ -30,7 +30,7 @@ export default {
    * Erstellt Hörer für Event modal:deactivate
    * Deaktiviert Modal falls Event aufgerufen wird
    */
-  mounted() {
+  created() {
     this.$nuxt.$on("modal:activate", title => {
       this.title = title
       this.active = true

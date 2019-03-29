@@ -127,26 +127,38 @@ export default {
     /**
      * Führt Store Action aus um Track hochzuwerten
      */
-    upvoteTrack() {
-      this.$store.dispatch("currentRoom/voteTrack", {
-        id: this.track.id,
-        mode: "up"
-      })
+    async upvoteTrack() {
+      try {
+        await this.$store.dispatch("currentRoom/voteTrack", {
+          id: this.track.id,
+          mode: "up"
+        })
+      } catch (error) {
+        this.$store.dispatch("error/create", error)
+      }
     },
     /**
      * Führt Store Action aus um Track abzuwerten
      */
-    downvoteTrack() {
-      this.$store.dispatch("currentRoom/voteTrack", {
-        id: this.track.id,
-        mode: "down"
-      })
+    async downvoteTrack() {
+      try {
+        await this.$store.dispatch("currentRoom/voteTrack", {
+          id: this.track.id,
+          mode: "down"
+        })
+      } catch (error) {
+        this.$store.dispatch("error/create", error)
+      }
     },
     /**
      * Führt Store Action aus um Track zu entfernen
      */
-    removeTrack() {
-      this.$store.dispatch("currentRoom/removeTrack", this.track)
+    async removeTrack() {
+      try {
+        await this.$store.dispatch("currentRoom/removeTrack", this.track)
+      } catch (error) {
+        this.$store.dispatch("error/create", error)
+      }
     }
   }
 }
