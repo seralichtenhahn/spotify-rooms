@@ -10,18 +10,18 @@ export const actions = {
    * @return {promise}
    */
   async join({}, roomName) {
+    const id = slugify(roomName, { lower: true })
+
     const room = await this.$db
       .collection("rooms")
-      .doc(roomName)
+      .doc(id)
       .get()
 
     if (!room.exists) {
       throw new Error("Raum wurde nicht gefunden")
     }
 
-    this.$router.push({ name: "rooms-id", params: { id: roomName } })
-
-    return roomName
+    this.$router.push({ name: "rooms-id", params: { id } })
   },
   /**
    * Erstellt einen neuen Raum, inklusive Playlist
@@ -39,7 +39,7 @@ export const actions = {
       throw new Error("Gebe einen Namen ein")
     }
 
-    // Konventiert Raumname zu einzigartugem slug
+    // Konventiert Raumname zu einzigartigem slug
     const id = slugify(roomName, { lower: true })
 
     const roomDoc = await this.$db.collection("rooms").doc(id)
