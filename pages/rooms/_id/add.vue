@@ -179,6 +179,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        cursor: pointer;
 
         img {
           width: rem(64);
@@ -204,6 +205,10 @@ export default {
           width: rem(24);
           height: rem(24);
           fill: rgba($white, 0.6);
+        }
+
+        &.title {
+          cursor: initial;
         }
 
         &:not(:last-child) {
