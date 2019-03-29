@@ -48,20 +48,6 @@ exports.handler = function(event, _context, callback) {
     })
   }
 
-  // Fehler falls die Redirect URI nicht mit den Request Headern übereinstimmen
-  const isInvalid =
-    !!event.headers.origin &&
-    !payload.redirect_uri.match(event.headers.origin.toLowerCase())[0]
-  if (isInvalid) {
-    return callback(null, {
-      statusCode: 422,
-      headers,
-      body: JSON.stringify({
-        message: "Invalid redirect_uri"
-      })
-    })
-  }
-
   // Client ID und Client Secret werden zu base64 konventiert
   // https://developer.spotify.com/documentation/general/guides/authorization-guide/
   const base64encoded = Buffer.from(
