@@ -56,17 +56,17 @@
       </div>
     </div>
     <portal
-      v-if="showDeviceList"
+      v-if="showFormStartQueue"
       to="modal"
     >
-      <FormDeviceList />
+      <FormStartQueue />
     </portal>
   </div>
 </template>
 
 <script>
 import CardTrack from "@/components/Cards/CardTrack"
-import FormDeviceList from "@/components/Forms/FormDeviceList"
+import FormStartQueue from "@/components/Forms/FormStartQueue"
 import { mapGetters } from "vuex"
 import IconArrowBack from "@/assets/icons/arrow-back.svg"
 import IconAddCircle from "@/assets/icons/add-circle-outline.svg"
@@ -74,7 +74,7 @@ import IconAddCircle from "@/assets/icons/add-circle-outline.svg"
 export default {
   components: {
     CardTrack,
-    FormDeviceList,
+    FormStartQueue,
     IconArrowBack,
     IconAddCircle
   },
@@ -99,7 +99,7 @@ export default {
   },
   data() {
     return {
-      showDeviceList: false
+      showFormStartQueue: false
     }
   },
   computed: {
@@ -117,11 +117,11 @@ export default {
     },
     /**
      * Setzt showDeviceList auf true
-     * Ruft Event auf um Modal zu aktivieren mit dem Titel "Wähle dein aktives Gerät"
+     * Ruft Event auf um Modal zu aktivieren mit dem Titel "Warteschlange starten"
      */
     setDevice() {
-      this.showDeviceList = true
-      this.$nuxt.$emit("modal:activate", "Wähle dein aktives Gerät")
+      this.showFormStartQueue = true
+      this.$nuxt.$emit("modal:activate", "Warteschlange starten")
     }
   },
   transition(to, from) {
