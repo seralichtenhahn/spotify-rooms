@@ -36,10 +36,17 @@ export default {
     }
   },
   methods: {
+    /**
+     * Setzt Wert von ExpireIn auf 1
+     * Ladet die Seite neu
+     */
     reload() {
       this.$store.commit("auth/setExpiresIn", 1)
       window.location.reload()
     },
+    /**
+     * Aktiviert falls showError wahr ist, das Modal mit dem Titel "Ein Fehler ist aufgetreten"
+     */
     showErrorHandler(showError) {
       if (showError || this.showError) {
         this.$nuxt.$emit("modal:activate", "Ein Fehler ist aufgetreten")
