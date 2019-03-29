@@ -2,9 +2,9 @@
   <div class="app--layout">
     <nuxt/>
     <StripeRoomInfo />
-    <AppModal />
+    <AppModal @hook:mounted="showErrorHandler" />
     <portal
-      v-if="error"
+      v-if="showError"
       to="modal"
     >
       <p>
@@ -18,29 +18,32 @@
 <script>
 import AppModal from "@/components/Modal/Modal"
 import StripeRoomInfo from "@/components/Stripes/StripeRoomInfo"
+import { mapGetters } from "vuex"
 
 export default {
   components: {
     AppModal,
     StripeRoomInfo
   },
-  data() {
-    return {
-      error: ""
-    }
-  },
   middleware: ["auth"],
-  mounted() {
-    this.$nuxt.$on("modal:error", error => {
-      this.error =
-        error.message || error.response || "Error! Bitte Lade die Seite neu."
-      this.$nuxt.$emit("modal:activate", "Ein Fehler ist aufgetreten")
-    })
+  computed: {
+    ...mapGetters("error", ["showError", "error"])
+  },
+  watch: {
+    showError: {
+      immediate: true,
+      handler: "showErrorHandler"
+    }
   },
   methods: {
     reload() {
       this.$store.commit("auth/setExpiresIn", 1)
       window.location.reload()
+    },
+    showErrorHandler(showError) {
+      if (showError || this.showError) {
+        this.$nuxt.$emit("modal:activate", "Ein Fehler ist aufgetreten")
+      }
     }
   }
 }

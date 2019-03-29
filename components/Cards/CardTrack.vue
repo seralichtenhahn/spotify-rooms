@@ -134,7 +134,7 @@ export default {
           mode: "up"
         })
       } catch (error) {
-        this.$nuxt.$emit("modal:error", error)
+        this.$store.dispatch("error/create", error)
       }
     },
     /**
@@ -147,7 +147,7 @@ export default {
           mode: "down"
         })
       } catch (error) {
-        this.$nuxt.$emit("modal:error", error)
+        this.$store.dispatch("error/create", error)
       }
     },
     /**
@@ -157,7 +157,7 @@ export default {
       try {
         await this.$store.dispatch("currentRoom/removeTrack", this.track)
       } catch (error) {
-        this.$nuxt.$emit("modal:error", error)
+        this.$store.dispatch("error/create", error)
       }
     }
   }

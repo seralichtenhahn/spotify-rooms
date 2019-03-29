@@ -112,7 +112,7 @@ export default {
       })
       this.results = items
     } catch (error) {
-      this.$nuxt.$emit("modal:error", error)
+      this.$store.dispatch("error/create", error)
     }
   },
   methods: {
@@ -130,7 +130,7 @@ export default {
         this.results = respone.tracks.items
         this.title = `Resultate für "${query}"`
       } catch (error) {
-        this.$nuxt.$emit("modal:error", error)
+        this.$store.dispatch("error/create", error)
       }
     }, 150),
     /**
@@ -151,7 +151,7 @@ export default {
 
         this.$router.push({ name: "rooms-id" })
       } catch ({ message }) {
-        this.$nuxt.$emit("modal:error", message)
+        this.$store.dispatch("error/create", error)
       }
     }
   },

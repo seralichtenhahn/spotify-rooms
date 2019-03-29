@@ -38,7 +38,7 @@ export const actions = {
    * Speichert Informationen im Store
    * @param {object} StoreContext - vuex context.
    */
-  async fetchUser({ commit }) {
+  async fetchUser({ commit, dispatch }) {
     try {
       const { display_name, id, product } = await this.$spotify.getMe()
       commit("setId", id)
@@ -46,7 +46,7 @@ export const actions = {
       commit("setLoginStatus", true)
       commit("setIsPremium", product === "premium")
     } catch (error) {
-      this.$nuxt.$emit("modal:error", error)
+      dispatch("error/create", error, { root: true })
     }
   }
 }

@@ -288,7 +288,7 @@ export const actions = {
         commit("addTimeout", timeout)
       }
     } catch (error) {
-      this.$nuxt.$emit("modal:error", error)
+      dispatch("error/create", error, { root: true })
     }
   },
   /**
