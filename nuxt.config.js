@@ -93,7 +93,9 @@ module.exports = {
   },
 
   workbox: {
-    offlinePage: "200.html"
+    offlinePage: "200.html",
+    //pagesURLPattern: "/(?!.*(__webpack_hmr|hot-update))",
+    pagesURLPattern: "/(?!/.netlify/*)"
   },
 
   /*
