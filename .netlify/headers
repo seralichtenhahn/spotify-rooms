@@ -5,4 +5,4 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Feature-Policy: autoplay 'self'; fullscreen 'self';
-  Content-Security-Policy: default-src *;  media-src 'self' https://i.scdn.co; style-src; 'self' 'unsafe-inline' *; script-src 'self' 'unsafe-eval' 'unsafe-inline' *; img-src 'self' data: *;π
+  Content-Security-Policy: default-src *;  media-src 'self' https://i.scdn.co; style-src; 'self' 'unsafe-inline' *; script-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self' data: *;
