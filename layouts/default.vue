@@ -3,6 +3,15 @@
     <nuxt/>
     <StripeRoomInfo />
     <AppModal />
+    <portal
+      v-if="error"
+      to="modal"
+    >
+      <p>
+        {{ error }}
+      </p>
+      <button @click="reload">Neuladen</button>
+    </portal>
   </div>
 </template>
 
@@ -15,7 +24,25 @@ export default {
     AppModal,
     StripeRoomInfo
   },
-  middleware: ["auth"]
+  data() {
+    return {
+      error: ""
+    }
+  },
+  middleware: ["auth"],
+  mounted() {
+    this.$nuxt.$on("modal:error", error => {
+      this.error =
+        error.message || error.response || "Error! Bitte Lade die Seite neu."
+      this.$nuxt.$emit("modal:activate", "Ein Fehler ist aufgetreten")
+    })
+  },
+  methods: {
+    reload() {
+      this.$store.commit("auth/setExpiresIn", 1)
+      window.location.reload()
+    }
+  }
 }
 </script>
 

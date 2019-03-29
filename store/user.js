@@ -45,8 +45,8 @@ export const actions = {
       commit("setUsername", display_name)
       commit("setLoginStatus", true)
       commit("setIsPremium", product === "premium")
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
+      this.$nuxt.$emit("modal:error", error)
     }
   }
 }

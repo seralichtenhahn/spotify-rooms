@@ -271,19 +271,24 @@ export const actions = {
    * Setzt ein Timeout und führt Funktion erneut aus, wenn nächsters Track startet
    * @param {object} StoreContext - vuex context.
    */
-  async fetchPlayback({ dispatch, commit }) {
-    const playback = await this.$spotify.getMyCurrentPlaybackState()
-    const isPlaying = await dispatch("checkIfQueueIsPlaying", playback)
+  async fetchPlayback({ dispatch, commit, state }) {
+    try {
+      const playback = await this.$spotify.getMyCurrentPlaybackState()
 
-    if (isPlaying) {
-      dispatch("checkCurrentTrack", playback)
+      await dispatch("checkIfQueueIsPlaying", playback)
 
-      commit("removeTimeout")
-      const timeLeft = playback.item.duration_ms - playback.progress_ms
-      const timeout = setTimeout(() => {
-        dispatch("fetchPlayback")
-      }, timeLeft)
-      commit("addTimeout", timeout)
+      if (state.isPlaying) {
+        dispatch("checkCurrentTrack", playback)
+
+        commit("removeTimeout")
+        const timeLeft = playback.item.duration_ms - playback.progress_ms
+        const timeout = setTimeout(() => {
+          dispatch("fetchPlayback")
+        }, timeLeft)
+        commit("addTimeout", timeout)
+      }
+    } catch (error) {
+      this.$nuxt.$emit("modal:error", error)
     }
   },
   /**
@@ -292,16 +297,16 @@ export const actions = {
    * @param {object} StoreContext - vuex context.
    * @param {object} playback
    */
-  async checkIfQueueIsPlaying({ state }, playback) {
+  async checkIfQueueIsPlaying({ state, commit }, playback) {
     const isPlaying =
       playback.is_playing && playback.context.uri.includes(state.playlistId)
+    commit("setIsPlaying", isPlaying)
     await this.$db
       .collection("rooms")
       .doc(state.id)
       .update({
         isPlaying
       })
-    return isPlaying
   },
   /**
    * Speichert aktuell laufenden Track in der Datenbank

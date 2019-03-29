@@ -106,10 +106,14 @@ export default {
    * @return {promise}
    */
   async mounted() {
-    const { items } = await this.$spotify.getMyTopTracks({
-      limit: 10
-    })
-    this.results = items
+    try {
+      const { items } = await this.$spotify.getMyTopTracks({
+        limit: 10
+      })
+      this.results = items
+    } catch (error) {
+      this.$nuxt.$emit("modal:error", error)
+    }
   },
   methods: {
     /**
@@ -119,11 +123,15 @@ export default {
      * @return {promise}
      */
     fetchSongs: debounce(async function(query) {
-      const respone = await this.$spotify.searchTracks(query, {
-        limit: 10
-      })
-      this.results = respone.tracks.items
-      this.title = `Resultate für "${query}"`
+      try {
+        const respone = await this.$spotify.searchTracks(query, {
+          limit: 10
+        })
+        this.results = respone.tracks.items
+        this.title = `Resultate für "${query}"`
+      } catch (error) {
+        this.$nuxt.$emit("modal:error", error)
+      }
     }, 150),
     /**
      * Führt die Action currentRoom/addTrack mit den Track Infos aus
@@ -142,8 +150,8 @@ export default {
         })
 
         this.$router.push({ name: "rooms-id" })
-      } catch (error) {
-        console.error(error)
+      } catch ({ message }) {
+        this.$nuxt.$emit("modal:error", message)
       }
     }
   },

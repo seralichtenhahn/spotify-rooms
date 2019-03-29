@@ -24,7 +24,7 @@ export const actions = {
         }
       }
 
-      spotify.setAccessToken(accessToken)
+      spotify.setAccessToken(rootState.auth.accessToken)
 
       await dispatch("user/fetchUser")
     }
