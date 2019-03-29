@@ -10,7 +10,8 @@
 
 1. clone Repo
 2. edit `name, description, author` in `package.json`
-3. run `$ yarn` in root folder
+3. copy .env.dist to .env and add API Keys
+4. run `$ yarn` in root folder
 
 
 ## Development
