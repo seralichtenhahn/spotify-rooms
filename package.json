@@ -79,6 +79,9 @@
     "vue-jest": "^3.0.4",
     "vue-svg-loader": "0.11.0"
   },
+  "workspaces": [
+    "functions/*"
+  ],
   "browserslist": [
     "> 1%",
     "last 2 versions",
