@@ -7,7 +7,6 @@ exports.handler = async function(event, context) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 410,
-      headers,
       body: JSON.stringify({
         message: "Method not allowed"
       })
@@ -21,7 +20,6 @@ exports.handler = async function(event, context) {
     if (!payload.refresh_token) {
       return {
         statusCode: 422,
-        headers,
         body: JSON.stringify({
           message: "Required information is missing."
         })
