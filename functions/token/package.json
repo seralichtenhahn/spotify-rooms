@@ -9,7 +9,6 @@
   "author": "Serafin Lichtenhahn <serafin@wondrous.ch> (https://www.wearewondrous.ch)",
   "license": "MIT",
   "dependencies": {
-    "encoding": "^0.1.12",
     "node-fetch": "^2.3.0"
   }
 }
