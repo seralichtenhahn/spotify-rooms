@@ -43,7 +43,7 @@ export const actions = {
     const id = slugify(roomName, { lower: true })
 
     const roomDoc = await this.$db.collection("rooms").doc(id)
-    const room = roomDoc.get()
+    const room = await roomDoc.get()
 
     // Checkt ob Raum bereits existiert
     if (room.exists) {
@@ -55,7 +55,7 @@ export const actions = {
       name: roomName
     })
 
-    // Raum wird ind er Datenbank gespeichert
+    // Raum wird in der Datenbank gespeichert
     await roomDoc.set({
       title: roomName,
       owner: rootState.user.id,
