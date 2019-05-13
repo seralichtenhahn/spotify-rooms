@@ -1,5 +1,7 @@
 /* eslint-disable */
 const fetch = require("node-fetch");
+const { URLSearchParams } = require("url")
+
 exports.handler = async function(event, context) {
   // Nur POST Requests sind erlaubt
   if (event.httpMethod !== "POST") {
