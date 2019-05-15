@@ -1,3 +1,7 @@
+import { vuexfireMutations } from "vuexfire"
+
+export const mutations = vuexfireMutations
+
 export const actions = {
   /**
    * Falls der AccessToken vvorhanden ist wird der Login Status zu true gesetzt

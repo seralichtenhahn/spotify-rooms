@@ -1,5 +1,7 @@
 import firebase from "firebase/app"
 import differenceWith from "lodash/differenceWith"
+import { firestoreAction } from "vuexfire"
+import { db } from "@/plugins/firebase"
 
 export const state = () => ({
   id: "",
@@ -10,8 +12,8 @@ export const state = () => ({
   isPlaying: false,
   currentTrack: null,
   hydrated: false,
-  listeners: [],
-  timeout: null
+  timeout: null,
+  room: null
 })
 
 export const getters = {
@@ -80,108 +82,113 @@ export const actions = {
    * @param {string} roomID
    * @return {promise}
    */
-  async init({ commit, getters, dispatch, state }, id) {
-    // Raum wurde bereits initialisiert
-    if (state.id) {
-      return
-    }
+  init: firestoreAction(
+    async ({ bindFirestoreRef, commit, getters, dispatch, state }, id) => {
+      // Raum wurde bereits initialisiert
+      if (state.id) {
+        return
+      }
 
-    const room = await this.$db.collection("rooms").doc(id)
-    const roomSnapshot = await room.get()
+      console.log(db)
+      bindFirestoreRef("room", db.collection("rooms").doc(id))
 
-    if (!roomSnapshot.exists) {
-      throw new Error("Raum existiert nicht")
-    }
-    commit("setId", room.id)
+      const room = await this.$db.collection("rooms").doc(id)
+      const roomSnapshot = await room.get()
 
-    const roomData = roomSnapshot.data()
-    commit("setTitle", roomData.title)
-    commit("setOwner", roomData.owner)
+      if (!roomSnapshot.exists) {
+        throw new Error("Raum existiert nicht")
+      }
+      commit("setId", room.id)
 
-    if (getters.isOwner) {
-      commit("setPlaylistId", roomData.playlistId)
-      dispatch("fetchPlayback")
-    }
+      const roomData = roomSnapshot.data()
+      commit("setTitle", roomData.title)
+      commit("setOwner", roomData.owner)
 
-    // Wird bei Änderungen der Raumdaten ausgeführt
-    const roomListener = room.onSnapshot(async snapshot => {
-      const { isPlaying, currentTrack } = snapshot.data()
+      if (getters.isOwner) {
+        commit("setPlaylistId", roomData.playlistId)
+        dispatch("fetchPlayback")
+      }
 
-      commit("setIsPlaying", isPlaying)
-      commit("setCurrentTrack", currentTrack)
-    })
+      // Wird bei Änderungen der Raumdaten ausgeführt
+      const roomListener = room.onSnapshot(async snapshot => {
+        const { isPlaying, currentTrack } = snapshot.data()
 
-    // // Listener wird gespeichert damit er beim verlassen des Raumes wieder entfrent werden kann
-    commit("addListener", roomListener)
+        commit("setIsPlaying", isPlaying)
+        commit("setCurrentTrack", currentTrack)
+      })
 
-    // Wird bei Änderungen der Warteschlange ausgeführt
-    const queueListener = room
-      .collection("queue")
-      .onSnapshot(async snapshot => {
-        const queue = await snapshot.query
-          .orderBy("score", "desc")
-          .orderBy("createdAt")
-          .get()
-        const queueData = queue.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }))
+      // // Listener wird gespeichert damit er beim verlassen des Raumes wieder entfrent werden kann
+      commit("addListener", roomListener)
 
-        // Überprüft ob neue Tracks vorhanden sind
-        if (getters.isOwner && state.hydrated) {
-          const newTracks = differenceWith(
-            queueData,
-            getters.queue,
-            (newTrack, oldTrack) => {
-              return newTrack.id === oldTrack.id
+      // Wird bei Änderungen der Warteschlange ausgeführt
+      const queueListener = room
+        .collection("queue")
+        .onSnapshot(async snapshot => {
+          const queue = await snapshot.query
+            .orderBy("score", "desc")
+            .orderBy("createdAt")
+            .get()
+          const queueData = queue.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+
+          // Überprüft ob neue Tracks vorhanden sind
+          if (getters.isOwner && state.hydrated) {
+            const newTracks = differenceWith(
+              queueData,
+              getters.queue,
+              (newTrack, oldTrack) => {
+                return newTrack.id === oldTrack.id
+              }
+            )
+
+            // Speichert neue Tracks in der Playlist
+            if (newTracks.length) {
+              const uris = newTracks.map(track => track.uri)
+              const index = queueData.findIndex(track => track.score === -1)
+              const position = index > -1 ? index - 1 : queueData.length - 1
+              this.$spotify.addTracksToPlaylist(state.playlistId, uris, {
+                position
+              })
             }
-          )
 
-          // Speichert neue Tracks in der Playlist
-          if (newTracks.length) {
-            const uris = newTracks.map(track => track.uri)
-            const index = queueData.findIndex(track => track.score === -1)
-            const position = index > -1 ? index - 1 : queueData.length - 1
-            this.$spotify.addTracksToPlaylist(state.playlistId, uris, {
-              position
+            // Überprüft ob Tracks neue Reihenfolge haben
+            const updatedTracks = getters.queue.filter(track => {
+              const newTrack = queueData.find(_track => _track.id === track.id)
+              return newTrack ? newTrack.score !== track.score : false
+            })
+
+            // Neue Position wird bestimmt
+            updatedTracks.forEach(track => {
+              const findTrack = _track => _track.id === track.id
+              const position = getters.queue.findIndex(findTrack)
+              const newPosition = queueData.findIndex(findTrack)
+              if (position !== newPosition) {
+                this.$spotify.reorderTracksInPlaylist(
+                  state.playlistId,
+                  position,
+                  newPosition
+                )
+              }
             })
           }
 
-          // Überprüft ob Tracks neue Reihenfolge haben
-          const updatedTracks = getters.queue.filter(track => {
-            const newTrack = queueData.find(_track => _track.id === track.id)
-            return newTrack ? newTrack.score !== track.score : false
-          })
+          commit("setQueue", queueData)
+          commit("setHydrated", true)
+        })
 
-          // Neue Position wird bestimmt
-          updatedTracks.forEach(track => {
-            const findTrack = _track => _track.id === track.id
-            const position = getters.queue.findIndex(findTrack)
-            const newPosition = queueData.findIndex(findTrack)
-            if (position !== newPosition) {
-              this.$spotify.reorderTracksInPlaylist(
-                state.playlistId,
-                position,
-                newPosition
-              )
-            }
-          })
-        }
+      // Event Listener wird gesetzt um Status des Raums abzufragen
+      document.addEventListener(
+        "visibilitychange",
+        handleVisibilityChange.bind(this)
+      )
 
-        commit("setQueue", queueData)
-        commit("setHydrated", true)
-      })
+      commit("addListener", queueListener)
 
-    // Event Listener wird gesetzt um Status des Raums abzufragen
-    document.addEventListener(
-      "visibilitychange",
-      handleVisibilityChange.bind(this)
-    )
-
-    commit("addListener", queueListener)
-
-    return roomData
-  },
+      return roomData
+    }
+  ),
   /**
    * Fügt einen neuen Track der Datenbank hinzu
    * @param {object} StoreContext - vuex context.
