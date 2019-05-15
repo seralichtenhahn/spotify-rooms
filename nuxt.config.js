@@ -1,5 +1,3 @@
-import postcssNormalize from "postcss-normalize"
-
 // Necessary require statement for importing env variables into nuxt.config.js
 // https://github.com/nuxt-community/dotenv-module#using-env-file-in-nuxtconfigjs
 require("dotenv").config()
@@ -105,7 +103,11 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    postcss: [postcssNormalize()],
+    postcss: {
+      plugins: {
+        "postcss-normalize": {}
+      }
+    },
     extend(config, ctx) {
       // update test for images & consider as images only files from folder assets/images/*
       config.module.rules
