@@ -89,6 +89,11 @@ export default {
     IconPause,
     IconSkipForward
   },
+  data() {
+    return {
+      timeout: null
+    }
+  },
   computed: {
     ...mapGetters("device", ["isMobile"]),
     ...mapGetters("currentRoom", [
@@ -101,24 +106,127 @@ export default {
       return this.isPlaying ? "IconPause" : "IconPlay"
     }
   },
+  watch: {
+    id: {
+      immediate: true,
+      handler(id) {
+        if (this.isOwner && id) {
+          this.fetchPlayback()
+        }
+      }
+    }
+  },
+  mounted() {
+    this.$nuxt.$on("playback:fetch", callback => {
+      this.fetchPlayback().then(() => callback())
+    })
+  },
   methods: {
-    /*
-     * Führt Actions aus zum starten des letzten Tracks in der Wartesclange
+    /**
+     * Spielt den zuletzt gespielten Track in der Warteschlange ab
      */
-    prevTrack() {
-      this.$store.dispatch("currentRoom/prevTrack")
+    async prevTrack() {
+      await this.$spotify.skipToPrevious()
+
+      // Timeout notwendig weil Spotify den Playback Status noch nicht aktualisiert hat
+      setTimeout(() => {
+        this.fetchPlayback()
+      }, 250)
     },
     /*
-     * Führt Actions aus zum ändern des Play Status
+     * Ändert den Playback Status
      */
-    changePlayState() {
-      this.$store.dispatch("currentRoom/changePlayState")
+    async changePlayState() {
+      if (this.isPlaying) {
+        await this.$spotify.pause()
+      } else {
+        await this.$spotify.play()
+      }
+
+      // Timeout notwendig weil Spotify den Playback Status noch nicht aktualisiert hat
+      setTimeout(() => {
+        this.fetchPlayback()
+      }, 250)
     },
-    /*
-     * Führt Actions aus zum starten des nächsten Tracks in der Wartesclange
+    /**
+     * Spielt den nächsten Track in der Warteschlange ab
      */
-    nextTrack() {
-      this.$store.dispatch("currentRoom/nextTrack")
+    async nextTrack() {
+      await this.$spotify.skipToNext()
+
+      // Timeout notwendig weil Spotify den Playback Status noch nicht aktualisiert hat
+      setTimeout(() => {
+        this.fetchPlayback()
+      }, 250)
+    },
+    /**
+     * Holt den Playback Status des Nutzters
+     * Setzt ein Timeout und führt Funktion erneut aus, wenn nächsters Track startet
+     * @param {object} StoreContext - vuex context.
+     */
+    async fetchPlayback() {
+      try {
+        const playback = await this.$spotify.getMyCurrentPlaybackState()
+
+        if (!playback) {
+          return
+        }
+
+        await this.checkIfQueueIsPlaying(playback)
+
+        if (this.isPlaying) {
+          this.checkCurrentTrack(playback)
+
+          this.timeout = null
+          const timeLeft = playback.item.duration_ms - playback.progress_ms
+
+          this.timeout = setTimeout(() => {
+            this.fetchPlayback()
+          }, timeLeft)
+        }
+      } catch (error) {
+        this.$store.dispatch("error/create", error, { root: true })
+      }
+    },
+    /**
+     * Checkt ob Nutzer gerade die Warteschlange am spielen ist.
+     * Aktualisiert die Datenbank
+     * @param {object} StoreContext - vuex context.
+     * @param {object} playback
+     */
+    async checkIfQueueIsPlaying(playback) {
+      const isPlaying =
+        playback.is_playing &&
+        !!playback.context &&
+        playback.context.uri.includes(this.playlistId)
+
+      await this.$db
+        .collection("rooms")
+        .doc(this.id)
+        .update({
+          isPlaying
+        })
+    },
+    /**
+     * Speichert aktuell laufenden Track in der Datenbank
+     * @param {object} StoreContext - vuex context.
+     * @param {object} playback
+     */
+    checkCurrentTrack({ item }) {
+      if (!item) {
+        return
+      }
+
+      this.$db
+        .collection("rooms")
+        .doc(this.id)
+        .update({
+          currentTrack: {
+            title: item.name,
+            artist: item.artists.map(artist => artist.name).join(", "),
+            image: item.album.images.find(image => image.height === 300).url
+          }
+        })
     }
   }
 }

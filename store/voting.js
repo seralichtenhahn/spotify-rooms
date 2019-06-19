@@ -1,3 +1,6 @@
+import { firestoreAction } from "vuexfire"
+import { db } from "@/plugins/firebase"
+
 export const state = () => ({
   votes: []
 })
@@ -24,13 +27,18 @@ export const actions = {
    * @param {object} roomName
    * @return {number} index
    */
-  updateVote({ commit, state }, data) {
-    const index = state.votes.findIndex(vote => vote.trackId === data.trackId)
-    if (index !== -1) {
-      commit("removeVote", index)
-    }
-    commit("addVote", data)
-
-    return index
-  }
+  init: firestoreAction(async ({ state, bindFirestoreRef, rootState }) => {
+    await bindFirestoreRef(
+      "votes",
+      db
+        .collection("users")
+        .doc(rootState.user.id)
+        .collection("rooms")
+        .doc(rootState.currentRoom.room.id)
+        .collection("votes")
+    )
+  }),
+  reset: firestoreAction(({ unbindFirestoreRef }) => {
+    unbindFirestoreRef("votes")
+  })
 }

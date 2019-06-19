@@ -43,13 +43,13 @@ export default {
      * @param {string} device - id
      */
     async queueStarted() {
-      await this.$store.dispatch("currentRoom/fetchPlayback")
-
-      if (this.isPlaying) {
-        this.$nuxt.$emit("modal:deactivate")
-      } else {
-        this.error = "Die Playlist wurde noch nicht gestartet"
-      }
+      this.$nuxt.$emit("playback:fetch", () => {
+        if (this.isPlaying) {
+          this.$nuxt.$emit("modal:deactivate")
+        } else {
+          this.error = "Die Playlist wurde noch nicht gestartet"
+        }
+      })
     },
     cancel() {
       this.$nuxt.$emit("modal:deactivate")
