@@ -47,7 +47,7 @@ module.exports = {
     "@/plugins/localStorage.js",
     "@/plugins/dayjs.js",
     "@/plugins/nuxtClientInit.js",
-    "@/plugins/sw.js"
+    "@/plugins/installSw.js"
   ],
 
   /*
