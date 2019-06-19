@@ -2,7 +2,7 @@
   ID = "597ea606-1b7b-4320-b5b8-5e4fecd2bdca"
 
 [dev]
-  command = "yarn dev"
+  command = "nuxt"
   functions = "./functions"
 
 [build]
