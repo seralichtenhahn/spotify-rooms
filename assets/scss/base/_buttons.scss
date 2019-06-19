@@ -41,7 +41,7 @@ $generate-classes: false !default;
 // primary Button Mixin
 @mixin button--primary {
   color: $button-primary-fc;
-  background-color: darken($button-primary-bgc, 11.5%);
+  background-color: $button-primary-bgc;
 
   &:active,
   &:focus,
@@ -63,6 +63,20 @@ $generate-classes: false !default;
   }
 }
 
+// -----------
+// mobile Button Mixin
+@mixin button--mobile {
+  font-size: rem(12);
+  padding: rem(6 8);
+  margin-bottom: rem(3);
+  
+  @include breakpoint(medium) {
+    font-size: rem(14);
+    padding: calc-rem(16 36);
+    margin-bottom: calc-rem(16);
+  }
+}
+
 // ---------
 // Implementation
 @if $generate-classes {
@@ -77,5 +91,9 @@ $generate-classes: false !default;
 
   .button--block {
     @include button--block;
+  }
+
+  .button--mobile {
+    @include button--mobile;
   }
 }
