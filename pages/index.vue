@@ -10,12 +10,12 @@
         playsinline
       >
         <source
-          src="~assets/videos/Cheering-Crowd.mp4"
-          type="video/mp4"
-        >
-        <source
           src="~assets/videos/Cheering-Crowd.webm"
           type="video/webm"
+        >
+        <source
+          src="~assets/videos/Cheering-Crowd.mp4"
+          type="video/mp4"
         >
       </video>
       <img
