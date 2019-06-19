@@ -66,14 +66,14 @@ $generate-classes: false !default;
 // -----------
 // mobile Button Mixin
 @mixin button--mobile {
-  font-size: rem(12);
   padding: rem(6 8);
   margin-bottom: rem(3);
+  font-size: rem(12);
   
   @include breakpoint(medium) {
-    font-size: rem(14);
     padding: calc-rem(16 36);
     margin-bottom: calc-rem(16);
+    font-size: rem(14);
   }
 }
 
