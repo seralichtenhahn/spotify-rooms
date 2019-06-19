@@ -1,7 +1,7 @@
 <template>
   <portal to="modal">
     <p>
-      Eine neue bombastische Version von <strong>Spotify Rooms</strong> ist verfügbar.
+      Eine neue Version von <strong>Spotify Rooms</strong> ist verfügbar.
     </p>
     <button @click="update">Installieren</button>
   </portal>
