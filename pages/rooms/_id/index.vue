@@ -30,29 +30,31 @@
       <div class="row--outer">
         <div class="room-overview--page--queue--header">
           <h3>Warteschlange</h3>
-          <div v-if="!isMobile">
+          <div>
             <button
               v-if="isOwner"
-              class="button--primary"
+              class="button--primary button--mobile"
               @click="setDevice"
             >
-              Warteschlange starten
+              <span v-if="!isMobile">Warteschlange</span> starten
             </button>
-            <nuxt-link
-              :to="{ name: 'rooms-id-add' }"
-              class="button"
-            >
-              Track hinzufügen
-            </nuxt-link>
+            <template v-if="!isMobile">
+              <nuxt-link
+                :to="{ name: 'rooms-id-add' }"
+                class="button"
+              >
+                Track hinzufügen
+              </nuxt-link>
+            </template>
           </div>
         </div>
-        <ul>
+        <Queue v-slot="{ queue }">
           <CardTrack
             v-for="(track, index) in queue"
             :key="index"
             :track="track"
           />
-        </ul>
+        </Queue>
       </div>
     </div>
     <portal
@@ -67,6 +69,7 @@
 <script>
 import CardTrack from "@/components/Cards/CardTrack"
 import FormStartQueue from "@/components/Forms/FormStartQueue"
+import Queue from "@/components/Queue/Queue"
 import { mapGetters } from "vuex"
 import IconArrowBack from "@/assets/icons/arrow-back.svg"
 import IconAddCircle from "@/assets/icons/add-circle-outline.svg"
@@ -75,21 +78,28 @@ export default {
   components: {
     CardTrack,
     FormStartQueue,
+    Queue,
     IconArrowBack,
     IconAddCircle
   },
   /**
    * Führt Action currentRoom/init mit der Raum Id aus
    * Gibt Raumdaten zurück
-   * Falls Raum nicht gefunden wird, wird der Nutzter zur 404 Seiter weitergeleitet
+   * Falls Raum nicht gefunden wird, wird der Nutzter zur 404 Seite weitergeleitet
    * @param {object} NuxtContext - https://nuxtjs.org/api/context/
    * @return {object} Room
    */
   async asyncData({ params, error, store }) {
     try {
-      const room = await store.dispatch("currentRoom/init", params.id)
+      await store.dispatch("currentRoom/init", params.id)
+      await store.dispatch("voting/init")
 
-      return room
+      const { title, owner } = store.state.currentRoom.room
+
+      return {
+        title,
+        owner
+      }
     } catch ({ message }) {
       error({
         statusCode: 404,
@@ -103,7 +113,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("currentRoom", ["queue", "isOwner"]),
+    ...mapGetters("currentRoom", ["isOwner"]),
     ...mapGetters("device", ["isMobile"])
   },
   methods: {
@@ -113,6 +123,7 @@ export default {
      */
     leaveRoom() {
       this.$store.dispatch("currentRoom/reset")
+      this.$store.dispatch("voting/reset")
       this.$router.push("/rooms")
     },
     /**
@@ -169,6 +180,12 @@ $room-overview--page--header-height-mobile: rem(160);
     background-color: $grey-cod;
     transform: translateY($room-overview--page--header-height-mobile);
 
+    &--header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     ul {
       padding-bottom: rem($stripe--room-height-mobile) + rem(20);
       margin: 0;
@@ -186,12 +203,6 @@ $room-overview--page--header-height-mobile: rem(160);
     &--queue {
       padding-top: rem(12);
       transform: translateY($room-overview--page--header-height);
-
-      &--header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
 
       ul {
         padding-bottom: rem($stripe--room-height) + rem(20);

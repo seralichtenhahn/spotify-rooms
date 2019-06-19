@@ -1,13 +1,17 @@
 [Settings]
   ID = "597ea606-1b7b-4320-b5b8-5e4fecd2bdca"
 
+[dev]
+  command = "nuxt"
+  functions = "./functions"
+
 [build]
   command = "yarn generate"
   publish = "dist"
-  functions = "/.netlify/functions"
+  functions = "./functions"
 
 [build.environment]
-  YARN_VERSION = "1.12.3"
+  YARN_VERSION = "1.15.2"
   NODE_VERSION = "10.13.0"
 
 [context.production]

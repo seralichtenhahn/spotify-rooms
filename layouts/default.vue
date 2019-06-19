@@ -3,6 +3,7 @@
     <nuxt/>
     <StripeRoomInfo />
     <AppModal @hook:mounted="showErrorHandler" />
+    <QueueHandler v-if="isOwner" />
     <portal
       v-if="showError"
       to="modal"
@@ -23,11 +24,13 @@ import { mapGetters } from "vuex"
 export default {
   components: {
     AppModal,
-    StripeRoomInfo
+    StripeRoomInfo,
+    QueueHandler: () => import("@/components/Queue/QueueHandler")
   },
   middleware: ["auth"],
   computed: {
-    ...mapGetters("error", ["showError", "error"])
+    ...mapGetters("error", ["showError", "error"]),
+    ...mapGetters("currentRoom", ["isOwner"])
   },
   watch: {
     showError: {

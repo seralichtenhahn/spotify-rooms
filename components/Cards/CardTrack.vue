@@ -37,25 +37,21 @@
     </div>
     <div class="track--card--voting">
       <a
+        :class="{'active': !canUpvote}"
         href="#"
         class="icon--upvote"
         @click.prevent="upvoteTrack"
       >
-        <IconArrowUp
-          :class="{'active': !canUpvote}"
-          class=" icon"
-        />
+        <IconArrowUp class=" icon" />
       </a>
       <span>{{ track.score }}</span>
       <a
+        :class="{'active': !canDownvote}"
         href="#"
         class="icon--downvote"
         @click.prevent="downvoteTrack"
       >
-        <IconArrowDown
-          :class="{'active': !canDownvote}"
-          class="icon"
-        />
+        <IconArrowDown class="icon" />
       </a>
     </div>
     <div
@@ -78,6 +74,7 @@ import IconArrowDown from "@/assets/icons/arrow-down.svg"
 import IconCloseCircle from "@/assets/icons/close-circle-outline.svg"
 import dayjs from "dayjs"
 import { mapGetters } from "vuex"
+import firebase from "firebase/app"
 
 export default {
   components: {
@@ -93,29 +90,28 @@ export default {
   },
   computed: {
     ...mapGetters("device", ["isMobile"]),
-    ...mapGetters("currentRoom", ["isOwner"]),
+    ...mapGetters("currentRoom", ["id", "isOwner"]),
+    ...mapGetters("voting", ["votes"]),
     /**
      * Gibt gespeicherte Berwetung zurück, falls vorhanden
      * @return {object} vote
      */
-    vote() {
-      return this.$store.state.voting.votes.find(
-        vote => vote.trackId === this.track.id
-      )
+    trackVote() {
+      return this.votes.find(vote => vote.id === this.track.id)
     },
     /**
      * Gibt zürück ob der Benutzer den Track hochwerten darf
      * @return {boolean} Nutzer darf Track hochwerten
      */
     canUpvote() {
-      return this.vote ? this.vote.mode !== "up" : true
+      return this.trackVote ? this.trackVote.value === -1 : true
     },
     /**
      * Gibt zürück ob der Benutzer den Track abwerten darf
      * @return {boolean} Nutzer darf Track abwerten
      */
     canDownvote() {
-      return this.vote ? this.vote.value !== "down" : true
+      return this.trackVote ? this.trackVote.value === 1 : true
     },
     createdAt() {
       return this.track.createdAt
@@ -127,25 +123,42 @@ export default {
     /**
      * Führt Store Action aus um Track hochzuwerten
      */
-    async upvoteTrack() {
-      try {
-        await this.$store.dispatch("currentRoom/voteTrack", {
-          id: this.track.id,
-          mode: "up"
-        })
-      } catch (error) {
-        this.$store.dispatch("error/create", error)
+    upvoteTrack() {
+      if (this.canUpvote) {
+        this.createVote(1, !this.canDownvote)
       }
     },
     /**
      * Führt Store Action aus um Track abzuwerten
      */
-    async downvoteTrack() {
+    downvoteTrack() {
+      if (this.canDownvote) {
+        this.createVote(-1, !this.canUpvote)
+      }
+    },
+    async createVote(value, multiply) {
+      const increment = multiply ? value * 2 : value
+
       try {
-        await this.$store.dispatch("currentRoom/voteTrack", {
-          id: this.track.id,
-          mode: "down"
-        })
+        this.$db
+          .collection("users")
+          .doc(this.$store.state.user.id)
+          .collection("rooms")
+          .doc(this.id)
+          .collection("votes")
+          .doc(this.track.id)
+          .set({
+            value,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          })
+        this.$db
+          .collection("rooms")
+          .doc(this.id)
+          .collection("queue")
+          .doc(this.track.id)
+          .update({
+            score: firebase.firestore.FieldValue.increment(increment)
+          })
       } catch (error) {
         this.$store.dispatch("error/create", error)
       }
@@ -212,8 +225,13 @@ export default {
       width: rem(24);
       cursor: pointer;
       fill: $white;
+    }
 
-      &.active {
+    .active {
+      cursor: not-allowed;
+      pointer-events: none;
+
+      svg {
         fill: $green-meadow;
       }
     }
