@@ -59,9 +59,6 @@ export default {
       }
     }
   },
-  mounted() {
-    this.showRefreshUI()
-  },
   methods: {
     /**
      * Setzt Wert von ExpireIn auf 1
