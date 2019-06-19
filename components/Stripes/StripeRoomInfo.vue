@@ -100,7 +100,8 @@ export default {
       "isPlaying",
       "currentTrack",
       "isOwner",
-      "id"
+      "id",
+      "playlistId"
     ]),
     playstateComponent() {
       return this.isPlaying ? "IconPause" : "IconPlay"
@@ -172,7 +173,16 @@ export default {
           return
         }
 
-        await this.checkIfQueueIsPlaying(playback)
+        const isPlaying = this.checkIfQueueIsPlaying(playback)
+
+        console.log(isPlaying)
+
+        await this.$db
+          .collection("rooms")
+          .doc(this.id)
+          .update({
+            isPlaying
+          })
 
         if (this.isPlaying) {
           this.checkCurrentTrack(playback)
@@ -194,18 +204,18 @@ export default {
      * @param {object} StoreContext - vuex context.
      * @param {object} playback
      */
-    async checkIfQueueIsPlaying(playback) {
-      const isPlaying =
-        playback.is_playing &&
-        !!playback.context &&
-        playback.context.uri.includes(this.playlistId)
+    checkIfQueueIsPlaying(playback) {
+      if (!playback.is_playing) {
+        return false
+      }
 
-      await this.$db
-        .collection("rooms")
-        .doc(this.id)
-        .update({
-          isPlaying
-        })
+      if (playback.context && playback.context.uri.includes(this.playlistId)) {
+        return true
+      }
+
+      console.log(this.playlistId, playback.context.uri)
+
+      return false
     },
     /**
      * Speichert aktuell laufenden Track in der Datenbank
