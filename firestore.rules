@@ -20,5 +20,13 @@ service cloud.firestore {
         allow delete: if true;
       }
     }
+
+    match /users/{user} {
+      match /rooms/{room} {
+        match/votes/{vote} {
+          allow read, write: if true;
+        }
+      }
+    }
   }
 }
