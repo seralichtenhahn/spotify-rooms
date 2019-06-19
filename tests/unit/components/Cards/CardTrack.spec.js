@@ -11,9 +11,9 @@ describe("CardTrack", () => {
     state: {
       voting: {
         votes: [
-          { id: "4567890", mode: "up" },
-          { id: "4512890", mode: "down" },
-          { id: "4567856", mode: "up" }
+          { id: "4567890", value: 1 },
+          { id: "4512890", value: -1 },
+          { id: "4567856", value: 1 }
         ]
       }
     }
@@ -28,12 +28,21 @@ describe("CardTrack", () => {
           namespaced: true,
           state: {
             votes: []
+          },
+          getters: {
+            votes: state => state.votes
           }
         },
         currentRoom: {
           namespaced: true,
-          actions: {
-            voteTrack: jest.fn()
+          getters: {
+            isOwner: () => false
+          }
+        },
+        device: {
+          namespaced: true,
+          getters: {
+            isMobile: () => false
           }
         }
       }
@@ -65,8 +74,7 @@ describe("CardTrack", () => {
     expect(wrapper.vm.canDownvote).toBeTruthy()
   })
 
-  it("dispatches action when method is called", () => {
-    store.dispatch = jest.fn(() => Promise.resolve())
+  it("create Vote when method is called", () => {
     const track = generateTrack()
     const wrapper = shallowMount(CardTrack, {
       propsData: {
@@ -76,15 +84,12 @@ describe("CardTrack", () => {
       store
     })
 
+    wrapper.vm.createVote = jest.fn(() => Promise.resolve())
+
     wrapper.find(".icon--downvote").trigger("click")
-    expect(store.dispatch).toHaveBeenCalledWith("currentRoom/voteTrack", {
-      id: track.id,
-      mode: "down"
-    })
+    expect(wrapper.vm.createVote).toHaveBeenCalledWith(-1, false)
+
     wrapper.find(".icon--upvote").trigger("click")
-    expect(store.dispatch).toHaveBeenCalledWith("currentRoom/voteTrack", {
-      id: track.id,
-      mode: "up"
-    })
+    expect(wrapper.vm.createVote).toHaveBeenCalledWith(1, false)
   })
 })
