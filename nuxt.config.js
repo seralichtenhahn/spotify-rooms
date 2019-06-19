@@ -96,7 +96,8 @@ module.exports = {
     //pagesURLPattern: "/(?!.*(__webpack_hmr|hot-update))",
     pagesURLPattern: "/(?!/.netlify/*)",
     autoRegister: false,
-    skipWaiting: false
+    skipWaiting: false,
+    importScripts: ["/sw-message.js"]
   },
 
   /*
