@@ -175,25 +175,27 @@ export default {
 
         const isPlaying = this.checkIfQueueIsPlaying(playback)
 
-        console.log(isPlaying)
-
-        await this.$db
-          .collection("rooms")
-          .doc(this.id)
-          .update({
-            isPlaying
-          })
-
-        if (this.isPlaying) {
-          this.checkCurrentTrack(playback)
-
-          this.timeout = null
-          const timeLeft = playback.item.duration_ms - playback.progress_ms
-
-          this.timeout = setTimeout(() => {
-            this.fetchPlayback()
-          }, timeLeft)
+        if (isPlaying !== this.isPlaying) {
+          await this.$db
+            .collection("rooms")
+            .doc(this.id)
+            .update({
+              isPlaying
+            })
         }
+
+        if (!isPlaying) {
+          return
+        }
+
+        this.updateCurrentTrack(playback)
+
+        this.timeout = null
+        const timeLeft = playback.item.duration_ms - playback.progress_ms
+
+        this.timeout = setTimeout(() => {
+          this.fetchPlayback()
+        }, timeLeft)
       } catch (error) {
         this.$store.dispatch("error/create", error, { root: true })
       }
@@ -213,8 +215,6 @@ export default {
         return true
       }
 
-      console.log(this.playlistId, playback.context.uri)
-
       return false
     },
     /**
@@ -222,8 +222,8 @@ export default {
      * @param {object} StoreContext - vuex context.
      * @param {object} playback
      */
-    checkCurrentTrack({ item }) {
-      if (!item) {
+    updateCurrentTrack({ item }) {
+      if (!item || this.currentTrack.title === item.name) {
         return
       }
 
