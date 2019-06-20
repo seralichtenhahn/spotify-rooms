@@ -22,6 +22,9 @@ service cloud.firestore {
     }
 
     match /users/{user} {
+      allow list, delete: if false;
+      allow create, update, get: if true;
+
       match /rooms/{room} {
         match/votes/{vote} {
           allow read, write: if true;
