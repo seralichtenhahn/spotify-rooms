@@ -33,7 +33,7 @@
           <div>
             <button
               v-if="isOwner"
-              class="button--primary button--mobile"
+              class="button--primary"
               @click="setDevice"
             >
               <span v-if="!isMobile">Warteschlange</span> starten
