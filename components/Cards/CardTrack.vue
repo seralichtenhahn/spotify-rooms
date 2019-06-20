@@ -245,7 +245,7 @@ export default {
       display: block;
       width: rem(24);
       cursor: pointer;
-      fill: rgba($white, 0.4);
+      color: rgba($white, 0.4);
     }
   }
 
