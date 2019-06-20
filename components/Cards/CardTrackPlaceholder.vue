@@ -34,8 +34,8 @@ export default {
   .icon {
     width: rem(64);
     height: rem(64);
-    color: rgba($white, 0.3);
     margin-bottom: rem(12);
+    color: rgba($white, 0.3);
   }
 }
 </style>
