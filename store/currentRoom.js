@@ -12,8 +12,16 @@ export const getters = {
   id: state => get(state.room, "id"),
   title: state => get(state.room, "title"),
   owner: state => get(state.room, "owner"),
+  owner_id: state => get(state.room, "owner_id"),
   playlistId: state => get(state.room, "playlistId"),
-  isOwner: (_state, getters, rootState) => getters.owner === rootState.user.id,
+  isOwner: (_state, getters, rootState) => {
+    if (getters.owner_id) {
+      return getters.owner_id === rootState.user.id
+    }
+
+    // For old rooms without owner_id
+    return getters.owner === rootState.user.id
+  },
   queue: state => state.queue,
   isPlaying: state => get(state.room, "isPlaying"),
   currentTrack: state => get(state.room, "currentTrack")

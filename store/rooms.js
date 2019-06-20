@@ -58,7 +58,8 @@ export const actions = {
     // Raum wird in der Datenbank gespeichert
     await roomDoc.set({
       title: roomName,
-      owner: rootState.user.id,
+      owner: rootState.user.username,
+      owner_id: rootState.user.id,
       playlistId: playlist.id,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     })

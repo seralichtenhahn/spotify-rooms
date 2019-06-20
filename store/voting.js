@@ -27,17 +27,23 @@ export const actions = {
    * @param {object} roomName
    * @return {number} index
    */
-  init: firestoreAction(async ({ state, bindFirestoreRef, rootState }) => {
-    await bindFirestoreRef(
-      "votes",
-      db
-        .collection("users")
-        .doc(rootState.user.id)
-        .collection("rooms")
-        .doc(rootState.currentRoom.room.id)
-        .collection("votes")
-    )
-  }),
+  init: firestoreAction(
+    async ({ bindFirestoreRef, rootState, rootGetters }) => {
+      if (rootGetters["currentRoom/id"]) {
+        return
+      }
+
+      await bindFirestoreRef(
+        "votes",
+        db
+          .collection("users")
+          .doc(rootState.user.id)
+          .collection("rooms")
+          .doc(rootState.currentRoom.room.id)
+          .collection("votes")
+      )
+    }
+  ),
   reset: firestoreAction(({ unbindFirestoreRef }) => {
     unbindFirestoreRef("votes")
   })
