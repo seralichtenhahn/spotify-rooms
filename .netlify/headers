@@ -5,3 +5,6 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Feature-Policy: autoplay 'self'; fullscreen 'self';
+
+/sw.js
+  Cache-Control: no-cache

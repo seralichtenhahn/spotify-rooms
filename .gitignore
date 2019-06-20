@@ -152,4 +152,4 @@ fabric.properties
 .netlify/functions
 
 # Nuxt PWA Module
-sw.*
+static/sw.*

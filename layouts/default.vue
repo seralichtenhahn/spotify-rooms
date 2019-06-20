@@ -4,6 +4,10 @@
     <StripeRoomInfo />
     <AppModal @hook:mounted="showErrorHandler" />
     <QueueHandler v-if="isOwner" />
+    <FormUpdateBanner
+      v-if="showUpdateBanner"
+      @close-banner="closeUpdateBanner"
+    />
     <portal
       v-if="showError"
       to="modal"
@@ -25,17 +29,34 @@ export default {
   components: {
     AppModal,
     StripeRoomInfo,
-    QueueHandler: () => import("@/components/Queue/QueueHandler")
+    QueueHandler: () => import("@/components/Queue/QueueHandler"),
+    FormUpdateBanner: () => import("@/components/Forms/FormUpdateBanner")
   },
   middleware: ["auth"],
+  data() {
+    return {
+      showUpdateBanner: false
+    }
+  },
   computed: {
     ...mapGetters("error", ["showError", "error"]),
-    ...mapGetters("currentRoom", ["isOwner"])
+    ...mapGetters("currentRoom", ["isOwner"]),
+    ...mapGetters("sw", ["state"])
   },
   watch: {
     showError: {
       immediate: true,
       handler: "showErrorHandler"
+    },
+    state(state) {
+      if (state === "installed") {
+        this.showRefreshUI()
+      }
+      if (state === "activated") {
+        if (this.$store.getters["sw/refreshing"]) return
+        window.location.reload()
+        this.$store.commit("sw/setRefreshing", true)
+      }
     }
   },
   methods: {
@@ -54,6 +75,13 @@ export default {
       if (showError || this.showError) {
         this.$nuxt.$emit("modal:activate", "Ein Fehler ist aufgetreten")
       }
+    },
+    showRefreshUI() {
+      this.showUpdateBanner = true
+      this.$nuxt.$emit("modal:activate", "Update verfügbar")
+    },
+    closeUpdateBanner() {
+      this.showUpdateBanner = false
     }
   }
 }

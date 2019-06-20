@@ -46,7 +46,8 @@ module.exports = {
     "@/plugins/firebase.js",
     "@/plugins/localStorage.js",
     "@/plugins/dayjs.js",
-    "@/plugins/nuxtClientInit.js"
+    "@/plugins/nuxtClientInit.js",
+    "@/plugins/installSw.js"
   ],
 
   /*
@@ -93,7 +94,10 @@ module.exports = {
   workbox: {
     offlinePage: "200.html",
     //pagesURLPattern: "/(?!.*(__webpack_hmr|hot-update))",
-    pagesURLPattern: "/(?!/.netlify/*)"
+    pagesURLPattern: "/(?!/.netlify/*)",
+    autoRegister: false,
+    skipWaiting: false,
+    importScripts: ["/sw-message.js"]
   },
 
   /*
