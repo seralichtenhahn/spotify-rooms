@@ -39,8 +39,8 @@ $generate-classes: false !default;
 
   @include breakpoint(medium) {
     padding: calc-rem(12 24);
-    font-size: rem(14);
     margin-bottom: calc-rem(16);
+    font-size: rem(14);
   }
 
   @include breakpoint(large) {

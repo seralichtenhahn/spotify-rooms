@@ -36,6 +36,14 @@ $generate-classes: false !default;
   max-width: rem(460);
 }
 
+@mixin input--block--mobile {
+  max-width: 100%;
+
+  @include breakpoint(medium) {
+    max-width: rem(300);
+  }
+}
+
 @mixin input--reset {
   @include button--base;
 }
@@ -64,6 +72,10 @@ $generate-classes: false !default;
 
     &.large {
       @include input--large;
+    }
+
+    &.block--mobile {
+      @include input--block--mobile;
     }
   }
 
