@@ -3,7 +3,7 @@ import { db } from "@/plugins/firebase"
 
 export const state = () => ({
   votes: [],
-  initialied: false
+  initialized: false
 })
 
 export const getters = {
