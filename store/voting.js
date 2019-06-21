@@ -2,7 +2,8 @@ import { firestoreAction } from "vuexfire"
 import { db } from "@/plugins/firebase"
 
 export const state = () => ({
-  votes: []
+  votes: [],
+  initialized: false
 })
 
 export const getters = {
@@ -15,6 +16,9 @@ export const mutations = {
   },
   removeVote(state, index) {
     state.votes.splice(index, 1)
+  },
+  setInitialized(state, initialized) {
+    state.initialized = initialized
   }
 }
 
@@ -27,18 +31,27 @@ export const actions = {
    * @param {object} roomName
    * @return {number} index
    */
-  init: firestoreAction(async ({ state, bindFirestoreRef, rootState }) => {
-    await bindFirestoreRef(
-      "votes",
-      db
-        .collection("users")
-        .doc(rootState.user.id)
-        .collection("rooms")
-        .doc(rootState.currentRoom.room.id)
-        .collection("votes")
-    )
-  }),
-  reset: firestoreAction(({ unbindFirestoreRef }) => {
+  init: firestoreAction(
+    async ({ commit, bindFirestoreRef, rootState, state }) => {
+      if (state.initialized) {
+        return
+      }
+
+      await bindFirestoreRef(
+        "votes",
+        db
+          .collection("users")
+          .doc(rootState.user.id)
+          .collection("rooms")
+          .doc(rootState.currentRoom.room.id)
+          .collection("votes")
+      )
+
+      commit("setInitialized", true)
+    }
+  ),
+  reset: firestoreAction(({ commit, unbindFirestoreRef }) => {
     unbindFirestoreRef("votes")
+    commit("setInitialized", false)
   })
 }

@@ -44,7 +44,7 @@ export default {
 
     .icon {
       width: rem(128);
-      fill: $grey-mine;
+      color: $grey-mine;
     }
   }
 }

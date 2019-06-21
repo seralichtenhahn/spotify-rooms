@@ -33,6 +33,12 @@ module.exports = {
   */
   loading: { color: "#1db954" },
 
+  loadingIndicator: {
+    name: "circle",
+    color: "#1db954",
+    background: "#191414"
+  },
+
   /*
   ** Global CSS
   */
@@ -74,7 +80,7 @@ module.exports = {
 
   proxy: {
     "/.netlify/functions": {
-      target: "http://localhost:9000",
+      target: "http://localhost:34567",
       pathRewrite: { "^/.netlify/functions": "" },
       ws: false
     }

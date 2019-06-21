@@ -1,3 +1,5 @@
+import firebase from "firebase/app"
+
 export const state = () => ({
   id: "",
   username: "",
@@ -45,6 +47,13 @@ export const actions = {
       commit("setUsername", display_name)
       commit("setLoginStatus", true)
       commit("setIsPremium", product === "premium")
+      this.$db
+        .collection("users")
+        .doc(id)
+        .set({
+          username: display_name,
+          lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+        })
     } catch (error) {
       dispatch("error/create", error, { root: true })
     }

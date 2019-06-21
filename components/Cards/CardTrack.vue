@@ -244,8 +244,8 @@ export default {
     .icon {
       display: block;
       width: rem(24);
+      color: rgba($white, 0.4);
       cursor: pointer;
-      fill: rgba($white, 0.4);
     }
   }
 

@@ -204,7 +204,7 @@ export default {
         .icon {
           width: rem(24);
           height: rem(24);
-          fill: rgba($white, 0.6);
+          color: rgba($white, 0.8);
         }
 
         &.title {

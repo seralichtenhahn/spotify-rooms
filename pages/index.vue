@@ -34,7 +34,7 @@
         </p>
         <a
           :href="login"
-          class="button button--primary button--block"
+          class="button button--primary button--block button--large"
         >
           Login With Spotify
         </a>

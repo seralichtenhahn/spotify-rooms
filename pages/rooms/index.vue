@@ -10,6 +10,7 @@
           <input
             v-model="roomName"
             type="text"
+            class="block--mobile"
             placeholder="Raum beitreten"
             @keyup.enter="submit"
           >
@@ -20,7 +21,7 @@
         </p>
         <p>Oder</p>
         <button
-          class="button--block"
+          class="button--block button--large"
           @click="openModal"
         >
           Raum erstellen

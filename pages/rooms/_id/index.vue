@@ -33,7 +33,7 @@
           <div>
             <button
               v-if="isOwner"
-              class="button--primary button--mobile"
+              class="button--primary"
               @click="setDevice"
             >
               <span v-if="!isMobile">Warteschlange</span> starten
@@ -49,10 +49,16 @@
           </div>
         </div>
         <Queue v-slot="{ queue }">
-          <CardTrack
-            v-for="(track, index) in queue"
-            :key="index"
-            :track="track"
+          <template v-if="queue.length">
+            <CardTrack
+              v-for="(track, index) in queue"
+              :key="index"
+              :track="track"
+            />
+          </template>
+          <CardTrackPlaceholder
+            v-else
+            @placeholder-click="placeholderClick"
           />
         </Queue>
       </div>
@@ -73,10 +79,12 @@ import Queue from "@/components/Queue/Queue"
 import { mapGetters } from "vuex"
 import IconArrowBack from "@/assets/icons/arrow-back.svg"
 import IconAddCircle from "@/assets/icons/add-circle-outline.svg"
+import CardTrackPlaceholder from "@/components/Cards/CardTrackPlaceholder"
 
 export default {
   components: {
     CardTrack,
+    CardTrackPlaceholder,
     FormStartQueue,
     Queue,
     IconArrowBack,
@@ -133,6 +141,9 @@ export default {
     setDevice() {
       this.showFormStartQueue = true
       this.$nuxt.$emit("modal:activate", "Warteschlange starten")
+    },
+    placeholderClick() {
+      this.$router.push({ name: "rooms-id-add" })
     }
   },
   transition(to, from) {
