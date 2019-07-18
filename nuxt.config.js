@@ -80,7 +80,7 @@ module.exports = {
 
   proxy: {
     "/.netlify/functions": {
-      target: "http://localhost:34567",
+      target: "http://localhost:5000/spotify-rooms-35887/us-central1",
       pathRewrite: { "^/.netlify/functions": "" },
       ws: false
     }
