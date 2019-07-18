@@ -1,5 +1,5 @@
 const SpotifyWebApi = require("spotify-web-api-node")
-const env = require("./env")
+const env = require("./utils/env")
 
 exports.handler = async function(req, res) {
   // Nur POST Requests sind erlaubt
