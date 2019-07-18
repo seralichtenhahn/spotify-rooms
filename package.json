@@ -16,6 +16,7 @@
     "test:unit:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --no-cache --runInBand",
     "test": "yarn lint && yarn test:unit",
     "functions:deploy": "firebase deploy --only functions",
+    "functions:serve": "firebase serve --only functions",
     "precommit": "yarn lint"
   },
   "husky": {
