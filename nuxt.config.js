@@ -13,7 +13,7 @@ module.exports = {
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
     FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
     FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
-    NETLIFY_FUNCTIONS_URI: process.env.NETLIFY_FUNCTIONS_URI
+    FIREBASE_FUNCTIONS_URI: process.env.FIREBASE_FUNCTIONS_URI
   },
 
   /*
@@ -79,9 +79,9 @@ module.exports = {
   },
 
   proxy: {
-    "/.netlify/functions": {
+    "/.firebase/functions": {
       target: "http://localhost:5000/spotify-rooms-35887/us-central1",
-      pathRewrite: { "^/.netlify/functions": "" },
+      pathRewrite: { "^/.firebase/functions": "" },
       ws: false
     }
   },
@@ -100,7 +100,7 @@ module.exports = {
   workbox: {
     offlinePage: "200.html",
     //pagesURLPattern: "/(?!.*(__webpack_hmr|hot-update))",
-    pagesURLPattern: "/(?!/.netlify/*)",
+    pagesURLPattern: "/(?!/.firebase/*)",
     autoRegister: false,
     skipWaiting: false,
     importScripts: ["/sw-message.js"]

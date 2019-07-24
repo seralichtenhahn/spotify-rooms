@@ -33,7 +33,7 @@ export const actions = {
   async fetchTokens({ dispatch }, payload) {
     try {
       const response = await this.$axios.post(
-        process.env.NETLIFY_FUNCTIONS_URI + "/token",
+        process.env.FIREBASE_FUNCTIONS_URI + "/token",
         {
           redirect_uri: location.protocol + "//" + location.host + "/rooms",
           ...payload
@@ -58,7 +58,7 @@ export const actions = {
     try {
       const firebase_token = await this.$auth.currentUser.getIdToken(true)
       const response = await this.$axios.post(
-        process.env.NETLIFY_FUNCTIONS_URI + "/refresh",
+        process.env.FIREBASE + "/refresh",
         {
           firebase_token
         }
