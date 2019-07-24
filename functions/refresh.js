@@ -43,21 +43,16 @@ exports.handler = async function(req, res) {
       return res.status(response.status).json({ message: response.statusText })
     }
 
-    const { access_token } = response.body
+    const { access_token, expires_in } = response.body
 
-    await setAccessToken(userID, response.body, access_token)
+    const task1 = admin.auth().createCustomToken(currentUser.uid)
+    const task2 = setAccessToken(userID, access_token, false)
 
-    const createCustomToken = await admin
-      .auth()
-      .createCustomToken(currentUser.uid)
-
-    const [firebase_token] = await Promise.all([
-      createCustomToken,
-      setAccessToken
-    ])
+    const [firebase_token] = await Promise.all([task1, task2])
 
     return res.status(200).json({
       firebase_token,
+      expires_in,
       access_token
     })
   } catch (err) {
