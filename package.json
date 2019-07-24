@@ -17,6 +17,7 @@
     "test": "yarn lint && yarn test:unit",
     "functions:deploy": "firebase deploy --only functions",
     "functions:serve": "firebase serve --only functions",
+    "functions:shell": "GOOGLE_APPLICATION_CREDENTIALS=\"/Users/serafinlichtenhahn/Code/spotify-rooms/functions/service-account.json\" firebase functions:shell",
     "precommit": "yarn lint"
   },
   "husky": {
