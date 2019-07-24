@@ -3,7 +3,6 @@
     <nuxt/>
     <StripeRoomInfo />
     <AppModal @hook:mounted="showErrorHandler" />
-    <QueueHandler v-if="isOwner" />
     <FormUpdateBanner
       v-if="showUpdateBanner"
       @close-banner="closeUpdateBanner"
@@ -29,7 +28,6 @@ export default {
   components: {
     AppModal,
     StripeRoomInfo,
-    QueueHandler: () => import("@/components/Queue/QueueHandler"),
     FormUpdateBanner: () => import("@/components/Forms/FormUpdateBanner")
   },
   middleware: ["auth"],
