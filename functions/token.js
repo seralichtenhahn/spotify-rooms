@@ -1,5 +1,5 @@
-const SpotifyWebApi = require("spotify-web-api-node")
-const env = require("./utils/env")
+const spotifyApi = require("./utils/spotify")
+const createFirebaseAccount = require("./utils/createFirebaseAccount")
 
 exports.handler = async function(req, res) {
   // Nur POST Requests sind erlaubt
@@ -20,11 +20,7 @@ exports.handler = async function(req, res) {
       })
     }
 
-    var spotifyApi = new SpotifyWebApi({
-      clientId: env.spotify.client_id,
-      clientSecret: env.spotify.client_secret,
-      redirectUri: payload.redirect_uri
-    })
+    spotifyApi.setRedirectURI(payload.redirect_uri)
 
     const response = await spotifyApi.authorizationCodeGrant(payload.code)
 
@@ -34,7 +30,28 @@ exports.handler = async function(req, res) {
       return res.status(response.status).json({ message: response.statusText })
     }
 
-    return res.status(200).json(response.body)
+    const { access_token, refresh_token, expires_in } = response.body
+
+    spotifyApi.setAccessToken(access_token)
+
+    const user = await spotifyApi.getMe()
+
+    const { id, display_name, images, email } = user.body
+
+    const firebase_token = await createFirebaseAccount(
+      id,
+      display_name,
+      images[0].url,
+      email,
+      access_token,
+      refresh_token
+    )
+
+    return res.status(200).json({
+      access_token,
+      expires_in,
+      firebase_token
+    })
   } catch (err) {
     console.log(err) // output to firebase function log
     return res.status(500).json({ message: "invalid_token" })

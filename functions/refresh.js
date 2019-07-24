@@ -1,5 +1,8 @@
-const SpotifyWebApi = require("spotify-web-api-node")
-const env = require("./utils/env")
+const spotifyApi = require("./utils/spotify")
+const setAccessToken = require("./utils/setAccessToken")
+const admin = require("./utils/admin")
+
+const db = admin.firestore()
 
 exports.handler = async function(req, res) {
   // Nur POST Requests sind erlaubt
@@ -10,22 +13,27 @@ exports.handler = async function(req, res) {
   }
 
   try {
-    // const payload = JSON.parse(event.body)
     const payload = req.body
 
     // Fehler falls kein Refresh Token gegeben ist.
-    if (!payload.refresh_token) {
+    if (!payload.firebase_token) {
       return res.status(422).json({
         message: "Required information is missing."
       })
     }
 
-    var spotifyApi = new SpotifyWebApi({
-      clientId: env.spotify.client_id,
-      clientSecret: env.spotify.client_secret
-    })
+    const currentUser = await admin.auth().verifyIdToken(payload.firebase_token)
 
-    spotifyApi.setRefreshToken(payload.refresh_token)
+    const userID = currentUser.uid.substr(8) // remove "spotify:" from ui
+
+    const userRef = await db
+      .collection("users")
+      .doc(userID)
+      .get()
+
+    const { refreshToken } = userRef.data()
+
+    spotifyApi.setRefreshToken(refreshToken)
 
     const response = await spotifyApi.refreshAccessToken()
 
@@ -35,7 +43,23 @@ exports.handler = async function(req, res) {
       return res.status(response.status).json({ message: response.statusText })
     }
 
-    return res.status(200).json(response.body)
+    const { access_token } = response.body
+
+    await setAccessToken(userID, response.body, access_token)
+
+    const createCustomToken = await admin
+      .auth()
+      .createCustomToken(currentUser.uid)
+
+    const [firebase_token] = await Promise.all([
+      createCustomToken,
+      setAccessToken
+    ])
+
+    return res.status(200).json({
+      firebase_token,
+      access_token
+    })
   } catch (err) {
     console.log(err) // output to firebase function log
     return res.status(500).json({ message: "invalid_token" })

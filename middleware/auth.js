@@ -5,8 +5,15 @@
  * @param {object} NuxtContext -  https://nuxtjs.org/api/context/
  */
 
-export default async function({ store, redirect, query, spotify, error }) {
-  if (store.state.user.loggedIn) {
+export default async function({
+  store,
+  redirect,
+  query,
+  spotify,
+  error,
+  auth
+}) {
+  if (auth.currentUser) {
     return
   }
 
@@ -28,6 +35,8 @@ export default async function({ store, redirect, query, spotify, error }) {
       message: response.data || "Something went wrong"
     })
   }
+
+  await store.dispatch("auth/signIn")
 
   // setzt Globaler Access Token
   spotify.setAccessToken(store.state.auth.accessToken)
