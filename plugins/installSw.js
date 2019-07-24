@@ -1,7 +1,11 @@
 export default ({ store, isDev }) => {
+  if (isDev) {
+    return
+  }
+
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-      .register(isDev ? "/sw-dev.js" : "/sw.js")
+      .register("/sw.js")
       .then(registration => {
         // Registration was successful
         store.commit("sw/setRegistration", registration)
