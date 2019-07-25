@@ -82,13 +82,6 @@ export const actions = {
    * @param {object} Track
    */
   async removeTrack({ getters }, track) {
-    const position = getters.queue.findIndex(_track => _track.id === track.id)
-    await this.$spotify.removeTracksFromPlaylist(getters.playlistId, [
-      {
-        uri: track.uri,
-        positions: [position]
-      }
-    ])
     await this.$db
       .collection("rooms")
       .doc(getters.id)

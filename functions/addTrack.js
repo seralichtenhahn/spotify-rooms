@@ -4,7 +4,7 @@ const admin = require("./utils/admin")
 const db = admin.firestore()
 
 exports.handler = async function(snap, context) {
-  const roomName = context.params.room
+  const roomName = context.params.roomId
   const { uri } = snap.data()
 
   const room = await db
