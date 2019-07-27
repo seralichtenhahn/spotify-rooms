@@ -52,8 +52,8 @@ module.exports = {
     "@/plugins/firebase.js",
     "@/plugins/localStorage.js",
     "@/plugins/dayjs.js",
-    "@/plugins/nuxtClientInit.js",
-    "@/plugins/installSw.js"
+    "@/plugins/installSw.js",
+    "@/plugins/nuxtClientInit.js"
   ],
 
   /*
