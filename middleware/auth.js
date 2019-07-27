@@ -11,9 +11,11 @@ export default async function({
   query,
   spotify,
   error,
-  auth
+  currentUser
 }) {
-  if (auth.currentUser) {
+  const user = await currentUser
+
+  if (user && user.uid) {
     return
   }
 
@@ -25,15 +27,12 @@ export default async function({
     code: query.code
   })
 
-  // Entfernt den Code URL Parameter aus der Browser History, um Bugs zu vermeiden
-  const cleanUri = location.protocol + "//" + location.host + location.pathname
-  window.history.replaceState({}, document.title, cleanUri)
-
   if (response.status !== 200) {
     error({
       statusCode: response.status || 500,
       message: response.data || "Something went wrong"
     })
+    return
   }
 
   await store.dispatch("auth/signIn")

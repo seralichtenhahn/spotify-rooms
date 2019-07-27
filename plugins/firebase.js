@@ -20,9 +20,16 @@ firebase.initializeApp(config)
 const firestore = firebase.firestore()
 const auth = firebase.auth()
 
+const currentUser = new Promise(resolve =>
+  auth.onAuthStateChanged(user => resolve(user))
+)
+
 export default (ctx, inject) => {
   ctx.auth = auth
   inject("auth", auth)
+
+  ctx.currentUser = currentUser
+  inject("currentUser", currentUser)
 
   ctx.db = firestore
   inject("db", firestore)

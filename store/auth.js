@@ -42,6 +42,11 @@ export const actions = {
 
       dispatch("setCredentials", response.data)
 
+      // Entfernt den Code URL Parameter aus der Browser History, um Bugs zu vermeiden
+      const cleanUri =
+        location.protocol + "//" + location.host + location.pathname
+      window.history.replaceState({}, document.title, cleanUri)
+
       return response
     } catch (e) {
       console.error(e)
@@ -56,9 +61,10 @@ export const actions = {
    */
   async refreshTokens({ dispatch }) {
     try {
-      const firebase_token = await this.$auth.currentUser.getIdToken(true)
+      const user = await this.$currentUser
+      const firebase_token = await user.getIdToken(true)
       const response = await this.$axios.post(
-        process.env.FIREBASE + "/refresh",
+        process.env.FIREBASE_FUNCTIONS_URI + "/refresh",
         {
           firebase_token
         }
@@ -87,14 +93,15 @@ export const actions = {
       commit("setFirebaseToken", credentials.firebase_token)
     }
   },
-  async signIn({ state, commit }) {
+  async signIn({ state, commit, dispatch }) {
+    console.log("trying to loggin...", state.firebaseToken)
     try {
       await this.$auth.signInWithCustomToken(state.firebaseToken)
       console.log(this.$auth.currentUser)
       commit("user/setLoginStatus", true, { root: true })
-    } catch (e) {
-      console.error(e)
-      return e
+    } catch (error) {
+      console.error(error)
+      dispatch("error/create", error, { root: true })
     }
   }
 }

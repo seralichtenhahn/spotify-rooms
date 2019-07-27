@@ -12,11 +12,7 @@ export const actions = {
    */
   async nuxtClientInit({ commit, dispatch, rootState }, { spotify, error }) {
     dispatch("device/init")
-    const { accessToken, expiresIn, firebaseToken } = rootState.auth
-
-    if (firebaseToken) {
-      await dispatch("auth/signIn")
-    }
+    const { accessToken, expiresIn } = rootState.auth
 
     if (accessToken) {
       if (expiresIn && expiresIn <= Date.now()) {
