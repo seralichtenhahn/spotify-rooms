@@ -42,7 +42,7 @@ export const actions = {
     // Konventiert Raumname zu einzigartigem slug
     const id = slugify(roomName, { lower: true })
 
-    const roomDoc = await this.$db.collection("rooms").doc(id)
+    const roomDoc = this.$db.collection("rooms").doc(id)
     const room = await roomDoc.get()
 
     // Checkt ob Raum bereits existiert
