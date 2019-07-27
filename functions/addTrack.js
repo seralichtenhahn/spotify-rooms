@@ -4,24 +4,23 @@ const admin = require("./utils/admin")
 const db = admin.firestore()
 
 exports.handler = async function(snap, context) {
-  const roomName = context.params.roomId
-  const { uri } = snap.data()
+  const { roomId, trackId } = context.params
 
   const room = await db
     .collection("rooms")
-    .doc(roomName)
+    .doc(roomId)
     .get()
 
-  const { owner_id: username, playlistId } = room.data()
+  const { owner_id, playlistId } = room.data()
 
   const user = await db
     .collection("users")
-    .doc(username)
+    .doc(owner_id)
     .get()
 
   const { accessToken } = user.data()
 
   spotifyApi.setAccessToken(accessToken)
 
-  await spotifyApi.addTracksToPlaylist(playlistId, [uri])
+  await spotifyApi.addTracksToPlaylist(playlistId, [trackId])
 }

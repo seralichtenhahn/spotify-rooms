@@ -64,17 +64,25 @@ export const actions = {
    * @param {object} StoreContext - vuex context.
    * @param {object} trackData
    */
-  async addTrack({ getters, rootState }, trackData) {
-    await this.$db
+  async addTrack({ getters, rootState }, { uri, ...trackData }) {
+    const trackRef = this.$db
       .collection("rooms")
       .doc(getters.id)
       .collection("queue")
-      .add({
-        ...trackData,
-        user: rootState.user.username,
-        score: 0,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
+      .doc(uri)
+    const track = await trackRef.get()
+
+    // Checkt ob Track bereits existiert
+    if (track.exists) {
+      throw new Error("Track existiert bereits")
+    }
+
+    await trackRef.set({
+      ...trackData,
+      user: rootState.user.username,
+      score: 0,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
   },
   /**
    * Entfernt einen Track aus der Playlist und der Warteschlange

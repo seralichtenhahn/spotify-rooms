@@ -18,22 +18,9 @@ exports.handler = async function(snap, context) {
 
   spotifyApi.setAccessToken(accessToken)
 
-  const tracks = await room
-    .collection("queue")
-    .orderBy("score", "desc")
-    .orderBy("createdAt")
-    .get()
-
-  if (tracks.empty) {
-    console.log("No matching documents.")
-    return
-  }
-
-  console.log(trackId)
-
-  const position = tracks.docs.findIndex(doc => doc.id === trackId)
-
-  console.log(position)
-
-  await spotifyApi.removeTracksFromPlaylistByPosition(playlistId, [position])
+  await spotifyApi.removeTracksFromPlaylist(playlistId, [
+    {
+      uri: trackId
+    }
+  ])
 }
