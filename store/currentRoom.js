@@ -81,6 +81,7 @@ export const actions = {
       ...trackData,
       user: rootState.user.username,
       score: 0,
+      state: "queue",
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     })
   },

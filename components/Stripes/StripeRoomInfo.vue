@@ -223,7 +223,11 @@ export default {
      * @param {object} playback
      */
     updateCurrentTrack({ item }) {
-      if (!item || this.currentTrack.title === item.name) {
+      if (!item) {
+        return
+      }
+
+      if (this.currentTrack && this.currentTrack.title === item.name) {
         return
       }
 
@@ -234,7 +238,8 @@ export default {
           currentTrack: {
             title: item.name,
             artist: item.artists.map(artist => artist.name).join(", "),
-            image: item.album.images.find(image => image.height === 300).url
+            image: item.album.images.find(image => image.height === 300).url,
+            uri: item.uri
           }
         })
     }

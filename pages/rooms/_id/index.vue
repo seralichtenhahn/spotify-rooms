@@ -34,9 +34,9 @@
             <button
               v-if="isOwner"
               class="button--primary"
-              @click="setDevice"
+              @click="toggleQueue"
             >
-              <span v-if="!isMobile">Warteschlange</span> starten
+              <span v-if="!isMobile">Warteschlange</span> {{ toggleQueueState }}
             </button>
             <template v-if="!isMobile">
               <nuxt-link
@@ -48,7 +48,11 @@
             </template>
           </div>
         </div>
-        <Queue v-slot="{ queue }">
+        <Queue v-slot="{ queue, playing }">
+          <CardTrackPlaying
+            v-if="playing"
+            :track="playing"
+          />
           <template v-if="queue.length">
             <CardTrack
               v-for="(track, index) in queue"
@@ -69,12 +73,20 @@
     >
       <FormStartQueue />
     </portal>
+    <portal
+      v-if="showFormResetQueue"
+      to="modal"
+    >
+      <FormResetQueue />
+    </portal>
   </div>
 </template>
 
 <script>
 import CardTrack from "@/components/Cards/CardTrack"
+import CardTrackPlaying from "@/components/Cards/CardTrackPlaying"
 import FormStartQueue from "@/components/Forms/FormStartQueue"
+import FormResetQueue from "@/components/Forms/FormResetQueue"
 import Queue from "@/components/Queue/Queue"
 import { mapGetters } from "vuex"
 import IconArrowBack from "@/assets/icons/arrow-back.svg"
@@ -84,8 +96,10 @@ import CardTrackPlaceholder from "@/components/Cards/CardTrackPlaceholder"
 export default {
   components: {
     CardTrack,
+    CardTrackPlaying,
     CardTrackPlaceholder,
     FormStartQueue,
+    FormResetQueue,
     Queue,
     IconArrowBack,
     IconAddCircle
@@ -117,12 +131,16 @@ export default {
   },
   data() {
     return {
-      showFormStartQueue: false
+      showFormStartQueue: false,
+      showFormResetQueue: false
     }
   },
   computed: {
-    ...mapGetters("currentRoom", ["isOwner"]),
-    ...mapGetters("device", ["isMobile"])
+    ...mapGetters("currentRoom", ["isOwner", "currentTrack"]),
+    ...mapGetters("device", ["isMobile"]),
+    toggleQueueState() {
+      return this.currentTrack ? "neustarten" : "starten"
+    }
   },
   methods: {
     /**
@@ -138,9 +156,17 @@ export default {
      * Setzt showDeviceList auf true
      * Ruft Event auf um Modal zu aktivieren mit dem Titel "Warteschlange starten"
      */
-    setDevice() {
-      this.showFormStartQueue = true
-      this.$nuxt.$emit("modal:activate", "Warteschlange starten")
+    toggleQueue() {
+      if (this.currentTrack) {
+        this.showFormResetQueue = true
+      } else {
+        this.showFormStartQueue = true
+      }
+
+      this.$nuxt.$emit(
+        "modal:activate",
+        `Warteschlange ${this.toggleQueueState}`
+      )
     },
     placeholderClick() {
       this.$router.push({ name: "rooms-id-add" })
