@@ -23,7 +23,6 @@ service cloud.firestore {
           request.resource.data.image == resource.data.image &&
           request.resource.data.score is int &&
           request.resource.data.title == resource.data.title &&
-          request.resource.data.uri == resource.data.uri &&
           request.resource.data.user == resource.data.user;
         allow delete: if isOwner();
       }
