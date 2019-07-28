@@ -2,6 +2,7 @@ const functions = require("firebase-functions")
 
 const refresh = require("./refresh")
 const token = require("./token")
+const updateCurrentTrack = require("./updateCurrentTrack")
 const addTrack = require("./addTrack")
 const removeTrack = require("./removeTrack")
 const reorderTrack = require("./reorderTrack")
@@ -11,6 +12,10 @@ const reorderTrack = require("./reorderTrack")
 
 exports.token = functions.https.onRequest(token.handler)
 exports.refresh = functions.https.onRequest(refresh.handler)
+
+exports.updateCurrentTrack = functions.firestore
+  .document("rooms/{roomId}")
+  .onUpdate(updateCurrentTrack.handler)
 
 exports.addTrack = functions.firestore
   .document("rooms/{roomId}/queue/{trackId}")

@@ -5,6 +5,11 @@ const getAccessToken = require("./utils/getAccessToken")
 const getTracks = require("./utils/getTracks")
 
 exports.handler = async function(change, context) {
+  // Only run when score is changed
+  if (change.after.get("score") === change.before.get("score")) {
+    return null
+  }
+
   const { roomId, trackId } = context.params
 
   const { playlistId, owner_id } = await getRoom(roomId)
