@@ -1,26 +1,30 @@
 const spotifyApi = require("./utils/spotify")
-const admin = require("./utils/admin")
 
-const db = admin.firestore()
+const getTracks = require("./utils/getTracks")
+const getRoom = require("./utils/getRoom")
+const getAccessToken = require("./utils/getAccessToken")
 
 exports.handler = async function(snap, context) {
   const { roomId, trackId } = context.params
 
-  const room = await db
-    .collection("rooms")
-    .doc(roomId)
-    .get()
+  // Get All Tracks in Queue
+  const getTracksTask = getTracks(roomId)
 
-  const { owner_id, playlistId } = room.data()
+  // Get Data of current Room
+  const { owner_id, playlistId } = await getRoom(roomId)
 
-  const user = await db
-    .collection("users")
-    .doc(owner_id)
-    .get()
+  // Await all Promises
+  const [tracks, accessToken] = await Promise.all([
+    getTracksTask,
+    getAccessToken(owner_id)
+  ])
 
-  const { accessToken } = user.data()
+  // Get Index of Track sorted Queue
+  const position = tracks.docs.findIndex(doc => doc.id === trackId)
 
   spotifyApi.setAccessToken(accessToken)
 
-  await spotifyApi.addTracksToPlaylist(playlistId, [trackId])
+  await spotifyApi.addTracksToPlaylist(playlistId, [trackId], {
+    position
+  })
 }

@@ -41,7 +41,7 @@ exports.handler = async function(req, res) {
     const firebase_token = await createFirebaseAccount(
       id,
       display_name,
-      images[0].url,
+      images || images[0].url,
       email,
       access_token,
       refresh_token

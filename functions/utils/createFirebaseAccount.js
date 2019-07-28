@@ -14,6 +14,11 @@ module.exports = async function createFirebaseAccount(
   // The UID we'll assign to the user.
   const uid = `spotify:${spotifyID}`
 
+  let image = "photoURL"
+  if (!photoURL.length) {
+    image = false
+  }
+
   // Save the access token to Firestore.
   const databaseTask = setAccessToken(spotifyID, accessToken, refreshToken)
 
@@ -21,7 +26,7 @@ module.exports = async function createFirebaseAccount(
   const userCreationTask = auth
     .updateUser(uid, {
       displayName,
-      photoURL,
+      [image]: photoURL,
       email,
       emailVerified: true
     })
@@ -32,7 +37,7 @@ module.exports = async function createFirebaseAccount(
         return auth.createUser({
           uid,
           displayName,
-          photoURL,
+          [image]: photoURL,
           email,
           emailVerified: true
         })

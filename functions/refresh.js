@@ -1,8 +1,9 @@
 const spotifyApi = require("./utils/spotify")
 const setAccessToken = require("./utils/setAccessToken")
 const admin = require("./utils/admin")
+const getAccessToken = require("./utils/getAccessToken")
 
-const db = admin.firestore()
+const auth = admin.auth()
 
 exports.handler = async function(req, res) {
   // Nur POST Requests sind erlaubt
@@ -22,16 +23,11 @@ exports.handler = async function(req, res) {
       })
     }
 
-    const currentUser = await admin.auth().verifyIdToken(payload.firebase_token)
+    const currentUser = await auth.verifyIdToken(payload.firebase_token)
 
-    const userID = currentUser.uid.substr(8) // remove "spotify:" from ui
+    const userID = currentUser.uid.substr(8) // remove "spotify:" from uid
 
-    const userRef = await db
-      .collection("users")
-      .doc(userID)
-      .get()
-
-    const { refreshToken } = userRef.data()
+    const refreshToken = await getAccessToken(userID, "refreshToken")
 
     spotifyApi.setRefreshToken(refreshToken)
 
@@ -45,10 +41,10 @@ exports.handler = async function(req, res) {
 
     const { access_token, expires_in } = response.body
 
-    const task1 = admin.auth().createCustomToken(currentUser.uid)
-    const task2 = setAccessToken(userID, access_token, false)
-
-    const [firebase_token] = await Promise.all([task1, task2])
+    const [firebase_token] = await Promise.all([
+      admin.auth().createCustomToken(currentUser.uid),
+      setAccessToken(userID, access_token, false)
+    ])
 
     return res.status(200).json({
       firebase_token,

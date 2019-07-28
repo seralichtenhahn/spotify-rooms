@@ -1,24 +1,20 @@
 const spotifyApi = require("./utils/spotify")
-const admin = require("./utils/admin")
 
-const db = admin.firestore()
+const getRoom = require("./utils/getRoom")
+const getAccessToken = require("./utils/getAccessToken")
 
 exports.handler = async function(snap, context) {
   const { roomId, trackId } = context.params
-  const room = db.collection("rooms").doc(roomId)
 
-  const { owner_id, playlistId } = (await room.get()).data()
-
-  const user = await db
-    .collection("users")
-    .doc(owner_id)
-    .get()
-
-  const { accessToken } = user.data()
+  // Await all Promises
+  const [room, accessToken] = await Promise.all([
+    getRoom(roomId),
+    getAccessToken(roomId)
+  ])
 
   spotifyApi.setAccessToken(accessToken)
 
-  await spotifyApi.removeTracksFromPlaylist(playlistId, [
+  await spotifyApi.removeTracksFromPlaylist(room.playlistId, [
     {
       uri: trackId
     }
