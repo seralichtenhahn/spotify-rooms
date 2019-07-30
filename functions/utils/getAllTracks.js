@@ -7,7 +7,6 @@ module.exports = roomId => {
     .collection("rooms")
     .doc(roomId)
     .collection("queue")
-    .where("state", "==", "queue")
     .orderBy("score", "desc")
     .orderBy("createdAt")
     .get()
