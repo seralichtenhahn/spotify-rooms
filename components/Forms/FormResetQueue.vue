@@ -45,7 +45,10 @@ export default {
         batch.update(trackRef, { state: "queue" })
       })
 
-      await this.$spotify.pause()
+      try {
+        await this.$spotify.pause()
+      } catch (err) {}
+
       await batch.commit()
 
       this.$nuxt.$loading.finish()
