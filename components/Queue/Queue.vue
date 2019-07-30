@@ -1,6 +1,9 @@
 <template>
   <ul>
-    <slot :queue="sortedQueue" />
+    <slot
+      :queue="filteredQueue"
+      :playing="currentlyPlaying"
+    />
   </ul>
 </template>
 
@@ -11,8 +14,11 @@ import differenceWith from "lodash/differenceWith"
 export default {
   computed: {
     ...mapGetters("currentRoom", ["queue", "isOwner", "playlistId"]),
-    sortedQueue() {
-      return this.queue
+    filteredQueue() {
+      return this.queue.filter(track => track.state === "queue")
+    },
+    currentlyPlaying() {
+      return this.queue.find(track => track.state === "playing")
     }
   }
 }

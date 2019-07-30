@@ -3,12 +3,10 @@
 
 [dev]
   command = "nuxt"
-  functions = "./functions"
 
 [build]
   command = "yarn generate"
   publish = "dist"
-  functions = "./functions"
 
 [build.environment]
   YARN_VERSION = "1.15.2"

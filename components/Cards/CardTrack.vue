@@ -35,7 +35,10 @@
         </div>
       </template>  
     </div>
-    <div class="track--card--voting">
+    <div
+      v-if="!isCurrentTrack"
+      class="track--card--voting"
+    >
       <a
         :class="{'active': !canUpvote}"
         href="#"
@@ -90,7 +93,7 @@ export default {
   },
   computed: {
     ...mapGetters("device", ["isMobile"]),
-    ...mapGetters("currentRoom", ["id", "isOwner"]),
+    ...mapGetters("currentRoom", ["id", "isOwner", "currentTrack"]),
     ...mapGetters("voting", ["votes"]),
     /**
      * Gibt gespeicherte Berwetung zurück, falls vorhanden
@@ -117,6 +120,13 @@ export default {
       return this.track.createdAt
         ? dayjs.unix(this.track.createdAt.seconds).fromNow()
         : null
+    },
+    isCurrentTrack() {
+      if (!this.currentTrack || !this.currentTrack.uri) {
+        return false
+      }
+
+      return this.currentTrack.uri === this.track.id
     }
   },
   methods: {

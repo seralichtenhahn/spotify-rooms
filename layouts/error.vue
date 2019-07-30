@@ -4,11 +4,20 @@
       <IconCloseCircle class="icon" />
       <h1>{{ error.message }}</h1>
       <nuxt-link
+        v-if="!isHomepage"
         to="/"
         class="link link--primary"
       >
         Zurück zur Homepage
       </nuxt-link>
+      <a
+        v-else
+        href="#"
+        class="link link--primary"
+        @click.prevent="reload"
+      >
+        Zurück zur Homepage
+      </a>
     </div>
   </div>
 </template>
@@ -25,6 +34,17 @@ export default {
     error: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    isHomepage() {
+      return this.$route.path === "/"
+    }
+  },
+  methods: {
+    reload() {
+      this.$store.commit("auth/setExpiresIn", 1)
+      window.location.reload()
     }
   }
 }

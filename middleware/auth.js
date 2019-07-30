@@ -5,29 +5,42 @@
  * @param {object} NuxtContext -  https://nuxtjs.org/api/context/
  */
 
-export default async function({ store, redirect, query, spotify, error }) {
-  if (store.state.user.loggedIn) {
+export default async function({
+  store,
+  redirect,
+  query,
+  spotify,
+  error,
+  currentUser
+}) {
+  if (store.getters["user/isLoggedIn"]) {
+    console.log("already logged in")
     return
+  } else {
+    const user = await currentUser
+    console.log("trigger token!!", user)
+
+    if (user && user.uid) {
+      return
+    }
   }
 
   if (!query.code) {
-    redirect("/")
+    return redirect("/")
   }
 
   const response = await store.dispatch("auth/fetchTokens", {
     code: query.code
   })
 
-  // Entfernt den Code URL Parameter aus der Browser History, um Bugs zu vermeiden
-  const cleanUri = location.protocol + "//" + location.host + location.pathname
-  window.history.replaceState({}, document.title, cleanUri)
-
   if (response.status !== 200) {
-    error({
+    return error({
       statusCode: response.status || 500,
       message: response.data || "Something went wrong"
     })
   }
+
+  await store.dispatch("auth/signIn")
 
   // setzt Globaler Access Token
   spotify.setAccessToken(store.state.auth.accessToken)

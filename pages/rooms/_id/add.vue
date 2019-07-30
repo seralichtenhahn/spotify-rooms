@@ -150,7 +150,7 @@ export default {
         })
 
         this.$router.push({ name: "rooms-id" })
-      } catch ({ message }) {
+      } catch (error) {
         this.$store.dispatch("error/create", error)
       }
     }

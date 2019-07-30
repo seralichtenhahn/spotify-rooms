@@ -15,8 +15,6 @@ export const actions = {
     const { accessToken, expiresIn } = rootState.auth
 
     if (accessToken) {
-      commit("user/setLoginStatus", true)
-
       if (expiresIn && expiresIn <= Date.now()) {
         const response = await dispatch("auth/refreshTokens")
 

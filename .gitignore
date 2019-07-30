@@ -153,3 +153,12 @@ fabric.properties
 
 # Nuxt PWA Module
 static/sw.*
+
+### Firebase ###
+.idea
+**/node_modules/*
+**/.firebaserc
+
+### Firebase Patch ###
+.runtimeconfig.json
+# .firebase/

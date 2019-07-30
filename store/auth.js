@@ -1,13 +1,13 @@
 export const state = () => ({
   accessToken: "",
   expiresIn: 0,
-  refreshToken: ""
+  firebaseToken: ""
 })
 
 export const getters = {
   accessToken: state => state.accessToken,
   expiresIn: state => state.expiresIn,
-  refreshToken: state => state.refreshToken
+  firebaseToken: state => state.firebaseToken
 }
 
 export const mutations = {
@@ -17,8 +17,8 @@ export const mutations = {
   setExpiresIn(state, expiresIn) {
     state.expiresIn = expiresIn
   },
-  setRefreshToken(state, refreshToken) {
-    state.refreshToken = refreshToken
+  setFirebaseToken(state, firebaseToken) {
+    state.firebaseToken = firebaseToken
   }
 }
 
@@ -33,7 +33,7 @@ export const actions = {
   async fetchTokens({ dispatch }, payload) {
     try {
       const response = await this.$axios.post(
-        process.env.NETLIFY_FUNCTIONS_URI + "/token",
+        process.env.FIREBASE_FUNCTIONS_URI + "/token",
         {
           redirect_uri: location.protocol + "//" + location.host + "/rooms",
           ...payload
@@ -41,6 +41,11 @@ export const actions = {
       )
 
       dispatch("setCredentials", response.data)
+
+      // Entfernt den Code URL Parameter aus der Browser History, um Bugs zu vermeiden
+      const cleanUri =
+        location.protocol + "//" + location.host + location.pathname
+      window.history.replaceState({}, document.title, cleanUri)
 
       return response
     } catch (e) {
@@ -54,12 +59,14 @@ export const actions = {
    * @param {object} StoreContext - vuex context.
    * @return {object} Rückgabewert der Lamda function
    */
-  async refreshTokens({ dispatch, state }) {
+  async refreshTokens({ dispatch }) {
     try {
+      const user = await this.$currentUser
+      const firebase_token = await user.getIdToken(true)
       const response = await this.$axios.post(
-        process.env.NETLIFY_FUNCTIONS_URI + "/refresh",
+        process.env.FIREBASE_FUNCTIONS_URI + "/refresh",
         {
-          refresh_token: state.refreshToken
+          firebase_token
         }
       )
 
@@ -82,8 +89,19 @@ export const actions = {
     commit("setAccessToken", credentials.access_token)
     commit("setExpiresIn", Date.now() + expiresInMilliseconds)
 
-    if (credentials.refresh_token) {
-      commit("setRefreshToken", credentials.refresh_token)
+    if (credentials.firebase_token) {
+      commit("setFirebaseToken", credentials.firebase_token)
+    }
+  },
+  async signIn({ state, commit, dispatch }) {
+    console.log("trying to loggin...", state.firebaseToken)
+    try {
+      await this.$auth.signInWithCustomToken(state.firebaseToken)
+      console.log(this.$auth.currentUser)
+      commit("user/setLoginStatus", true, { root: true })
+    } catch (error) {
+      console.error(error)
+      dispatch("error/create", error, { root: true })
     }
   }
 }
