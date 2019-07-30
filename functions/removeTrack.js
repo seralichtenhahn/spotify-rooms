@@ -7,13 +7,13 @@ exports.handler = async function(snap, context) {
   const { roomId, trackId } = context.params
 
   // Await all Promises
-  const { owner_id } = await getRoom(roomId)
+  const { owner_id, playlistId } = await getRoom(roomId)
 
   const accessToken = await getAccessToken(owner_id)
 
   spotifyApi.setAccessToken(accessToken)
 
-  await spotifyApi.removeTracksFromPlaylist(room.playlistId, [
+  await spotifyApi.removeTracksFromPlaylist(playlistId, [
     {
       uri: trackId
     }
