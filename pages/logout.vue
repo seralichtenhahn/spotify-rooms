@@ -10,8 +10,8 @@
 export default {
   async fetch({ redirect, store }) {
     store.commit("user/setLoginStatus", false)
-    store.commit("auth/accessToken", "")
-    store.commit("auth/expiresIn", 0)
+    store.commit("auth/setAccessToken", "")
+    store.commit("auth/setExpiresIn", 0)
 
     return redirect("/")
   }
