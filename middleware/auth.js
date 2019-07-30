@@ -13,14 +13,20 @@ export default async function({
   error,
   currentUser
 }) {
-  const user = await currentUser
-
-  if (user && user.uid) {
+  if (store.getters["user/isLoggedIn"]) {
+    console.log("already logged in")
     return
+  } else {
+    const user = await currentUser
+    console.log("trigger token!!", user)
+
+    if (user && user.uid) {
+      return
+    }
   }
 
   if (!query.code) {
-    redirect("/")
+    return redirect("/")
   }
 
   const response = await store.dispatch("auth/fetchTokens", {
@@ -28,11 +34,10 @@ export default async function({
   })
 
   if (response.status !== 200) {
-    error({
+    return error({
       statusCode: response.status || 500,
       message: response.data || "Something went wrong"
     })
-    return
   }
 
   await store.dispatch("auth/signIn")
