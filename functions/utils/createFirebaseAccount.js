@@ -14,36 +14,31 @@ module.exports = async function createFirebaseAccount(
   // The UID we'll assign to the user.
   const uid = `spotify:${spotifyID}`
 
-  let image = "photoURL"
-  if (!photoURL.length) {
-    image = false
+  const data = {
+    displayName,
+    email,
+    emailVerified: true
+  }
+
+  if (photoURL && photoURL.length) {
+    data.photoURL = photoURL[0].url
   }
 
   // Save the access token to Firestore.
   const databaseTask = setAccessToken(spotifyID, accessToken, refreshToken)
 
   // Create or update the user account.
-  const userCreationTask = auth
-    .updateUser(uid, {
-      displayName,
-      [image]: photoURL,
-      email,
-      emailVerified: true
-    })
-    .catch(error => {
-      // If user does not exists we create it.
-      if (error.code === "auth/user-not-found") {
-        console.log("creating user:", displayName)
-        return auth.createUser({
-          uid,
-          displayName,
-          [image]: photoURL,
-          email,
-          emailVerified: true
-        })
-      }
-      throw error
-    })
+  const userCreationTask = auth.updateUser(uid, data).catch(error => {
+    // If user does not exists we create it.
+    if (error.code === "auth/user-not-found") {
+      console.log("creating user:", displayName)
+      return auth.createUser({
+        uid,
+        ...data
+      })
+    }
+    throw error
+  })
 
   // Wait for all async tasks to complete, then generate and return a custom auth token.
   await Promise.all([userCreationTask, databaseTask])
