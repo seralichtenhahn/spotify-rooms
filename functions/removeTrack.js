@@ -7,10 +7,9 @@ exports.handler = async function(snap, context) {
   const { roomId, trackId } = context.params
 
   // Await all Promises
-  const [room, accessToken] = await Promise.all([
-    getRoom(roomId),
-    getAccessToken(roomId)
-  ])
+  const { owner_id } = await getRoom(roomId)
+
+  const accessToken = await getAccessToken(owner_id)
 
   spotifyApi.setAccessToken(accessToken)
 
