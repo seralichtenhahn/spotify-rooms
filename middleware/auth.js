@@ -19,7 +19,7 @@ export default async function({
   } else {
     const user = await currentUser
 
-    if (user && user.uid) {
+    if (user && user.uid && store.getters["auth/accessToken"]) {
       console.log("[auth] authenticated")
       return
     }
