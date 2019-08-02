@@ -14,13 +14,13 @@ export default async function({
   currentUser
 }) {
   if (store.getters["user/isLoggedIn"]) {
-    console.log("already logged in")
+    console.log("[auth] authenticated")
     return
   } else {
     const user = await currentUser
-    console.log("trigger token!!", user)
 
-    if (user && user.uid) {
+    if (user && user.uid && store.getters["auth/accessToken"]) {
+      console.log("[auth] authenticated")
       return
     }
   }
