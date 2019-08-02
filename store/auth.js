@@ -94,10 +94,9 @@ export const actions = {
     }
   },
   async signIn({ state, commit, dispatch }) {
-    console.log("trying to loggin...", state.firebaseToken)
+    console.log("[auth] login with", state.firebaseToken)
     try {
       await this.$auth.signInWithCustomToken(state.firebaseToken)
-      console.log(this.$auth.currentUser)
       commit("user/setLoginStatus", true, { root: true })
     } catch (error) {
       console.error(error)
