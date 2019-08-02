@@ -3,9 +3,12 @@ const admin = require("./admin")
 const db = admin.firestore()
 
 module.exports = (spotifyID, accessToken, refreshToken) => {
+  const oneHourInMilliseconds = 60 * 60 * 1000
+
   // Save the access token to Firestore.
   const data = {
-    accessToken
+    accessToken,
+    expiresIn: Date.now() + oneHourInMilliseconds
   }
 
   if (refreshToken) {
