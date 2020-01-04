@@ -77,6 +77,7 @@
 
 <script>
 import { mapGetters } from "vuex"
+import playbacksdkMixin from "@/mixins/playbacksdkMixin"
 import IconSkipBackwards from "@/assets/icons/skip-backward.svg"
 import IconPlay from "@/assets/icons/play.svg"
 import IconPause from "@/assets/icons/pause.svg"
@@ -89,9 +90,11 @@ export default {
     IconPause,
     IconSkipForward
   },
+  mixins: [playbacksdkMixin],
   data() {
     return {
-      timeout: null
+      timeout: null,
+      player: null
     }
   },
   computed: {
@@ -113,6 +116,12 @@ export default {
       handler(id) {
         if (this.isOwner && id) {
           this.fetchPlayback()
+
+          this.addPlaybackSDK()
+        }
+
+        if (!this.id) {
+          this.removePlaybackSDK()
         }
       }
     }
@@ -120,6 +129,13 @@ export default {
   mounted() {
     this.$nuxt.$on("playback:fetch", callback => {
       this.fetchPlayback().then(() => callback())
+    })
+
+    this.$nuxt.$on("playback:resume", () => {
+      this.$spotify.play({
+        device_id: this.player._options.id,
+        context_uri: `spotify:playlist:${this.playlistId}`
+      })
     })
   },
   methods: {
