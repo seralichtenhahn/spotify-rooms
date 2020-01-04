@@ -157,16 +157,17 @@ export default {
      * Ruft Event auf um Modal zu aktivieren mit dem Titel "Warteschlange starten"
      */
     toggleQueue() {
-      if (this.currentTrack) {
-        this.showFormResetQueue = true
-      } else {
-        this.showFormStartQueue = true
-      }
+      // if (this.currentTrack) {
+      //   this.showFormResetQueue = true
+      // } else {
+      //   this.showFormStartQueue = true
+      // }
 
-      this.$nuxt.$emit(
-        "modal:activate",
-        `Warteschlange ${this.toggleQueueState}`
-      )
+      // this.$nuxt.$emit(
+      //   "modal:activate",
+      //   `Warteschlange ${this.toggleQueueState}`
+      // )
+      this.$nuxt.$emit("playback:resume")
     },
     placeholderClick() {
       this.$router.push({ name: "rooms-id-add" })

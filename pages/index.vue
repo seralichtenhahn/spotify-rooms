@@ -73,7 +73,8 @@ export default {
         "user-modify-playback-state",
         "user-read-playback-state",
         "playlist-modify-private",
-        "playlist-modify-public"
+        "playlist-modify-public",
+        "streaming"
       ].join(" ")
 
       const redirect_uri = location.protocol + "//" + location.host + "/rooms"
